@@ -1,0 +1,12 @@
+{
+  "name": "皮玺玉",
+  "greeting": "Hi，我是皮玺玉",
+  "slogan": "养一只 AI 貔貅，替我囤住生活里的工作流",
+  "intro": "产品经理 × AI 实践者，把每个痛点都做成可复用的工具。",
+  "contact": {
+    "wechat": "/qrcodes/wechat.png",
+    "xiaohongshu": "/qrcodes/xhs.png",
+    "email": "your.email@example.com",
+    "github": "https://github.com/"
+  }
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "procurement",
+    "title": "采购智能",
+    "icon": "🛒",
+    "accent": "#A78BFA",
+    "desc": "把采购流程里的重复观察、异常预警交给 AI",
+    "order": 1
+  },
+  {
+    "id": "job",
+    "title": "求职作战",
+    "icon": "💼",
+    "accent": "#F472B6",
+    "desc": "从简历到面试，全流程的 AI 副本",
+    "order": 2
+  },
+  {
+    "id": "prd",
+    "title": "PRD 工厂",
+    "icon": "📋",
+    "accent": "#60A5FA",
+    "desc": "产品经理的工具链，把需求拆给 AI 写",
+    "order": 3
+  },
+  {
+    "id": "content",
+    "title": "内容创作",
+    "icon": "🎬",
+    "accent": "#FB923C",
+    "desc": "漫剧、视频特效、AIGC 生产线",
+    "order": 4
+  },
+  {
+    "id": "health",
+    "title": "她健康",
+    "icon": "🌸",
+    "accent": "#F472B6",
+    "desc": "女性健康管理：减肥规划、经期照顾",
+    "order": 5
+  },
+  {
+    "id": "general",
+    "title": "通用 AIGC",
+    "icon": "🧰",
+    "accent": "#34D399",
+    "desc": "跨领域可复用的 Skill / 提示词 / 模板",
+    "order": 6
+  }
+]

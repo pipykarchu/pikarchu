@@ -1,0 +1,23 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.env
+.env.local
+.env.*.local
+*.log
+npm-debug.log*
+
+# 貔貅 AI 试错素材（非项目资产）
+# 真正用到的 2 张已经复制到 public/mascot/ 入库
+吉祥物貔貅形象/
+

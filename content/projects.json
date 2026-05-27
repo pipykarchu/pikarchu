@@ -1,0 +1,101 @@
+[
+  {
+    "id": "procurement-dashboard",
+    "title": "采购预警看板",
+    "category": "procurement",
+    "status": "live",
+    "shortDesc": "监控采购数据异常，自动触发预警与归因分析",
+    "tags": ["采购", "数据看板", "异常检测"],
+    "cover": "",
+    "links": {},
+    "priority": 10
+  },
+  {
+    "id": "job-war-room",
+    "title": "求职作战中心",
+    "category": "job",
+    "status": "live",
+    "shortDesc": "求职全流程指挥台：JD 匹配、简历优化、面试模拟",
+    "tags": ["求职", "JD匹配", "面试"],
+    "cover": "",
+    "links": {},
+    "priority": 10
+  },
+  {
+    "id": "resume-optimizer",
+    "title": "简历优化器",
+    "category": "job",
+    "status": "wip",
+    "shortDesc": "把岗位 JD 喂给 AI，自动重写匹配的简历版本",
+    "tags": ["简历", "AI优化"],
+    "cover": "",
+    "links": {},
+    "priority": 7
+  },
+  {
+    "id": "prd-generator",
+    "title": "PRD 生成器",
+    "category": "prd",
+    "status": "idea",
+    "shortDesc": "一句需求 → 完整 PRD：用户故事、功能拆解、流程图",
+    "tags": ["PRD", "产品经理"],
+    "cover": "",
+    "links": {},
+    "priority": 6
+  },
+  {
+    "id": "manhua-studio",
+    "title": "漫剧生成工坊",
+    "category": "content",
+    "status": "idea",
+    "shortDesc": "剧本 → 分镜 → 角色一致 → 配音 → 成片的全流程",
+    "tags": ["漫剧", "AIGC视频"],
+    "cover": "",
+    "links": {},
+    "priority": 5
+  },
+  {
+    "id": "video-fx",
+    "title": "视频特效工作流",
+    "category": "content",
+    "status": "idea",
+    "shortDesc": "可复用的 AI 特效模板与一键生成 prompt 包",
+    "tags": ["视频特效", "AIGC"],
+    "cover": "",
+    "links": {},
+    "priority": 4
+  },
+  {
+    "id": "weight-loss-plan",
+    "title": "AI 减肥规划",
+    "category": "health",
+    "status": "idea",
+    "shortDesc": "结合体感、饮食、作息，生成可执行的周计划",
+    "tags": ["女性健康", "减肥"],
+    "cover": "",
+    "links": {},
+    "priority": 5
+  },
+  {
+    "id": "period-care",
+    "title": "经期健康管家",
+    "category": "health",
+    "status": "idea",
+    "shortDesc": "经期周期管理 + 情绪/饮食/运动建议",
+    "tags": ["女性健康", "经期"],
+    "cover": "",
+    "links": {},
+    "priority": 5
+  },
+  {
+    "id": "skill-library",
+    "title": "可复用 Skill 库",
+    "category": "general",
+    "status": "wip",
+    "shortDesc": "沉淀通用的 Claude Skill / 提示词 / Prompt 模板",
+    "tags": ["Skill", "Prompt"],
+    "cover": "",
+    "links": {},
+    "priority": 8
+  }
+]
