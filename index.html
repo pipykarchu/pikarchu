@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light" class="theme-preload">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/mascot/pixiu-hero.png?v=0.1.0" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="皮玺玉 × AI 貔貅 · 把生活里的麻烦事变成可复用的工作流" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      ;(() => {
+        const saved = localStorage.getItem('pixiyu-theme')
+        const theme = saved === 'dark' ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-theme', theme)
+      })()
+    </script>
     <title>Hi，我是皮玺玉</title>
   </head>
   <body>

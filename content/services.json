@@ -16,14 +16,5 @@
     "desc": "工作流定制 / 1v1 咨询 / 团队培训。报价区间制，私聊详谈。",
     "ctaText": "约我聊聊",
     "ctaAction": "open-contact"
-  },
-  {
-    "id": "private-traffic",
-    "type": "private",
-    "title": "加我私聊",
-    "subtitle": "长期关注",
-    "desc": "微信 + 小红书 + 公众号。AI 副本上新第一时间通知。",
-    "ctaText": "扫码加我",
-    "ctaAction": "open-contact"
   }
 ]

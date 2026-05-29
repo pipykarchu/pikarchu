@@ -8,11 +8,11 @@ const year = new Date().getFullYear()
 <template>
   <footer
     id="about"
-    class="py-12 px-6 border-t"
+    class="py-10 md:py-12 px-4 sm:px-6 border-t"
     :style="{ borderColor: 'var(--color-linear-border)' }"
   >
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+      <div class="flex items-center justify-center gap-3">
         <img src="/mascot/pixiu-secondary.png?v=0.1.0" alt="" class="w-10 h-10" />
         <div class="text-sm" :style="{ color: 'var(--color-linear-text-secondary)' }">
           皮玺玉 × AI 貔貅 · v0.1.0

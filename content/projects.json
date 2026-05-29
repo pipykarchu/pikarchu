@@ -1,36 +1,71 @@
 [
   {
-    "id": "procurement-dashboard",
-    "title": "采购预警看板",
-    "category": "procurement",
+    "id": "personal-ip-site",
+    "title": "皮玺玉 × AI 貔貅 个人 IP 站",
+    "category": "general",
     "status": "live",
-    "shortDesc": "监控采购数据异常，自动触发预警与归因分析",
-    "tags": ["采购", "数据看板", "异常检测"],
-    "cover": "",
+    "shortDesc": "数据驱动的作品集门户：改 JSON 即改网页，IP 内核「养一只 AI 貔貅替我囤工作流」",
+    "longDesc": "我自己设计 + 实现的个人 IP 站点，承载所有 AI 工作流作品的展示门户。完整 IP 设计：从核心叙事（貔貅\"只进不出\"= 囤工作流）到视觉系统（白玉萌貔貅 + 紫粉光晕）再到 IA（按\"领域\"而非\"工具类型\"分区）。所有内容由 content/*.json 数据驱动，加新作品 = 改一行 JSON，无需动代码。沿用 Linear 极简风 + 紫粉渐变规范，支持深浅双主题（跟随系统偏好 + 用户切换 + localStorage 持久化）。",
+    "tags": ["个人IP", "作品集", "Vue 3", "数据驱动", "Linear风"],
+    "tech": ["Vue 3 (script setup)", "Vite 7", "Tailwind CSS 4", "Composable + Props/Events", "JSON 数据驱动", "无路由（单页滚动）"],
+    "cover": "/mascot/pixiu-hero.png",
     "links": {},
-    "priority": 10
+    "highlights": [
+      "完整 IP 设计：内核叙事 + 吉祥物视觉 + 领域分区 + 状态徽章 4 件套",
+      "数据驱动架构：所有项目卡片、分区、服务都通过 content/*.json 配置",
+      "双主题：跟随系统偏好 + 手动切换 + localStorage 持久化",
+      "状态徽章纪律：Live / WIP / Idea / Paid 4 档清晰区分作品阶段",
+      "未来可扩展：免费区→付费区→私域引流的三段式商业漏斗已规划"
+    ],
+    "priority": 11
   },
   {
     "id": "job-war-room",
-    "title": "求职作战中心",
+    "title": "Studio · 求职作战中心",
     "category": "job",
     "status": "live",
-    "shortDesc": "求职全流程指挥台：JD 匹配、简历优化、面试模拟",
-    "tags": ["求职", "JD匹配", "面试"],
-    "cover": "",
-    "links": {},
+    "shortDesc": "本地优先的 AI Agent 求职工作流：档案 → 路径推演 → JD 决策 → 简历定制 → 面试演练 → 学习作战 全闭环",
+    "longDesc": "我作为目标用户、需求分析师、产品经理、prompt 工程师全角色 0-1 设计并迭代了 33 版（v0.1.0 → v0.33.6）的 AI 求职 Agent 系统。9 大功能模块覆盖求职全流程，集成 4 类 LLM（Claude/GPT/Gemini/DeepSeek）+ Vision API + Web Search 工具。核心产品决策：「信息分级铁律」（✅事实/🟡推断+依据/❓拒答+理由）、「不让 AI 编」原则（公司信息/量化数字/未来预测必须拒答）、「路径推演不预测」（AI 是 sparring partner 不是 oracle）、「每岗位独立 git auto-commit」、「数据本地优先绝不外发」。同时实现完整的演示模式架构（双层隔离 + 8 个 Tier 1 预录响应 + 写盘 monkey patch），已成功部署到 Vercel 单平台 serverless。",
+    "tags": ["AI Agent", "B 端 PM", "Prompt 工程", "多模型编排", "本地优先"],
+    "tech": ["Vue 3 + Vite 7 + Tailwind 4", "Node.js + Express 4 (ESM)", "Claude / GPT / Gemini / DeepSeek 多 LLM 编排", "Vision API + Function Calling + Web Search", "本地 JSON / Markdown 持久化", "simple-git 每岗位独立版本", "Vercel serverless 演示模式"],
+    "cover": "/mascot/pixiu-secondary.png",
+    "links": {
+      "local": "http://127.0.0.1:5185/?profile=demo&profile_lock=demo",
+      "demo": "http://127.0.0.1:5185/?profile=demo&profile_lock=demo",
+      "demoNote": "打开李明演示档案，只读预览，不进入真实档案。"
+    },
+    "highlights": [
+      "33 版迭代：每版 changelog 清晰，体现持续产品决策能力",
+      "9 大功能模块：档案 / 路径推演 / JD 解析 / 简历定制 / 面试手册 / 面试演练 / 学习作战 / 用量看板 / 设置",
+      "信息分级铁律：把 LLM 幻觉问题从工程问题转化为产品规则（B 端用户最关心的可信任性）",
+      "多模型分工策略：Gemini 长推理 / Claude 面试手册 / Vision 解析（按场景选模型）",
+      "演示模式架构：双层隔离（环境变量 + 写盘 monkey patch）+ 8 个 Tier 1 LLM 场景预录响应",
+      "赛道作战（v0.31.0）：同类型 JD 归组 + 一键生成 5 份产物（共性能力 / 主战简历 / 决策建议 / 面试黑话 / 自我介绍）",
+      "学习作战：SMART 拆解 / AI 周复盘 / 翻卡 + 错题本 + AI 出新题 + 模拟考试"
+    ],
     "priority": 10
   },
   {
-    "id": "resume-optimizer",
-    "title": "简历优化器",
-    "category": "job",
-    "status": "wip",
-    "shortDesc": "把岗位 JD 喂给 AI，自动重写匹配的简历版本",
-    "tags": ["简历", "AI优化"],
-    "cover": "",
-    "links": {},
-    "priority": 7
+    "id": "procurement-dashboard",
+    "title": "提单履行预警看板",
+    "category": "procurement",
+    "status": "live",
+    "shortDesc": "把 2 份导出 Excel 喂给单文件 HTML，自动出 4 类预警 + 提单人改善建议，已在荣耀后勤实战",
+    "longDesc": "面向荣耀后勤不动产采购履行团队的离线分析工具。导入订单表 + 监控台账两份 Excel，自动生成：待验收预警（订单 > 30 天）、待提单预警（预计下次提单 > 60 天）、待清理关闭订单（未验收金额 ≤ 1 元）、提单人预警排名。秘钥控制管理者视图与普通用户视图，本期数据可留痕、年度可汇总。所有数据在浏览器本地处理，不上传后端。",
+    "tags": ["采购", "异常预警", "Excel分析", "单文件HTML", "荣耀后勤"],
+    "tech": ["SheetJS (xlsx)", "原生 JS", "CSS Grid", "本地存储 localStorage", "单文件 HTML 零部署"],
+    "cover": "/mascot/pixiu-mini.png",
+    "links": {
+      "demo": "/projects/procurement-dashboard/index.html"
+    },
+    "highlights": [
+      "字段智能识别：提单人、订单时间等核心字段支持 5-7 种别名",
+      "权限分层：秘钥用户看全量，普通用户选自己只看个人改善建议",
+      "数据质量校验：自动发现订单号 + 金额对应多个时间的异常",
+      "年度汇总：月份数据可折叠，支持导出 PPT 大纲 Excel",
+      "零部署：单文件 HTML，双击即可在浏览器打开"
+    ],
+    "priority": 9
   },
   {
     "id": "prd-generator",
@@ -39,8 +74,10 @@
     "status": "idea",
     "shortDesc": "一句需求 → 完整 PRD：用户故事、功能拆解、流程图",
     "tags": ["PRD", "产品经理"],
+    "tech": [],
     "cover": "",
     "links": {},
+    "highlights": [],
     "priority": 6
   },
   {
@@ -50,8 +87,10 @@
     "status": "idea",
     "shortDesc": "剧本 → 分镜 → 角色一致 → 配音 → 成片的全流程",
     "tags": ["漫剧", "AIGC视频"],
+    "tech": [],
     "cover": "",
     "links": {},
+    "highlights": [],
     "priority": 5
   },
   {
@@ -61,8 +100,10 @@
     "status": "idea",
     "shortDesc": "可复用的 AI 特效模板与一键生成 prompt 包",
     "tags": ["视频特效", "AIGC"],
+    "tech": [],
     "cover": "",
     "links": {},
+    "highlights": [],
     "priority": 4
   },
   {
@@ -72,8 +113,10 @@
     "status": "idea",
     "shortDesc": "结合体感、饮食、作息，生成可执行的周计划",
     "tags": ["女性健康", "减肥"],
+    "tech": [],
     "cover": "",
     "links": {},
+    "highlights": [],
     "priority": 5
   },
   {
@@ -83,8 +126,10 @@
     "status": "idea",
     "shortDesc": "经期周期管理 + 情绪/饮食/运动建议",
     "tags": ["女性健康", "经期"],
+    "tech": [],
     "cover": "",
     "links": {},
+    "highlights": [],
     "priority": 5
   },
   {
@@ -94,8 +139,10 @@
     "status": "wip",
     "shortDesc": "沉淀通用的 Claude Skill / 提示词 / Prompt 模板",
     "tags": ["Skill", "Prompt"],
+    "tech": [],
     "cover": "",
     "links": {},
+    "highlights": [],
     "priority": 8
   }
 ]

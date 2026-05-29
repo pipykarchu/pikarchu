@@ -1,0 +1,2861 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>后勤不动产提单与验收预警改善看板</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --purple-900: #4c1d95;
+    --purple-700: #6d28d9;
+    --purple-600: #7c3aed;
+    --purple-100: #ede9fe;
+    --yellow-500: #f59e0b;
+    --yellow-100: #fef3c7;
+    --ink: #1f2937;
+  }
+  body {
+    font-family: "Microsoft YaHei","PingFang SC",-apple-system,BlinkMacSystemFont,sans-serif;
+    background: linear-gradient(135deg, #f8f5ff 0%, #fff9e6 42%, #f8fafc 100%);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 1400px; margin: 0 auto; }
+  header {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 62%, #f59e0b 100%);
+    color: #fff;
+    padding: 28px 36px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 14px 34px rgba(76,29,149,.22);
+  }
+  header::after {
+    content: 'αhonor';
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fef3c7;
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    opacity: .16;
+    pointer-events: none;
+    line-height: 1;
+  }
+  header h1 { font-size: 24px; font-weight: 600; letter-spacing: 2px; margin-bottom: 6px; }
+  header p { font-size: 13px; opacity: .85; }
+  header h1, header p { position: relative; z-index: 1; }
+
+  .access-section {
+    background: #fff;
+    padding: 22px 24px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #e9d5ff;
+    box-shadow: 0 8px 22px rgba(76,29,149,.08);
+  }
+  .access-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: end;
+  }
+  .access-title { font-size: 16px; font-weight: 700; color: var(--purple-900); margin-bottom: 6px; }
+  .access-desc { font-size: 12px; color: #6b7280; line-height: 1.6; }
+  .access-form { display: flex; gap: 10px; align-items: center; }
+  .access-form input {
+    min-width: 220px;
+    padding: 10px 12px;
+    border: 1px solid #c4b5fd;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+  }
+  .access-form input:focus {
+    border-color: var(--purple-600);
+    box-shadow: 0 0 0 3px rgba(124,58,237,.12);
+  }
+  .access-status {
+    grid-column: 1 / -1;
+    display: none;
+    font-size: 12px;
+    padding: 8px 10px;
+    border-radius: 6px;
+  }
+  .access-status.show { display: block; background: #fef2f2; color: #991b1b; }
+  .access-status.success { display: block; background: #f0fdf4; color: #047857; }
+
+  .upload-section {
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #e9d5ff;
+    box-shadow: 0 8px 22px rgba(76,29,149,.07);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 180px;
+    gap: 16px;
+    align-items: center;
+  }
+  .upload-box {
+    display: grid;
+    grid-template-rows: auto 42px auto;
+    gap: 6px;
+    align-self: stretch;
+  }
+  .upload-box label { font-size: 13px; color: #374151; font-weight: 500; }
+  .upload-box .hint { font-size: 11px; color: #9ca3af; }
+  .upload-box input[type="file"] {
+    width: 100%;
+    height: 42px;
+    padding: 5px 12px;
+    border: 2px dashed #c4b5fd;
+    border-radius: 8px;
+    background: #faf7ff;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 28px;
+    transition: all .2s;
+  }
+  .upload-box input[type="file"]:hover { border-color: var(--purple-600); background: #f5f0ff; }
+  .upload-box input[type="file"]::file-selector-button {
+    height: 28px; padding: 0 12px; border: none; border-radius: 5px;
+    background: var(--purple-600); color: #fff; cursor: pointer; font-size: 12px;
+    line-height: 28px; margin-right: 10px; vertical-align: middle;
+  }
+  .btn {
+    padding: 11px 22px; border: none; border-radius: 8px;
+    font-size: 13px; cursor: pointer; transition: all .2s;
+    font-weight: 500;
+  }
+  .btn-primary { background: var(--purple-600); color: #fff; }
+  .btn-primary:hover { background: var(--purple-700); transform: translateY(-1px); }
+  .btn-primary:disabled { background: #9ca3af; cursor: not-allowed; transform: none; }
+  .btn-demo { background: var(--yellow-500); color: #fff; }
+  .btn-demo:hover { background: #d97706; }
+  .btn-export { background: #10b981; color: #fff; }
+  .btn-export:hover { background: #059669; }
+  .btn-sm { padding: 6px 14px; font-size: 11px; }
+  .upload-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-self: stretch;
+    justify-content: center;
+  }
+  .upload-actions .btn { width: 100%; }
+
+  .file-status {
+    grid-column: 1 / -1; padding: 8px 12px; background: #f5f3ff;
+    border-left: 3px solid var(--purple-600); border-radius: 4px;
+    font-size: 12px; color: #4c1d95; display: none;
+  }
+  .file-status.show { display: block; }
+  .file-status.error { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+  .file-status.warning { background: #fffbeb; border-color: #f59e0b; color: #92400e; }
+
+  .summary-cards {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    margin-bottom: 20px;
+  }
+  .card {
+    background: #fff; padding: 22px; border-radius: 12px;
+    box-shadow: 0 8px 22px rgba(76,29,149,.06);
+    border-left: 4px solid var(--purple-600);
+  }
+  .card.alert { border-left-color: #ef4444; }
+  .card.warning { border-left-color: #f59e0b; }
+  .card.success { border-left-color: #10b981; }
+  .card .label { font-size: 12px; color: #6b7280; margin-bottom: 6px; }
+  .card .value { font-size: 28px; font-weight: 700; color: #111827; }
+  .card .delta { font-size: 12px; margin-top: 4px; }
+  .card .delta.up { color: #ef4444; }
+  .card .delta.down { color: #10b981; }
+  .card .delta.flat { color: #6b7280; }
+
+  .section {
+    background: #fff; padding: 24px; border-radius: 12px;
+    margin-bottom: 20px; box-shadow: 0 8px 22px rgba(76,29,149,.06);
+    border: 1px solid rgba(196,181,253,.45);
+  }
+  .section h2 {
+    font-size: 16px; color: #2e1065; margin-bottom: 16px;
+    padding-bottom: 10px; border-bottom: 2px solid #f3e8ff;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section h2 .badge {
+    font-size: 11px; padding: 2px 8px; border-radius: 10px;
+    background: #ef4444; color: #fff; font-weight: normal;
+  }
+  .section-toolbar { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+  .data-profile {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  }
+  .profile-item {
+    border: 1px solid #e5e7eb; border-radius: 8px; padding: 14px 16px;
+    background: linear-gradient(180deg, #fff 0%, #faf7ff 100%); min-height: 92px;
+  }
+  .profile-item .label { font-size: 12px; color: #6b7280; margin-bottom: 8px; }
+  .profile-item .value { font-size: 22px; font-weight: 700; color: #111827; }
+  .profile-item .hint { font-size: 11px; color: #64748b; margin-top: 6px; line-height: 1.5; }
+  .field-map {
+    grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 8px; margin-top: 2px;
+  }
+  .field-pill {
+    display: flex; justify-content: space-between; gap: 10px; align-items: center;
+    border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 10px;
+    background: #fff; font-size: 12px; color: #374151; min-width: 0;
+  }
+  .field-pill span:last-child {
+    color: #6b7280; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .field-pill.missing { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+  .field-pill.missing span:last-child { color: #b91c1c; }
+
+  .split-stats, .severity-stats {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;
+  }
+  .split-card, .severity-card {
+    border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px;
+    background: linear-gradient(180deg, #fff 0%, #fffdf5 100%);
+  }
+  .split-card h3, .severity-card h3 {
+    font-size: 13px; color: #4c1d95; margin-bottom: 12px; font-weight: 700;
+  }
+  .split-grid {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
+  }
+  .split-item {
+    border: 1px solid #ede9fe; border-radius: 8px; padding: 12px;
+    background: #faf7ff;
+  }
+  .split-item .label { font-size: 12px; color: #6b7280; margin-bottom: 6px; }
+  .split-item .value { font-size: 24px; font-weight: 800; color: #2e1065; }
+  .severity-table { width: 100%; min-width: 0; }
+  .severity-table th, .severity-table td { padding: 8px 10px; }
+  .severity-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 8px; border-radius: 999px; font-weight: 700; font-size: 12px;
+  }
+  .severity-chip.high { color: #991b1b; background: #fee2e2; }
+  .severity-chip.mid { color: #92400e; background: #fef3c7; }
+  .severity-chip.low { color: #047857; background: #d1fae5; }
+  .reason-input {
+    width: 100%; min-width: 160px; padding: 6px 8px;
+    border: 1px solid #c4b5fd; border-radius: 6px; font-size: 12px;
+    background: #fff;
+  }
+  .reason-input:focus {
+    outline: none; border-color: var(--purple-600);
+    box-shadow: 0 0 0 3px rgba(124,58,237,.12);
+  }
+  .reason-input.missing { border-color: #f59e0b; background: #fffbeb; }
+  .reason-tip { font-size: 11px; color: #92400e; margin-top: 6px; }
+  .env-note {
+    border: 1px dashed #c4b5fd; border-radius: 8px; padding: 12px 14px;
+    background: #faf7ff; color: #4c1d95; font-size: 12px; line-height: 1.6;
+    margin-top: 12px;
+  }
+  .person-drill {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px;
+    align-items: center;
+  }
+  .person-drill-title { font-size: 14px; font-weight: 700; color: #4c1d95; margin-bottom: 4px; }
+  .person-drill-desc { font-size: 12px; color: #6b7280; line-height: 1.6; }
+  .person-drill-select {
+    min-width: 260px; padding: 9px 12px; border: 1px solid #c4b5fd;
+    border-radius: 7px; background: #fff; color: #374151; font-size: 13px;
+  }
+  .person-drill-actions { display: flex; gap: 8px; align-items: center; justify-content: flex-end; }
+  .person-drill-summary {
+    grid-column: 1 / -1; display: none; gap: 10px; flex-wrap: wrap;
+    font-size: 12px; color: #4c1d95;
+  }
+  .person-drill-summary.show { display: flex; }
+  .person-chip {
+    border: 1px solid #e9d5ff; background: #faf7ff; border-radius: 999px;
+    padding: 5px 10px; font-variant-numeric: tabular-nums;
+  }
+  .record-actions {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  }
+  .record-status {
+    font-size: 12px; color: #4c1d95; background: #faf7ff;
+    border: 1px solid #e9d5ff; border-radius: 6px; padding: 8px 10px;
+  }
+  .period-list { display: grid; gap: 10px; }
+  .period-year {
+    border: 1px solid #e9d5ff; border-radius: 8px; overflow: hidden; background: #fff;
+  }
+  .period-year summary {
+    cursor: pointer; list-style: none; padding: 12px 14px;
+    background: #faf7ff; color: #4c1d95; font-size: 13px; font-weight: 700;
+    display: flex; justify-content: space-between; gap: 12px; align-items: center;
+  }
+  .period-year summary::-webkit-details-marker { display: none; }
+  .period-year-actions { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .period-months { display: grid; gap: 10px; padding: 12px; }
+  .period-item {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto;
+    gap: 10px; align-items: center;
+    border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px 14px;
+    background: #fff;
+  }
+  .period-item.active { border-color: #c4b5fd; background: #faf7ff; }
+  .period-title { font-size: 13px; font-weight: 700; color: #2e1065; margin-bottom: 4px; }
+  .period-meta { font-size: 11px; color: #6b7280; line-height: 1.5; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: auto; }
+  th {
+    background: #faf7ff; color: #4c1d95; padding: 10px 12px;
+    text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb;
+    position: sticky; top: 0;
+  }
+  th, td { overflow-wrap: anywhere; vertical-align: middle; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; color: #4b5563; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  th.num-center, td.num-center { text-align: center; font-variant-numeric: tabular-nums; }
+  th.center, td.center { text-align: center; }
+  tr:hover td { background: #f9fafb; }
+  .table-wrapper { max-height: 420px; overflow: auto; border: 1px solid #e5e7eb; border-radius: 6px; }
+  .ranking-table, #pendingTable, #overdueTable, #cleanupTable { table-layout: fixed; }
+  .ranking-table { min-width: 1120px; }
+  .ranking-table th:nth-child(1), .ranking-table td:nth-child(1) { width: 7%; }
+  .ranking-table th:nth-child(2), .ranking-table td:nth-child(2) { width: 11%; }
+  .ranking-table th:nth-child(3), .ranking-table td:nth-child(3) { width: 10%; }
+  .ranking-table th:nth-child(4), .ranking-table td:nth-child(4) { width: 13%; }
+  .ranking-table th:nth-child(5), .ranking-table td:nth-child(5) { width: 12%; }
+  .ranking-table th:nth-child(6), .ranking-table td:nth-child(6) { width: 10%; }
+  .ranking-table th:nth-child(7), .ranking-table td:nth-child(7) { width: 17%; }
+  .ranking-table th:nth-child(8), .ranking-table td:nth-child(8) { width: 12%; }
+  .ranking-table th:nth-child(9), .ranking-table td:nth-child(9) { width: 8%; }
+  #pendingTable { min-width: 1140px; }
+  #pendingTable th:nth-child(1), #pendingTable td:nth-child(1) { width: 10%; }
+  #pendingTable th:nth-child(2), #pendingTable td:nth-child(2) { width: 9%; }
+  #pendingTable th:nth-child(3), #pendingTable td:nth-child(3) { width: 10%; }
+  #pendingTable th:nth-child(4), #pendingTable td:nth-child(4) { width: 9%; }
+  #pendingTable th:nth-child(5), #pendingTable td:nth-child(5) { width: 14%; }
+  #pendingTable th:nth-child(6), #pendingTable td:nth-child(6) { width: 12%; }
+  #pendingTable th:nth-child(7), #pendingTable td:nth-child(7) { width: 9%; }
+  #pendingTable th:nth-child(8), #pendingTable td:nth-child(8) { width: 8%; }
+  #pendingTable th:nth-child(9), #pendingTable td:nth-child(9) { width: 19%; }
+  #overdueTable { min-width: 1180px; }
+  #overdueTable th:nth-child(1), #overdueTable td:nth-child(1) { width: 9%; }
+  #overdueTable th:nth-child(2), #overdueTable td:nth-child(2) { width: 8%; }
+  #overdueTable th:nth-child(3), #overdueTable td:nth-child(3) { width: 9%; }
+  #overdueTable th:nth-child(4), #overdueTable td:nth-child(4) { width: 11%; }
+  #overdueTable th:nth-child(5), #overdueTable td:nth-child(5) { width: 12%; }
+  #overdueTable th:nth-child(6), #overdueTable td:nth-child(6) { width: 18%; }
+  #overdueTable th:nth-child(7), #overdueTable td:nth-child(7) { width: 10%; }
+  #overdueTable th:nth-child(8), #overdueTable td:nth-child(8) { width: 10%; }
+  #overdueTable th:nth-child(9), #overdueTable td:nth-child(9) { width: 7%; }
+  #overdueTable th:nth-child(10), #overdueTable td:nth-child(10) { width: 6%; }
+  #cleanupTable { min-width: 1120px; }
+  #cleanupTable th:nth-child(1), #cleanupTable td:nth-child(1) { width: 10%; }
+  #cleanupTable th:nth-child(2), #cleanupTable td:nth-child(2) { width: 9%; }
+  #cleanupTable th:nth-child(3), #cleanupTable td:nth-child(3) { width: 10%; }
+  #cleanupTable th:nth-child(4), #cleanupTable td:nth-child(4) { width: 13%; }
+  #cleanupTable th:nth-child(5), #cleanupTable td:nth-child(5) { width: 18%; }
+  #cleanupTable th:nth-child(6), #cleanupTable td:nth-child(6) { width: 11%; }
+  #cleanupTable th:nth-child(7), #cleanupTable td:nth-child(7) { width: 11%; }
+  #cleanupTable th:nth-child(8), #cleanupTable td:nth-child(8) { width: 10%; }
+  #cleanupTable th:nth-child(9), #cleanupTable td:nth-child(9) { width: 8%; }
+  #pendingTable th:nth-child(9), #pendingTable td:nth-child(9) { min-width: 220px; }
+  .list-cell { max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .category-fold summary {
+    cursor: pointer; color: #6d28d9; font-weight: 600; list-style: none;
+  }
+  .category-fold summary::-webkit-details-marker { display: none; }
+  .category-fold span {
+    display: inline-block; max-width: 100%; margin-top: 4px; color: #4b5563;
+    white-space: normal; overflow-wrap: anywhere;
+  }
+
+  .severity-high { color: #dc2626; font-weight: 600; }
+  .severity-mid { color: #d97706; font-weight: 600; }
+  .severity-low { color: #059669; font-weight: 600; }
+  .rank-medal { font-weight: 700; color: var(--purple-600); }
+
+  /* TOP 排名表 - 强化视觉 */
+  .ranking-table tr td:first-child {
+    width: 40px; text-align: center; font-weight: 700;
+    font-size: 13px; color: var(--purple-600);
+  }
+  .ranking-table tr td.bar-cell {
+    position: relative; padding: 0;
+  }
+  .ranking-table tr td.bar-cell .bar-bg {
+    position: absolute; top: 0; left: 0; height: 100%;
+    background: linear-gradient(90deg, #fee2e2 0%, #fecaca 100%);
+    z-index: 0;
+  }
+  .ranking-table tr td.bar-cell .bar-bg.warn {
+    background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%);
+  }
+  .ranking-table tr td.bar-cell .bar-text {
+    position: relative; z-index: 1; padding: 10px 12px;
+    text-align: center; font-variant-numeric: tabular-nums;
+  }
+
+  .empty {
+    text-align: center; padding: 60px 20px; color: #9ca3af; font-size: 13px;
+  }
+  .empty .emoji { font-size: 48px; margin-bottom: 12px; opacity: .3; }
+
+  .improvement-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .improvement-card {
+    width: 100%; padding: 14px 18px; background: #fffbeb; border-left: 3px solid #f59e0b;
+    border-radius: 6px; font-size: 12px;
+  }
+  .improvement-card .name { font-weight: 600; color: #92400e; margin-bottom: 6px; font-size: 13px; }
+  .improvement-card ul { padding-left: 16px; color: #78350f; line-height: 1.7; }
+
+  .filter-box {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: #6b7280;
+  }
+  .filter-box select, .filter-box input {
+    padding: 5px 10px; border: 1px solid #d1d5db; border-radius: 5px;
+    font-size: 12px; background: #fff; min-width: 120px;
+  }
+
+  .task-progress-section { border-top: 4px solid var(--yellow-500); }
+  .progress-subtitle {
+    font-size: 11px; color: #6b7280; font-weight: normal; margin-left: 6px;
+  }
+  .progress-overview {
+    display: grid; grid-template-columns: 300px 1fr; gap: 18px; align-items: start;
+  }
+  .progress-meter {
+    border: 1px solid #e9d5ff; border-radius: 8px; padding: 16px;
+    background: #faf7ff;
+  }
+  .progress-meter-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    margin-bottom: 12px;
+  }
+  .progress-meter .label { font-size: 12px; color: #6d28d9; font-weight: 600; }
+  .progress-number { font-size: 34px; font-weight: 700; color: #4c1d95; line-height: 1; }
+  .progress-bar {
+    height: 10px; border-radius: 999px; overflow: hidden; background: #e5e7eb;
+  }
+  .progress-bar-fill {
+    height: 100%; width: 0; border-radius: inherit;
+    background: linear-gradient(90deg, #7c3aed 0%, #f59e0b 100%);
+  }
+  .progress-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px;
+  }
+  .progress-stat {
+    border: 1px solid #e5e7eb; border-radius: 6px; padding: 10px; background: #fff;
+  }
+  .progress-stat .num { font-size: 20px; font-weight: 700; color: #111827; text-align: left; }
+  .progress-stat .txt { font-size: 11px; color: #6b7280; margin-top: 2px; }
+  .task-progress-list { display: grid; gap: 10px; }
+  .task-progress-list.scrollable {
+    max-height: 340px; overflow-y: auto; padding-right: 6px;
+  }
+  .task-progress-item {
+    display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: start;
+    min-height: 58px; padding: 12px; border: 1px solid #e5e7eb;
+    border-left: 4px solid #d1d5db; border-radius: 8px; background: #fff;
+  }
+  .task-progress-item.done { border-left-color: var(--purple-600); background: #faf7ff; }
+  .task-progress-item.doing { border-left-color: #f59e0b; background: #fffbeb; }
+  .task-progress-item.pending { border-left-color: #94a3b8; background: #f8fafc; }
+  .task-status-dot {
+    width: 22px; height: 22px; border-radius: 50%; display: inline-flex;
+    align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
+  }
+  .task-progress-item.done .task-status-dot { color: #fff; background: var(--purple-600); }
+  .task-progress-item.doing .task-status-dot { color: #92400e; background: #fde68a; }
+  .task-progress-item.pending .task-status-dot { color: #475569; background: #e2e8f0; }
+  .task-progress-title { font-size: 13px; font-weight: 600; color: #111827; margin-bottom: 4px; }
+  .task-progress-detail { font-size: 12px; color: #6b7280; line-height: 1.5; }
+  .task-progress-percent {
+    min-width: 58px; text-align: right; font-size: 12px; font-weight: 700;
+    color: #374151; font-variant-numeric: tabular-nums;
+  }
+  .task-progress-percent span {
+    display: block; margin-top: 4px; font-size: 11px; font-weight: 500; color: #6b7280;
+  }
+
+  .footer {
+    text-align: center; padding: 18px; color: #9ca3af; font-size: 11px;
+    position: relative;
+  }
+  .footer .version-watermark {
+    display: inline-block; margin-top: 6px; color: #7c3aed; opacity: .68;
+    font-weight: 700; letter-spacing: .2px;
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 12px; }
+    header { padding: 22px 20px; }
+    header::after { right: 12px; top: 12px; font-size: 44px; }
+    header h1 { font-size: 20px; letter-spacing: 1px; }
+    .access-card { grid-template-columns: 1fr; }
+    .access-form { align-items: stretch; flex-direction: column; }
+    .access-form input { min-width: 0; width: 100%; }
+    .section { padding: 18px; }
+    .section h2 { flex-wrap: wrap; align-items: flex-start; }
+    .section-toolbar { width: 100%; margin-left: 0; flex-wrap: wrap; }
+    .upload-section, .summary-cards, .progress-overview, .data-profile, .field-map, .split-stats, .severity-stats, .person-drill {
+      grid-template-columns: 1fr;
+    }
+    .person-drill-actions { align-items: stretch; flex-direction: column; }
+    .person-drill-select { min-width: 0; width: 100%; }
+    .task-progress-item { grid-template-columns: 26px 1fr; }
+    .task-progress-percent { grid-column: 2; text-align: left; }
+    .period-item { grid-template-columns: 1fr; }
+    .table-wrapper { overflow-x: auto; }
+    table { min-width: 980px; }
+    .ranking-table, #pendingTable, #overdueTable, #cleanupTable { min-width: 980px; }
+    .severity-table { min-width: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>后勤不动产提单与验收预警改善看板</h1>
+    <p>正式版本 · 双表融合 · 离线运行 · 自动预警 · 期间对比 · 改善建议 · 基准日 <span id="todayLabel"></span></p>
+  </header>
+
+  <div class="access-section" id="accessSection">
+    <div class="access-card">
+      <div>
+        <div class="access-title">后勤采购履行专属入口</div>
+        <div class="access-desc">当前为正式版本。请输入秘钥验证使用权限；验证通过后显示上传入口、看板任务完成进度和数据质量识别区。</div>
+      </div>
+      <div class="access-form">
+        <input type="password" id="accessKey" placeholder="请输入秘钥">
+        <button class="btn btn-primary" id="accessBtn">验证</button>
+      </div>
+      <div class="access-status" id="accessStatus"></div>
+    </div>
+  </div>
+
+  <div class="upload-section" id="uploadSection" style="display: none;">
+    <div class="upload-box">
+      <label>📋 订单表（订单日期 + PR创建人姓名）</label>
+      <input type="file" id="orderFile" accept=".xlsx,.xls,.csv">
+      <span class="hint">必含：PR创建人姓名/提单人/业务对接人、订单日期/订单时间</span>
+    </div>
+    <div class="upload-box">
+      <label>📊 监控台账表（下一次提单月份 + PO行类型 + 部件号）</label>
+      <input type="file" id="monitorFile" accept=".xlsx,.xls,.csv">
+      <span class="hint">必含：业务对接人/提单人、预计下次提单日期/下一次提单月份；城市、三级品类、PO行类型、部件号可用于增强分析；额外列会自动忽略</span>
+    </div>
+    <div class="upload-actions">
+      <button class="btn btn-primary" id="analyzeBtn" disabled>开始分析</button>
+      <button class="btn btn-demo" id="demoBtn">▶ 确认本月数据</button>
+    </div>
+    <div class="file-status" id="fileStatus"></div>
+  </div>
+
+  <div id="dashboard" style="display: none;">
+
+    <div class="section task-progress-section">
+      <h2>✅ 看板完成任务进度
+        <span class="progress-subtitle">默认展示最新 5 条，可向下滚动查看完整更新历史</span>
+      </h2>
+      <div class="progress-overview">
+        <div class="progress-meter">
+          <div class="progress-meter-head">
+            <div class="label">总体完成度</div>
+            <div class="progress-number" id="taskCompletionRate">-</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-bar-fill" id="taskCompletionBar"></div>
+          </div>
+          <div class="progress-stats">
+            <div class="progress-stat">
+              <div class="num" id="taskDoneCount">-</div>
+              <div class="txt">已完成</div>
+            </div>
+            <div class="progress-stat">
+              <div class="num" id="taskDoingCount">-</div>
+              <div class="txt">进行中</div>
+            </div>
+            <div class="progress-stat">
+              <div class="num" id="taskPendingCount">-</div>
+              <div class="txt">待补充</div>
+            </div>
+          </div>
+        </div>
+        <div class="task-progress-list" id="taskProgressList"></div>
+      </div>
+    </div>
+
+    <div class="summary-cards">
+      <div class="card alert">
+        <div class="label">超期待验收订单数量（订单 &gt; 30 天）</div>
+        <div class="value" id="kpiOverdue30">-</div>
+        <div class="delta" id="kpiOverdue30Delta">-</div>
+      </div>
+      <div class="card warning">
+        <div class="label">超期未提单数量（&gt; 60 天）</div>
+        <div class="value" id="kpiOverdue60">-</div>
+        <div class="delta" id="kpiOverdue60Delta">-</div>
+      </div>
+      <div class="card">
+        <div class="label">涉及提单人</div>
+        <div class="value" id="kpiPersons">-</div>
+        <div class="delta" id="kpiPersonsDelta">-</div>
+      </div>
+      <div class="card success">
+        <div class="label">健康率</div>
+        <div class="value" id="kpiHealth">-</div>
+        <div class="delta" id="kpiHealthDelta">-</div>
+      </div>
+    </div>
+
+    <div class="section catalog-section">
+      <h2>📚 目录 / 非目录超期统计
+        <span style="font-size:11px;color:#9ca3af;font-weight:normal">（分别统计超期未提单数量和未验收数量）</span>
+      </h2>
+      <div class="split-stats" id="catalogStats"></div>
+      <div class="env-note">正式版本说明：上传两份正式表单并确认本月数据后会保存为一期本地记录；下次打开网页时，普通用户无需秘钥即可查看提单人排名，选择提单人后查看对应改善建议和各类明细。</div>
+    </div>
+
+    <div class="section confirmed-period-section">
+      <h2>📁 各期确认数据
+        <span style="font-size:11px;color:#9ca3af;font-weight:normal">（仅后勤采购履行可见，按年度折叠，可提取当期、导出月度记录、年度汇总或年度删除清理）</span>
+      </h2>
+      <div class="period-list" id="confirmedPeriodList"></div>
+    </div>
+
+    <div class="section data-profile-section">
+      <h2>📌 数据质量与字段识别
+        <span style="font-size:11px;color:#9ca3af;font-weight:normal">（分析前自动校验，便于定位源表问题）</span>
+      </h2>
+      <div class="data-profile" id="dataProfile"></div>
+    </div>
+
+    <div class="section severity-section">
+      <h2>🚦 严重等级统计
+        <span style="font-size:11px;color:#9ca3af;font-weight:normal">（待验收：30-60 一般 / 60-90 中等 / &gt;90 严重；待提单：超过 60 天即严重）</span>
+      </h2>
+      <div class="severity-stats" id="severityStats"></div>
+    </div>
+
+    <div class="section person-drill-section">
+      <h2>👤 选择提单人查看明细与建议</h2>
+      <div class="person-drill">
+        <div>
+          <div class="person-drill-title">普通用户先选择自己的提单人</div>
+          <div class="person-drill-desc">选择后仅展示该提单人的待提单、待验收、待清理关闭明细和改善建议。</div>
+        </div>
+        <div class="person-drill-actions">
+          <select id="drillPerson" class="person-drill-select" onchange="applyPersonDrill(this.value)">
+            <option value="">请选择提单人</option>
+          </select>
+          <button class="btn btn-sm btn-primary" type="button" onclick="resetPublicPersonView()">返回排名</button>
+        </div>
+        <div class="person-drill-summary" id="drillSummary"></div>
+      </div>
+    </div>
+
+    <!-- TOP 提单人排名表 -->
+    <div class="section ranking-section">
+      <h2>🏆 提单人预警排名 TOP 10
+        <span style="font-size:11px;color:#9ca3af;font-weight:normal">（综合金额、频次、超期天数；点击行可筛选该提单人明细）</span>
+        <div class="section-toolbar ranking-toolbar">
+          <button class="btn btn-export btn-sm" onclick="exportRanking()">⬇ 导出排名</button>
+        </div>
+      </h2>
+      <table class="ranking-table">
+        <thead>
+          <tr>
+            <th>排名</th>
+            <th>提单人</th>
+            <th class="center">待验收单数</th>
+            <th class="center">未验收金额(¥)</th>
+            <th class="center">最久超期(天)</th>
+            <th class="center">待提单单数</th>
+            <th>主要超期品类</th>
+            <th class="center">待清理关闭订单数</th>
+            <th>vs 上期</th>
+          </tr>
+        </thead>
+        <tbody id="rankingBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 改善建议 -->
+    <div class="section improvement-section">
+      <h2>💡 提单人改善建议
+        <div class="section-toolbar">
+          <button class="btn btn-export btn-sm" onclick="exportImprovement()">⬇ 导出建议清单</button>
+        </div>
+      </h2>
+      <div class="improvement-list" id="improvementList"></div>
+    </div>
+
+    <!-- 待提单预警明细（含筛选） -->
+    <div class="section pending-section">
+      <h2>⏰ 待提单预警明细 <span class="badge" id="badgeOverdue60">0</span>
+        <span style="font-size:11px;color:#9ca3af;font-weight:normal">（超过 60 天即严重）</span>
+        <div class="section-toolbar">
+          <span class="filter-box">
+            提单人：<select id="filterPerson60" onchange="applyPersonDrill(this.value)"><option value="">全部</option></select>
+          </span>
+          <span class="filter-box">
+            城市：<select id="filterCity" onchange="renderPendingTable()"><option value="">全部</option></select>
+          </span>
+          <button class="btn btn-export btn-sm" onclick="exportFiltered60()">⬇ 按筛选导出</button>
+        </div>
+      </h2>
+      <div class="table-wrapper">
+        <table id="pendingTable">
+          <thead><tr>
+            <th>提单人</th><th>PO行类型</th><th>部件号</th><th>城市</th><th>三级品类</th>
+            <th>预计提单时间</th><th class="num-center">已超期(天)</th>
+            <th>等级</th><th>超期原因 <span style="color:#d97706;font-size:11px">需填写</span></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="reason-tip">提示：提单人打开网页查看后，请在“超期原因”中填写原因，便于后续正式环境留痕与月度、季度对比。</div>
+      </div>
+    </div>
+
+    <!-- 待验收预警明细（含筛选） -->
+    <div class="section overdue-section">
+      <h2>🚨 待验收预警明细 <span class="badge" id="badgeOverdue30">0</span>
+        <span style="font-size:11px;color:#9ca3af;font-weight:normal">（30-60 天一般，60-90 天中等，超过 90 天严重）</span>
+        <div class="section-toolbar">
+          <span class="filter-box">
+            提单人：<select id="filterPerson30" onchange="applyPersonDrill(this.value)"><option value="">全部</option></select>
+          </span>
+          <button class="btn btn-export btn-sm" onclick="exportFiltered30()">⬇ 按筛选导出</button>
+        </div>
+      </h2>
+      <div class="table-wrapper">
+        <table id="overdueTable">
+          <thead><tr>
+            <th>提单人</th><th>PO行类型</th><th>部件号</th><th>提单单号</th><th>订单单号</th><th>品类</th>
+            <th class="num-center">未验收金额(¥)</th><th>订单时间</th>
+            <th class="center">超期(天)</th><th>等级</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section cleanup-section">
+      <h2>🧹 待清理关闭订单明细 <span class="badge" id="badgeCleanup">0</span>
+        <div class="section-toolbar">
+          <span class="filter-box">
+            提单人：<select id="filterPersonCleanup" onchange="applyPersonDrill(this.value)"><option value="">全部</option></select>
+          </span>
+          <button class="btn btn-export btn-sm" onclick="exportCleanup()">⬇ 按筛选导出</button>
+        </div>
+      </h2>
+      <div class="table-wrapper">
+        <table id="cleanupTable">
+          <thead><tr>
+            <th>提单人</th><th>PO行类型</th><th>部件号</th><th>订单单号</th><th>品类</th>
+            <th class="center">订单金额(¥)</th><th class="center">未验收金额(¥)</th><th>订单时间</th><th class="center">建议</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="emptyState">
+    <div class="empty">
+      <div class="emoji" id="emptyIcon">🔐</div>
+      <div id="emptyText">请输入后勤采购履行秘钥后使用看板</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    单文件离线工具 · 数据不上传 · 由皮玺玉设计开发
+    <div class="version-watermark" id="versionWatermark"></div>
+  </div>
+</div>
+
+<script>
+// =============================================================================
+// 全局状态
+// =============================================================================
+const STATE = {
+  orderData: null,
+  monitorData: null,
+  result: null,
+  history: null,
+  fieldMap: null,
+  quality: null,
+  confirmedPeriods: [],
+  activePeriodId: null,
+  selectedPerson: '',
+  authorized: false,
+  publicView: false,
+};
+
+const ACCESS_KEY = 'hqcl123';
+const APP_VERSION = {
+  code: 'V24',
+  updatedAt: '2026-05-14 01:52',
+  label: '提单履行预警看板优化版',
+};
+const TODAY = startOfDay(new Date());
+document.getElementById('todayLabel').textContent = fmtDate(TODAY);
+document.getElementById('versionWatermark').textContent = `${APP_VERSION.label} · ${APP_VERSION.code} · 更新时间 ${APP_VERSION.updatedAt}`;
+
+const TASK_PROGRESS = [
+  {
+    title: 'V24 上传文件框细节对齐',
+    detail: '进一步优化上传文件框：两块导入区域保持平行对齐，文件选择控件固定高度，选择文件按钮和文字在虚线框内上下居中，避免贴近下沿。',
+    status: 'done',
+    percent: 100,
+    version: 'V24',
+    updatedAt: '2026-05-14 01:52',
+  },
+  {
+    title: 'V23 未验收金额与人数占比优化',
+    detail: '待验收预警明细、导出、排名和建议统一使用未验收金额；待提单严重等级统计新增提单人数占比；首页 αhonor 水印在彩色标题框内垂直居中。',
+    status: 'done',
+    percent: 100,
+    version: 'V23',
+    updatedAt: '2026-05-14 01:28',
+  },
+  {
+    title: 'V22 上传区对齐与订单状态过滤',
+    detail: '上传文件区改为上下居中平行对齐；订单表新增订单状态字段识别，订单状态为 received 的行会与失效/作废/关闭合同状态一起排除，不参与待验收、待清理和排名统计。',
+    status: 'done',
+    percent: 100,
+    version: 'V22',
+    updatedAt: '2026-05-14 01:15',
+  },
+  {
+    title: 'V21 秘钥、分布图与表格版面优化',
+    detail: '后勤采购履行秘钥已改为 hqcl123；按最新方案移除预警分布图模块；主要明细和排名表改为固定比例列宽，金额、超期天数和数量列保持居中；改善建议标题去掉“基于规则”。',
+    status: 'done',
+    percent: 100,
+    version: 'V21',
+    updatedAt: '2026-05-14 00:16',
+  },
+  {
+    title: 'V20 订单级汇总与品类并排展示',
+    detail: '待验收明细改为按同一订单号汇总金额到单条记录，多个品类并排展示在同一行；同步修正合并金额首行重复累计问题；待提单超过60天统一标为严重。',
+    status: 'done',
+    percent: 100,
+    version: 'V20',
+    updatedAt: '2026-05-13 03:33',
+  },
+  {
+    title: 'V19 订单合并与期次管理优化',
+    detail: '待验收订单按订单号 + 品类合并金额和条目，合同状态失效行不进入分析；各期确认数据改为年度折叠管理，支持提取当期、导出月度记录、生成年度汇总和年度删除清理；移除页面底部独立分析结果留痕板块。',
+    status: 'done',
+    percent: 100,
+    version: 'V19',
+    updatedAt: '2026-05-13 03:15',
+  },
+  {
+    title: 'V18 表2额外列兼容提示',
+    detail: '监控台账表允许包含当前看板未使用的额外列，只要包含提单人、预计下次提单时间等必要字段即可；数据质量区会显示表2识别列数和额外列数，分析提示中明确额外列已自动忽略。',
+    status: 'done',
+    percent: 100,
+    version: 'V18',
+    updatedAt: '2026-05-13 02:54',
+  },
+  {
+    title: 'V17 正式版本与个人视图优化',
+    detail: '看板切换为正式版本；确认本月数据改为仅确认已上传并分析的数据，不再自动生成演示数据；普通用户选择提单人后隐藏排名和四个 KPI，仅保留该提单人的建议与明细；改善建议卡片改为铺满宽度。',
+    status: 'done',
+    percent: 100,
+    version: 'V17',
+    updatedAt: '2026-05-13 01:01',
+  },
+  {
+    title: 'V16 普通视图与严重等级权限优化',
+    detail: '普通用户打开确认数据后先看提单人排名，并通过提单人选择联动查看个人待提单、待验收、待清理明细和改善建议；严重等级统计仅后勤采购履行可见，待提单严重等级改为数量、提单人数和数量占比。',
+    status: 'done',
+    percent: 100,
+    version: 'V16',
+    updatedAt: '2026-05-13 00:18',
+  },
+  {
+    title: 'V15 确认数据恢复修复',
+    detail: '确认本期数据后保存精简分析结果快照，并使用 IndexedDB 承载大数据；后续打开网页无需秘钥即可恢复排名、建议和明细。',
+    status: 'done',
+    percent: 100,
+    version: 'V15',
+    updatedAt: '2026-05-11 04:40',
+  },
+  {
+    title: 'V14 普通用户明细直出',
+    detail: '确认本期数据后，未输入秘钥的普通用户打开网页可恢复明细条目；明细标题徽标同步当前需要处理的单据数量，网页文件名加入版本号。',
+    status: 'done',
+    percent: 100,
+    version: 'V14',
+    updatedAt: '2026-05-11 04:30',
+  },
+  {
+    title: 'V13 确认数据与默认展示优化',
+    detail: '标题已更新为后勤不动产看板；确认期次支持退回上期和删除；确认后普通用户默认看到明细、建议和原因留痕。',
+    status: 'done',
+    percent: 100,
+    version: 'V13',
+    updatedAt: '2026-05-11 04:00',
+  },
+  {
+    title: 'V12 方案补充兼容更新',
+    detail: '重新读取优化方案后，任务进度改为按新增记录顺序展示，并兼容旧台账字段“监控项目”作为部件号识别。',
+    status: 'done',
+    percent: 100,
+    version: 'V12',
+    updatedAt: '2026-05-11 03:37',
+  },
+  {
+    title: 'V11 版本水印与更新历史',
+    detail: '看板底部已显示版本号和更新时间；任务进度右侧默认显示最新记录，可滚动查看完整优化历史。',
+    status: 'done',
+    percent: 100,
+    version: 'V11',
+    updatedAt: '2026-05-11 02:52',
+  },
+  {
+    title: 'V10 排名表补充待清理列',
+    detail: '提单人预警排名已增加待清理关闭订单数，待验收金额和最久超期天数居中对齐。',
+    status: 'done',
+    percent: 100,
+    version: 'V10',
+    updatedAt: '2026-05-11 02:45',
+  },
+  {
+    title: 'V9 方案分板块整理',
+    detail: '优化方案已按字段、权限、统计、明细、建议、留痕等板块整理，冲突内容以后续新增要求为准。',
+    status: 'done',
+    percent: 100,
+    version: 'V9',
+    updatedAt: '2026-05-11 02:38',
+  },
+  {
+    title: 'V8 留痕与待清理闭环',
+    detail: '新增待清理关闭订单明细、本月分析结果 Excel、年度 PPT 记录，并支持确认本月数据后免秘钥查看结果。',
+    status: 'done',
+    percent: 100,
+    version: 'V8',
+    updatedAt: '2026-05-11 02:30',
+  },
+  {
+    title: 'V7 待提单原因与目录统计',
+    detail: '待提单明细已支持填写超期原因，并按目录 / 非目录统计超期未提单和未验收数量。',
+    status: 'done',
+    percent: 100,
+    version: 'V7',
+    updatedAt: '2026-05-11 02:18',
+  },
+  {
+    title: '双 Excel 离线导入与字段识别',
+    detail: '支持订单表、监控台账表上传，自动识别提单人、订单时间、预计提单时间、城市、三级品类等核心字段。',
+    status: 'done',
+    percent: 100,
+  },
+  {
+    title: '两类履行预警规则计算',
+    detail: '已完成超期待验收订单数量、超期未提单数量统计，并按一般 / 中等 / 严重分级。',
+    status: 'done',
+    percent: 100,
+  },
+  {
+    title: '首屏 KPI 与提单人 TOP 排名',
+    detail: '已输出预警数量、涉及提单人、健康率，以及综合金额、频次、超期天数的 TOP10 排名。',
+    status: 'done',
+    percent: 100,
+  },
+  {
+    title: '待提单明细与原因闭环',
+    detail: '已移除待提单三级品类钻取板块，待提单明细放在建议下方，并支持录入超期原因。',
+    status: 'done',
+    percent: 100,
+  },
+  {
+    title: '目录 / 非目录分组统计',
+    detail: '已按 PO 行类型分别统计超期未提单数量、未验收数量、待验收金额和涉及提单人。',
+    status: 'done',
+    percent: 100,
+  },
+  {
+    title: '超期原因录入',
+    detail: '待提单明细已支持提单人填写超期原因，并保存在本机浏览器与确认期次留痕中。',
+    status: 'done',
+    percent: 100,
+  },
+  {
+    title: '明细筛选与 Excel 导出',
+    detail: '已支持待验收、待提单、排名、城市品类和改善建议的筛选导出。',
+    status: 'done',
+    percent: 100,
+  },
+  {
+    title: '提单人改善建议',
+    detail: '已根据单量、金额、最久超期、趋势和品类集中度自动生成个人改善建议。',
+    status: 'done',
+    percent: 100,
+  },
+  {
+    title: '确认本月数据',
+    detail: '后勤采购履行可在上传两份表单并完成分析后确认本月结果，便于下次免秘钥查看分析结果。',
+    status: 'done',
+    percent: 100,
+  },
+  {
+    title: '正式环境记录与月份季度对比',
+    detail: '正式版本已固化两文件上传、确认完成留痕、所有人可见和后续月份 / 季度对比入口。',
+    status: 'pending',
+    percent: 20,
+  },
+];
+
+// =============================================================================
+// 字段映射
+// =============================================================================
+const FIELD_ALIASES = {
+  person:      ['提单人', '申请人', '需求人', '需求人姓名', 'PR创建人姓名', '业务对接人', 'requester'],
+  prNo:        ['提单单号', '提单号', 'PR号', 'PR编号', 'pr_no', '需求单号'],
+  orderNo:     ['订单单号', '单号', '订单号', 'PO号', '订单编号', '原始订单编号', 'po_no'],
+  category:    ['品类', '物料', '采购品类', 'category', '三级品类', '采购品类中文名称', '非生产三级采购品类中文名称'],
+  amount:      ['金额', '订单金额', '总金额', 'amount', '采购金额（PO行）不含税CNY', '采购金额含税（PO行）含税CNY', '行金额（不含税交易币种）'],
+  acceptedAmount:['已验收金额(PO行)不含税CNY', '已验收金额（PO行）不含税交易币种', '已验收金额', '验收金额', 'accepted_amount'],
+  orderDate:   ['订单时间', '订单日期', '下单时间', '提单日期', 'order_date', '原始订单日期', 'PR创建日期', '创建时间'],
+  contractStatus:['行内合同状态', '合同状态', '合同有效状态', '合同/协议状态', '协议状态', 'contract_status'],
+  orderStatus: ['订单状态', 'PO状态', '采购订单状态', '订单行状态', 'PO行状态', 'order_status', 'po_status'],
+  poLineType:   ['PO行类型', '行类型', '目录类型', 'po_line_type'],
+  partNo:       ['供应商部件号', '部件号', '商品编码', '物料编码', 'SKU', 'part_no'],
+  monitorItem: ['监控项目', '项目', '物料/品类', '采购计划', 'item', '合同标题'],
+  expectedDate:['预计下次提单日期', '预计下次提单时间', '计划提单时间', '预计提单时间', '下一次提单月份', '下次提单月份', 'expected_date'],
+  business:    ['影响业务', '业务方', '需求部门', '需求人部门名称', '开支部门中文名称', 'business'],
+  overdueReason:['超期原因', '原因', '未提单原因', '逾期原因', 'overdue_reason'],
+  city:        ['城市', '所在城市', '区域', 'city'],
+  catL3:       ['三级品类', '品类(三级)', '非生产三级采购品类中文名称', 'category_l3', '三级类目'],
+};
+
+function findField(headers, type) {
+  for (const alias of FIELD_ALIASES[type]) {
+    const found = headers.find(h => h && h.toString().trim().toLowerCase() === alias.toLowerCase());
+    if (found) return found;
+  }
+  for (const alias of FIELD_ALIASES[type]) {
+    const found = headers.find(h => h && h.toString().includes(alias));
+    if (found) return found;
+  }
+  return null;
+}
+
+function startOfDay(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeJsString(value) {
+  return String(value ?? '')
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/\r?\n/g, ' ');
+}
+
+// =============================================================================
+// 文件上传
+// =============================================================================
+document.getElementById('orderFile').addEventListener('change', e => loadFile(e, 'order'));
+document.getElementById('monitorFile').addEventListener('change', e => loadFile(e, 'monitor'));
+document.getElementById('analyzeBtn').addEventListener('click', () => analyze(STATE.orderData, STATE.monitorData));
+document.getElementById('demoBtn').addEventListener('click', confirmCurrentMonth);
+document.getElementById('accessBtn').addEventListener('click', verifyAccess);
+document.getElementById('accessKey').addEventListener('keydown', e => {
+  if (e.key === 'Enter') verifyAccess();
+});
+restoreConfirmedResult();
+
+function verifyAccess() {
+  const input = document.getElementById('accessKey');
+  const status = document.getElementById('accessStatus');
+  if (input.value.trim() !== ACCESS_KEY) {
+    STATE.authorized = false;
+    STATE.publicView = !!STATE.result;
+    status.textContent = '秘钥不正确，无法显示上传入口。';
+    status.className = 'access-status show';
+    applyVisibility();
+    input.focus();
+    return;
+  }
+  STATE.authorized = true;
+  STATE.publicView = false;
+  document.getElementById('uploadSection').style.display = 'grid';
+  document.querySelector('.task-progress-section').style.display = 'block';
+  document.getElementById('emptyState').style.display = STATE.result ? 'none' : 'block';
+  document.getElementById('emptyIcon').textContent = '📥';
+  document.getElementById('emptyText').textContent = '请上传两份正式表单，点击「开始分析」后再确认本月数据';
+  status.textContent = '验证通过，已显示后勤采购履行看板入口。';
+  status.className = 'access-status success';
+  applyVisibility();
+  renderConfirmedPeriods();
+  input.value = '';
+}
+
+function resetPersonDrill() {
+  STATE.selectedPerson = '';
+  const drill = document.getElementById('drillPerson');
+  if (drill) drill.value = '';
+  const summary = document.getElementById('drillSummary');
+  if (summary) {
+    summary.className = 'person-drill-summary';
+    summary.innerHTML = '';
+  }
+}
+
+function requireAccess() {
+  if (STATE.authorized) return true;
+  const status = document.getElementById('accessStatus');
+  status.textContent = '请先输入正确秘钥。';
+  status.className = 'access-status show';
+  document.getElementById('accessKey').focus();
+  return false;
+}
+
+function applyVisibility() {
+  const protectedDisplay = STATE.authorized ? 'block' : 'none';
+  document.querySelector('.task-progress-section').style.display = protectedDisplay;
+  const dataProfileSection = document.querySelector('.data-profile-section');
+  if (dataProfileSection) dataProfileSection.style.display = protectedDisplay;
+  const confirmedPeriodSection = document.querySelector('.confirmed-period-section');
+  if (confirmedPeriodSection) confirmedPeriodSection.style.display = protectedDisplay;
+  document.querySelectorAll('.severity-section').forEach(section => {
+    section.style.display = protectedDisplay;
+  });
+  const catalogSection = document.querySelector('.catalog-section');
+  if (catalogSection) catalogSection.style.display = protectedDisplay;
+  const isPublicResult = !!STATE.result && !STATE.authorized;
+  const personSelected = !!STATE.selectedPerson;
+  const hideUntilPersonSelected = isPublicResult && !personSelected;
+  const hidePublicAfterPersonSelected = isPublicResult && personSelected;
+  document.querySelectorAll('.summary-cards, .improvement-section, .pending-section, .overdue-section, .cleanup-section').forEach(section => {
+    section.style.display = hideUntilPersonSelected ? 'none' : '';
+  });
+  if (!hideUntilPersonSelected && !STATE.authorized) {
+    const summary = document.querySelector('.summary-cards');
+    if (summary) summary.style.display = hidePublicAfterPersonSelected ? 'none' : 'grid';
+  }
+  if (hidePublicAfterPersonSelected) {
+    const rankingSection = document.querySelector('.ranking-section');
+    if (rankingSection) rankingSection.style.display = 'none';
+  } else {
+    const rankingSection = document.querySelector('.ranking-section');
+    if (rankingSection) rankingSection.style.display = '';
+  }
+  const drillSection = document.querySelector('.person-drill-section');
+  if (drillSection) drillSection.style.display = STATE.result ? 'block' : 'none';
+}
+
+async function restoreConfirmedResult() {
+  try {
+    await loadConfirmedPeriods();
+    const parsed = getActiveConfirmedPeriod();
+    if (!parsed) return;
+    STATE.activePeriodId = parsed.id || null;
+    STATE.publicView = true;
+    STATE.orderData = parsed.orders || null;
+    STATE.monitorData = parsed.monitors || null;
+    STATE.history = parsed.history || null;
+    STATE.selectedPerson = '';
+    document.getElementById('emptyState').style.display = 'none';
+    showAccessMessage(`已读取${parsed.month || '当前期'}确认数据。无需秘钥可查看提单人排名，选择提单人后查看改善建议和各类明细。`, true);
+    if (parsed.result?.overdue30 && parsed.result?.overdue60) {
+      restoreResultSnapshot(parsed);
+      return;
+    }
+    if (parsed.orders && parsed.monitors) {
+      analyze(parsed.orders, parsed.monitors, { skipAccess: true, restored: true });
+    }
+  } catch (err) {
+    showAccessMessage('未能读取本机确认数据，请由后勤采购履行重新确认本期数据。', false);
+  }
+}
+
+function showAccessMessage(message, ok) {
+  const status = document.getElementById('accessStatus');
+  status.textContent = message;
+  status.className = ok ? 'access-status success' : 'access-status show';
+}
+
+function loadFile(event, type) {
+  if (!requireAccess()) {
+    event.target.value = '';
+    return;
+  }
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(e.target.result, { type: 'array', cellDates: true });
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const data = XLSX.utils.sheet_to_json(sheet, { defval: null, raw: false });
+      if (type === 'order') STATE.orderData = data;
+      else STATE.monitorData = data;
+      STATE.history = null;
+      const orderText = STATE.orderData ? `订单表 ${STATE.orderData.length} 行` : '订单表未加载';
+      const monitorText = STATE.monitorData ? `监控台账 ${STATE.monitorData.length} 行` : '监控台账未加载';
+      showStatus(`✅ ${type === 'order' ? '订单表' : '监控台账'}加载成功：${orderText} / ${monitorText}`, false);
+      resetPersonDrill();
+      checkReady();
+    } catch (err) {
+      showStatus('❌ 文件解析失败：' + err.message, true);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function checkReady() {
+  document.getElementById('analyzeBtn').disabled = !(STATE.orderData && STATE.monitorData);
+}
+
+function showStatus(msg, isError) {
+  const el = document.getElementById('fileStatus');
+  el.textContent = msg;
+  const typeClass = isError === 'warning' ? ' warning' : (isError ? ' error' : '');
+  el.className = 'file-status show' + typeClass;
+}
+
+function rowKey(row) {
+  return [row.person, row.city || '', row.catL3 || row.category || '', row.expected || row.orderDate || '', row.partNo || row.item || row.orderNo || '']
+    .map(v => String(v ?? '').replace(/\|/g, '/'))
+    .join('|');
+}
+
+function getSavedReason(key) {
+  try {
+    return localStorage.getItem('pxy_overdue_reason_' + key) || '';
+  } catch (err) {
+    return '';
+  }
+}
+
+window.savePendingReason = function(key, value) {
+  try {
+    localStorage.setItem('pxy_overdue_reason_' + key, value);
+  } catch (err) {}
+  if (STATE.result?.overdue60) {
+    STATE.result.overdue60.forEach(row => {
+      if (rowKey(row) === key) row.reason = value;
+    });
+  }
+  updateActivePeriodReasons();
+  const input = document.getElementById('reason_' + hashKey(key));
+  if (input) input.classList.toggle('missing', !value.trim());
+};
+
+function hashKey(key) {
+  let hash = 0;
+  const str = String(key);
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash + str.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash).toString(36);
+}
+
+// =============================================================================
+// 确认本月数据
+// =============================================================================
+async function confirmCurrentMonth() {
+  if (!requireAccess()) return;
+  resetPersonDrill();
+  if (STATE.orderData && STATE.monitorData) {
+    analyze(STATE.orderData, STATE.monitorData);
+    if (!STATE.result || STATE.result.orders !== STATE.orderData || STATE.result.monitors !== STATE.monitorData) return;
+    await confirmMonthlyData(STATE.orderData, STATE.monitorData);
+    showStatus(`✅ 已确认本月上传数据：订单 ${STATE.orderData.length} 条 / 监控 ${STATE.monitorData.length} 条`, false);
+    return;
+  }
+  showStatus('❌ 正式版本需先上传订单表和监控台账表，完成分析后再确认本月数据。', true);
+}
+
+// =============================================================================
+// 核心分析
+// =============================================================================
+function analyze(orders, monitors, options = {}) {
+  if (!options.skipAccess && !requireAccess()) return;
+  if (!options.restored) resetPersonDrill();
+  if (!orders || !monitors) return;
+  if (!orders.length || !monitors.length) {
+    showStatus('❌ 两张表都需要至少 1 行数据，请检查上传文件是否为空', true);
+    return;
+  }
+
+  const orderHeaders = Object.keys(orders[0] || {});
+  const monitorHeaders = Object.keys(monitors[0] || {});
+
+  const fld = {
+    person:      findField(orderHeaders, 'person'),
+    prNo:        findField(orderHeaders, 'prNo'),
+    orderNo:     findField(orderHeaders, 'orderNo'),
+    category:    findField(orderHeaders, 'category'),
+    amount:      findField(orderHeaders, 'amount'),
+    acceptedAmount: findField(orderHeaders, 'acceptedAmount'),
+    orderDate:   findField(orderHeaders, 'orderDate'),
+    contractStatus: findField(orderHeaders, 'contractStatus'),
+    orderStatus: findField(orderHeaders, 'orderStatus'),
+    orderPoLineType: findField(orderHeaders, 'poLineType'),
+    orderPartNo: findField(orderHeaders, 'partNo'),
+    monPerson:   findField(monitorHeaders, 'person'),
+    expected:    findField(monitorHeaders, 'expectedDate'),
+    monItem:     findField(monitorHeaders, 'monitorItem'),
+    monPoLineType: findField(monitorHeaders, 'poLineType'),
+    monPartNo:   findField(monitorHeaders, 'partNo') || findField(monitorHeaders, 'monitorItem'),
+    monReason:   findField(monitorHeaders, 'overdueReason'),
+    business:    findField(monitorHeaders, 'business'),
+    city:        findField(monitorHeaders, 'city'),
+    catL3:       findField(monitorHeaders, 'catL3'),
+  };
+  STATE.fieldMap = fld;
+  const recognizedMonitorFields = getRecognizedFieldCount([
+    fld.monPerson,
+    fld.expected,
+    fld.monItem,
+    fld.monPoLineType,
+    fld.monPartNo,
+    fld.monReason,
+    fld.business,
+    fld.city,
+    fld.catL3,
+  ]);
+  const extraMonitorColumnCount = Math.max(0, monitorHeaders.filter(Boolean).length - recognizedMonitorFields);
+
+  if (!fld.person || !fld.orderDate) {
+    showStatus('❌ 订单表必须包含"提单人"和"订单时间"字段', true);
+    return;
+  }
+  if (!fld.monPerson || !fld.expected) {
+    showStatus('❌ 监控台账必须包含"提单人"和"预计下次提单时间"字段', true);
+    return;
+  }
+  const warningMessages = [];
+  const infoMessages = [];
+  if (!fld.city || !fld.catL3) {
+    warningMessages.push('监控台账缺少"城市"或"三级品类"字段，待提单城市筛选和品类统计将受限');
+  }
+  if (extraMonitorColumnCount > 0) {
+    infoMessages.push(`监控台账包含 ${extraMonitorColumnCount} 个当前看板未使用的额外列，已自动忽略`);
+  }
+
+  let invalidOrderDateCount = 0;
+  let invalidMonitorDateCount = 0;
+  let invalidContractStatusCount = 0;
+  let excludedReceivedStatusCount = 0;
+  const activeOrders = orders.filter(o => {
+    if (fld.contractStatus && isInvalidContractStatus(o[fld.contractStatus])) {
+      invalidContractStatusCount++;
+      return false;
+    }
+    if (fld.orderStatus && isReceivedOrderStatus(o[fld.orderStatus])) {
+      excludedReceivedStatusCount++;
+      return false;
+    }
+    return true;
+  });
+
+  // 待验收：订单时间 > 30 天
+  const rawOverdue30 = activeOrders.map(o => {
+    const date = parseDate(o[fld.orderDate]);
+    if (!date) {
+      invalidOrderDateCount++;
+      return null;
+    }
+    const days = daysBetween(date, TODAY);
+    if (days <= 30) return null;
+    return {
+      person: o[fld.person] || '未填写',
+      prNo: fld.prNo ? (o[fld.prNo] || '-') : '-',
+      orderNo: fld.orderNo ? (o[fld.orderNo] || '-') : '-',
+      category: fld.category ? (o[fld.category] || '-') : '-',
+      amount: parseNumber(fld.amount ? o[fld.amount] : 0),
+      acceptedAmount: parseNumber(fld.acceptedAmount ? o[fld.acceptedAmount] : 0),
+      poLineType: normalizePoLineType(fld.orderPoLineType ? o[fld.orderPoLineType] : '', fld.orderPartNo ? o[fld.orderPartNo] : ''),
+      partNo: fld.orderPartNo ? (o[fld.orderPartNo] || '') : '',
+      orderDate: fmtDate(date),
+      overdueDays: days,
+      severity: days > 90 ? 'high' : (days > 60 ? 'mid' : 'low'),
+    };
+  }).filter(x => x);
+  const overdue30 = groupOverdueOrders(rawOverdue30);
+  overdue30.forEach(row => {
+    row.unacceptedAmount = Math.max(0, row.amount - row.acceptedAmount);
+  });
+
+  // 待提单：预计下次提单时间已过 > 60 天
+  const overdue60 = monitors.map(m => {
+    const date = parseDate(m[fld.expected]);
+    if (!date) {
+      invalidMonitorDateCount++;
+      return null;
+    }
+    const overdueDays = daysBetween(date, TODAY);
+    if (overdueDays <= 60) return null;
+    return {
+      person: m[fld.monPerson] || '未填写',
+      city: fld.city ? (m[fld.city] || '未知城市') : '未知城市',
+      catL3: fld.catL3 ? (m[fld.catL3] || '未知品类') : '未知品类',
+      item: fld.monItem ? (m[fld.monItem] || '-') : '-',
+      poLineType: normalizePoLineType(fld.monPoLineType ? m[fld.monPoLineType] : '', fld.monPartNo ? m[fld.monPartNo] : ''),
+      partNo: fld.monPartNo ? (m[fld.monPartNo] || '') : '',
+      expected: fmtDate(date),
+      overdueDays,
+      business: fld.business ? (m[fld.business] || '-') : '-',
+      reason: fld.monReason ? (m[fld.monReason] || '') : '',
+      severity: 'high',
+    };
+  }).filter(x => x);
+
+  const activePeriod = getActiveConfirmedPeriod();
+  if (options.restored && activePeriod) applyPeriodReasons(activePeriod);
+  overdue60.forEach(r => {
+    const saved = getSavedReason(rowKey(r));
+    if (saved) r.reason = saved;
+  });
+
+  STATE.quality = {
+    orderRows: orders.length,
+    monitorRows: monitors.length,
+    invalidOrderDateCount,
+    invalidMonitorDateCount,
+    invalidContractStatusCount,
+    excludedReceivedStatusCount,
+    mergedOrderLineCount: rawOverdue30.length - overdue30.length,
+    validOrderDateCount: activeOrders.length - invalidOrderDateCount,
+    validMonitorDateCount: monitors.length - invalidMonitorDateCount,
+    monitorColumnCount: monitorHeaders.filter(Boolean).length,
+    recognizedMonitorFields,
+    extraMonitorColumnCount,
+  };
+  const cleanup = overdue30.filter(r => r.unacceptedAmount <= 1);
+
+  STATE.result = { overdue30, overdue60, cleanup, orders, monitors };
+  const inconsistentOrders = findOrderDateMismatches(orders, fld);
+  STATE.quality.orderDateMismatchCount = inconsistentOrders.length;
+  STATE.quality.orderDateMismatchSample = inconsistentOrders.slice(0, 2).map(x => x.label).join('；');
+  if (inconsistentOrders.length) {
+    warningMessages.push(`发现 ${inconsistentOrders.length} 组订单号+金额对应多个订单时间，请核对源表；示例：${inconsistentOrders.slice(0, 3).map(x => x.label).join('、')}`);
+  }
+  if (invalidContractStatusCount) {
+    infoMessages.push(`已排除 ${invalidContractStatusCount} 行合同状态失效/作废/关闭数据`);
+  }
+  if (excludedReceivedStatusCount) {
+    infoMessages.push(`已排除 ${excludedReceivedStatusCount} 行订单状态 received 数据`);
+  }
+  if (rawOverdue30.length > overdue30.length) {
+    infoMessages.push(`同一订单号已合并 ${rawOverdue30.length - overdue30.length} 条明细，品类并排展示`);
+  }
+  if (invalidOrderDateCount || invalidMonitorDateCount) {
+    warningMessages.push(`发现 ${invalidOrderDateCount + invalidMonitorDateCount} 行日期无法解析，已自动跳过`);
+  }
+  showStatus(
+    warningMessages.length
+      ? `⚠️ 分析完成：${[...warningMessages, ...infoMessages].join('；')}`
+      : `✅ 分析完成：待验收 ${overdue30.length} 条 / 待提单 ${overdue60.length} 条${infoMessages.length ? '；' + infoMessages.join('；') : ''}`,
+    warningMessages.length ? 'warning' : false
+  );
+  render();
+}
+
+async function confirmMonthlyData(orders, monitors) {
+  try {
+    const period = buildConfirmedPeriod(orders, monitors);
+    const existingIndex = STATE.confirmedPeriods.findIndex(p => p.month === period.month);
+    if (existingIndex >= 0) STATE.confirmedPeriods.splice(existingIndex, 1);
+    STATE.confirmedPeriods.unshift(period);
+    STATE.activePeriodId = period.id;
+    await saveConfirmedPeriods();
+    const status = document.getElementById('recordStatus');
+    if (status) status.textContent = `已确认本期正式数据并留痕：${period.month}。下次打开可免秘钥查看提单人排名，选择提单人后查看对应改善建议和各类明细。`;
+    renderConfirmedPeriods();
+  } catch (err) {
+    const status = document.getElementById('recordStatus');
+    if (status) status.textContent = '本机浏览器存储不可用，本月数据未能保存留痕：' + err.message;
+  }
+}
+
+function buildConfirmedPeriod(orders, monitors) {
+  const month = fmtDate(TODAY).slice(0, 7);
+  const resultSnapshot = buildResultSnapshot();
+  return {
+    id: `${month}_${Date.now()}`,
+    confirmedAt: new Date().toISOString(),
+    month,
+    title: `${month} 确认数据`,
+    orderCount: orders?.length || 0,
+    monitorCount: monitors?.length || 0,
+    orders,
+    monitors,
+    result: resultSnapshot,
+    quality: STATE.quality || null,
+    history: STATE.history || null,
+    reasons: collectCurrentReasons(),
+  };
+}
+
+async function loadConfirmedPeriods() {
+  try {
+    const saved = localStorage.getItem('pxy_confirmed_periods');
+    STATE.confirmedPeriods = saved ? JSON.parse(saved) : [];
+    const dbPeriods = await loadPeriodsFromDb();
+    dbPeriods.forEach(period => {
+      if (!STATE.confirmedPeriods.some(p => p.id === period.id)) {
+        STATE.confirmedPeriods.push(period);
+      }
+    });
+    STATE.confirmedPeriods.sort((a, b) => String(b.confirmedAt || '').localeCompare(String(a.confirmedAt || '')));
+    const legacy = localStorage.getItem('pxy_active_confirmed_period') || localStorage.getItem('pxy_confirmed_month_result');
+    if (legacy) {
+      const parsed = JSON.parse(legacy);
+      if ((parsed?.orders && parsed?.monitors) || parsed?.result) {
+        parsed.id = parsed.id || `${parsed.month || fmtDate(TODAY).slice(0, 7)}_legacy`;
+        parsed.title = parsed.title || `${parsed.month || '历史'} 确认数据`;
+        parsed.reasons = parsed.reasons || {};
+        const existingIndex = STATE.confirmedPeriods.findIndex(p => p.id === parsed.id);
+        if (existingIndex >= 0) STATE.confirmedPeriods[existingIndex] = { ...STATE.confirmedPeriods[existingIndex], ...parsed };
+        else STATE.confirmedPeriods.unshift(parsed);
+        STATE.activePeriodId = parsed.id;
+        await saveConfirmedPeriods();
+      }
+    }
+    const activeId = localStorage.getItem('pxy_active_confirmed_period_id');
+    if (activeId) STATE.activePeriodId = activeId;
+    if ((!STATE.activePeriodId || !STATE.confirmedPeriods.some(p => p.id === STATE.activePeriodId)) && STATE.confirmedPeriods.length) {
+      STATE.activePeriodId = STATE.confirmedPeriods[0].id;
+    }
+  } catch (err) {
+    STATE.confirmedPeriods = [];
+  }
+}
+
+async function saveConfirmedPeriods() {
+  const indexPeriods = STATE.confirmedPeriods.map(toPeriodIndex);
+  await savePeriodsToDb(STATE.confirmedPeriods);
+  const active = getActiveConfirmedPeriod();
+  try {
+    localStorage.setItem('pxy_confirmed_periods', JSON.stringify(indexPeriods));
+    if (active) {
+      localStorage.setItem('pxy_active_confirmed_period_id', active.id);
+      try {
+        localStorage.setItem('pxy_active_confirmed_period', JSON.stringify(toLightPeriod(active)));
+      } catch (err) {
+        localStorage.removeItem('pxy_active_confirmed_period');
+      }
+    } else {
+      localStorage.removeItem('pxy_active_confirmed_period_id');
+      localStorage.removeItem('pxy_active_confirmed_period');
+      localStorage.removeItem('pxy_confirmed_month_result');
+    }
+  } catch (err) {
+    if (active) {
+      try {
+        localStorage.setItem('pxy_active_confirmed_period_id', active.id);
+      } catch (innerErr) {}
+    }
+  }
+}
+
+function toPeriodIndex(period) {
+  return {
+    id: period.id,
+    confirmedAt: period.confirmedAt,
+    month: period.month,
+    title: period.title,
+    orderCount: period.orderCount ?? period.orders?.length ?? 0,
+    monitorCount: period.monitorCount ?? period.monitors?.length ?? 0,
+    hasSnapshot: !!period.result,
+    history: period.history || null,
+    reasons: period.reasons || {},
+  };
+}
+
+function toLightPeriod(period) {
+  return {
+    ...toPeriodIndex(period),
+    result: period.result || null,
+    quality: period.quality || null,
+  };
+}
+
+function openPeriodDb() {
+  return new Promise((resolve, reject) => {
+    if (!('indexedDB' in window)) {
+      reject(new Error('当前浏览器不支持 IndexedDB'));
+      return;
+    }
+    const req = indexedDB.open('pxy_bill_warning_dashboard', 1);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains('periods')) {
+        db.createObjectStore('periods', { keyPath: 'id' });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error('IndexedDB 打开失败'));
+  });
+}
+
+async function loadPeriodsFromDb() {
+  try {
+    const db = await openPeriodDb();
+    return await new Promise((resolve, reject) => {
+      const tx = db.transaction('periods', 'readonly');
+      const store = tx.objectStore('periods');
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => reject(req.error || new Error('读取 IndexedDB 失败'));
+      tx.oncomplete = () => db.close();
+      tx.onerror = () => {
+        db.close();
+        reject(tx.error || new Error('读取 IndexedDB 事务失败'));
+      };
+    });
+  } catch (err) {
+    return [];
+  }
+}
+
+async function savePeriodsToDb(periods) {
+  try {
+    const db = await openPeriodDb();
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction('periods', 'readwrite');
+      const store = tx.objectStore('periods');
+      periods.forEach(period => store.put(period));
+      tx.oncomplete = () => {
+        db.close();
+        resolve();
+      };
+      tx.onerror = () => {
+        db.close();
+        reject(tx.error || new Error('保存 IndexedDB 失败'));
+      };
+    });
+  } catch (err) {
+    // localStorage still keeps the active lightweight snapshot.
+  }
+}
+
+async function deletePeriodFromDb(id) {
+  try {
+    const db = await openPeriodDb();
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction('periods', 'readwrite');
+      tx.objectStore('periods').delete(id);
+      tx.oncomplete = () => {
+        db.close();
+        resolve();
+      };
+      tx.onerror = () => {
+        db.close();
+        reject(tx.error || new Error('删除 IndexedDB 失败'));
+      };
+    });
+  } catch (err) {}
+}
+
+function getActiveConfirmedPeriod() {
+  if (!STATE.confirmedPeriods.length) return null;
+  return STATE.confirmedPeriods.find(p => p.id === STATE.activePeriodId) || STATE.confirmedPeriods[0];
+}
+
+function buildResultSnapshot() {
+  if (!STATE.result) return null;
+  const { overdue30, overdue60, cleanup, orders = [], monitors = [] } = STATE.result;
+  return {
+    overdue30: overdue30.map(row => ({ ...row })),
+    overdue60: overdue60.map(row => ({ ...row, reason: row.reason || getSavedReason(rowKey(row)) })),
+    cleanup: cleanup.map(row => ({ ...row })),
+    ordersCount: orders?.length || 0,
+    monitorsCount: monitors?.length || 0,
+  };
+}
+
+function restoreResultSnapshot(period) {
+  const snapshot = period.result;
+  STATE.result = {
+    overdue30: snapshot.overdue30 || [],
+    overdue60: snapshot.overdue60 || [],
+    cleanup: snapshot.cleanup || [],
+    orders: period.orders || makePlaceholderRows(snapshot.ordersCount || period.orderCount || 0),
+    monitors: period.monitors || makePlaceholderRows(snapshot.monitorsCount || period.monitorCount || 0),
+  };
+  STATE.result.overdue30.forEach(row => {
+    if (row.unacceptedAmount === undefined) row.unacceptedAmount = Math.max(0, (row.amount || 0) - (row.acceptedAmount || 0));
+  });
+  STATE.result.cleanup.forEach(row => {
+    if (row.unacceptedAmount === undefined) row.unacceptedAmount = Math.max(0, (row.amount || 0) - (row.acceptedAmount || 0));
+  });
+  STATE.quality = period.quality || {
+    orderRows: snapshot.ordersCount || period.orderCount || 0,
+    monitorRows: snapshot.monitorsCount || period.monitorCount || 0,
+    invalidOrderDateCount: 0,
+    invalidMonitorDateCount: 0,
+    validOrderDateCount: snapshot.ordersCount || period.orderCount || 0,
+    validMonitorDateCount: snapshot.monitorsCount || period.monitorCount || 0,
+    orderDateMismatchCount: 0,
+    orderDateMismatchSample: '',
+    monitorColumnCount: 0,
+    recognizedMonitorFields: 0,
+    extraMonitorColumnCount: 0,
+    invalidContractStatusCount: 0,
+    mergedOrderLineCount: 0,
+  };
+  STATE.history = period.history || null;
+  STATE.selectedPerson = '';
+  applyPeriodReasons(period);
+  render();
+}
+
+function makePlaceholderRows(count) {
+  return Array.from({ length: Math.max(0, Number(count) || 0) }, () => ({}));
+}
+
+function collectCurrentReasons() {
+  const reasons = {};
+  if (STATE.result?.overdue60) {
+    STATE.result.overdue60.forEach(row => {
+      const key = rowKey(row);
+      const reason = row.reason || getSavedReason(key);
+      if (reason) reasons[key] = reason;
+    });
+  }
+  return reasons;
+}
+
+function applyPeriodReasons(period) {
+  Object.entries(period?.reasons || {}).forEach(([key, reason]) => {
+    try {
+      localStorage.setItem('pxy_overdue_reason_' + key, reason);
+    } catch (err) {}
+  });
+}
+
+async function updateActivePeriodReasons() {
+  if (!STATE.activePeriodId) return;
+  const period = STATE.confirmedPeriods.find(p => p.id === STATE.activePeriodId);
+  if (!period) return;
+  period.reasons = collectCurrentReasons();
+  if (period.result?.overdue60) {
+    period.result.overdue60.forEach(row => {
+      const reason = period.reasons[rowKey(row)];
+      if (reason !== undefined) row.reason = reason;
+    });
+  }
+  await saveConfirmedPeriods();
+  renderConfirmedPeriods();
+}
+
+function renderConfirmedPeriods() {
+  const list = document.getElementById('confirmedPeriodList');
+  if (!list) return;
+  if (!STATE.authorized) {
+    list.innerHTML = '';
+    return;
+  }
+  if (!STATE.confirmedPeriods.length) {
+    list.innerHTML = '<div class="env-note">暂无已确认期次。上传两份正式表单并完成分析后，点击确认本月数据即可生成本期记录。</div>';
+    return;
+  }
+  const activeId = getActiveConfirmedPeriod()?.id;
+  const grouped = STATE.confirmedPeriods.reduce((acc, period) => {
+    const year = String(period.month || period.confirmedAt || '未分组').slice(0, 4);
+    (acc[year] ||= []).push(period);
+    return acc;
+  }, {});
+  list.innerHTML = Object.entries(grouped)
+    .sort((a, b) => b[0].localeCompare(a[0]))
+    .map(([year, periods], groupIndex) => {
+      const totalReasons = periods.reduce((sum, period) => sum + Object.keys(period.reasons || {}).length, 0);
+      return `
+        <details class="period-year" ${groupIndex === 0 ? 'open' : ''}>
+          <summary>
+            <span>${escapeHtml(year)} 年确认数据 · ${periods.length} 期 · 原因 ${totalReasons} 条</span>
+            <span class="period-year-actions">
+              <button class="btn btn-export btn-sm" type="button" onclick="exportAnnualSummary('${escapeJsString(year)}', event)">年度汇总</button>
+              <button class="btn btn-sm" type="button" style="background:#fee2e2;color:#991b1b" onclick="deleteConfirmedYear('${escapeJsString(year)}', event)">年度删除清理</button>
+            </span>
+          </summary>
+          <div class="period-months">
+            ${periods.map(period => renderPeriodItem(period, activeId)).join('')}
+          </div>
+        </details>
+      `;
+    }).join('');
+}
+
+function renderPeriodItem(period, activeId) {
+  const isActive = period.id === activeId;
+  const reasonCount = Object.keys(period.reasons || {}).length;
+  return `
+    <div class="period-item ${isActive ? 'active' : ''}">
+      <div>
+        <div class="period-title">${escapeHtml(period.title || period.month || '确认数据')}${isActive ? ' · 当前展示' : ''}</div>
+        <div class="period-meta">确认时间：${escapeHtml(formatDateTime(period.confirmedAt))} · 订单 ${period.orderCount ?? period.orders?.length ?? 0} 行 / 台账 ${period.monitorCount ?? period.monitors?.length ?? 0} 行 · 已留痕原因 ${reasonCount} 条</div>
+      </div>
+      <button class="btn btn-demo btn-sm" onclick="restorePeriod('${escapeJsString(period.id)}')" ${isActive ? 'disabled' : ''}>提取当期数据</button>
+      <button class="btn btn-export btn-sm" onclick="exportPeriodMonthlyRecord('${escapeJsString(period.id)}')">导出月度记录</button>
+      <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b" onclick="deleteConfirmedPeriod('${escapeJsString(period.id)}')">删除</button>
+    </div>
+  `;
+}
+
+window.restorePeriod = async function(id) {
+  if (!STATE.authorized) return;
+  const period = STATE.confirmedPeriods.find(p => p.id === id);
+  if (!period) return;
+  STATE.activePeriodId = period.id;
+  STATE.publicView = false;
+  STATE.orderData = period.orders || null;
+  STATE.monitorData = period.monitors || null;
+  STATE.history = period.history || null;
+  STATE.selectedPerson = '';
+  applyPeriodReasons(period);
+  await saveConfirmedPeriods();
+  if (period.result) restoreResultSnapshot(period);
+  else if (period.orders && period.monitors) analyze(period.orders, period.monitors, { skipAccess: true, restored: true });
+  else showStatus('该期缺少可恢复的明细快照，请重新上传并确认。', true);
+  showStatus(`✅ 已切换到 ${period.month || '所选期次'} 确认数据`, false);
+};
+
+window.deleteConfirmedPeriod = async function(id) {
+  if (!STATE.authorized) return;
+  const period = STATE.confirmedPeriods.find(p => p.id === id);
+  if (!period) return;
+  if (!confirm(`确认删除 ${period.month || '该期'} 确认数据？删除后可重新上传并确认。`)) return;
+  STATE.confirmedPeriods = STATE.confirmedPeriods.filter(p => p.id !== id);
+  if (STATE.activePeriodId === id) {
+    STATE.activePeriodId = STATE.confirmedPeriods[0]?.id || null;
+  }
+  await deletePeriodFromDb(id);
+  await saveConfirmedPeriods();
+  renderConfirmedPeriods();
+  const active = getActiveConfirmedPeriod();
+  if (active) {
+    await restorePeriod(active.id);
+  } else {
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    document.getElementById('emptyIcon').textContent = '📥';
+    document.getElementById('emptyText').textContent = '请上传两份正式表单，点击「开始分析」后再确认本月数据';
+  }
+};
+
+window.exportPeriodMonthlyRecord = function(id) {
+  const period = STATE.confirmedPeriods.find(p => p.id === id);
+  if (!period?.result) {
+    alert('该期缺少可导出的结果快照');
+    return;
+  }
+  exportMonthlyRecord(period);
+};
+
+window.exportAnnualSummary = function(year, event) {
+  if (event) event.preventDefault();
+  const periods = STATE.confirmedPeriods.filter(p => String(p.month || p.confirmedAt || '').startsWith(year));
+  if (!periods.length) {
+    alert('该年度暂无确认数据');
+    return;
+  }
+  exportAnnualSummaryRows(year, periods);
+};
+
+window.deleteConfirmedYear = async function(year, event) {
+  if (event) event.preventDefault();
+  const periods = STATE.confirmedPeriods.filter(p => String(p.month || p.confirmedAt || '').startsWith(year));
+  if (!periods.length) return;
+  if (!confirm(`确认删除 ${year} 年全部 ${periods.length} 期确认数据？删除后可重新上传并确认。`)) return;
+  const ids = new Set(periods.map(p => p.id));
+  STATE.confirmedPeriods = STATE.confirmedPeriods.filter(p => !ids.has(p.id));
+  if (ids.has(STATE.activePeriodId)) STATE.activePeriodId = STATE.confirmedPeriods[0]?.id || null;
+  for (const id of ids) await deletePeriodFromDb(id);
+  await saveConfirmedPeriods();
+  renderConfirmedPeriods();
+  const active = getActiveConfirmedPeriod();
+  if (active) await restorePeriod(active.id);
+  else {
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    document.getElementById('emptyIcon').textContent = '📥';
+    document.getElementById('emptyText').textContent = '请上传两份正式表单，点击「开始分析」后再确认本月数据';
+  }
+};
+
+function parseDate(v) {
+  if (v === null || v === undefined || v === '') return null;
+  if (v instanceof Date) return isNaN(v) ? null : v;
+
+  // Excel 日期序列号（数值型）
+  if (typeof v === 'number') {
+    const d = new Date((v - 25569) * 86400 * 1000);
+    return isNaN(d) ? null : d;
+  }
+
+  const s = String(v).trim();
+  if (!s) return null;
+
+  // "2026年1月" / "2026年1月15日" / "2026年1月15号"
+  let m = s.match(/^(\d{4})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})?\s*[日号]?$/);
+  if (m) {
+    const day = m[3] ? parseInt(m[3], 10) : 1;
+    const d = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, day);
+    return isNaN(d) ? null : d;
+  }
+
+  // "2026/1/1" / "2026/01/01" / "2026-1-1" / "2026.1.1"
+  m = s.match(/^(\d{4})[\/\-\.](\d{1,2})(?:[\/\-\.](\d{1,2}))?$/);
+  if (m) {
+    const day = m[3] ? parseInt(m[3], 10) : 1;
+    const d = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, day);
+    return isNaN(d) ? null : d;
+  }
+
+  // "2026-01" / "2026/01" 月份格式
+  m = s.match(/^(\d{4})[\/\-](\d{1,2})$/);
+  if (m) {
+    const d = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, 1);
+    return isNaN(d) ? null : d;
+  }
+
+  // 兜底：交给原生 Date 解析
+  const d = new Date(s);
+  return isNaN(d) ? null : d;
+}
+function daysBetween(d1, d2) {
+  return Math.floor((d2 - d1) / 86400000);
+}
+function fmtDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function formatDateTime(value) {
+  if (!value) return '-';
+  const d = new Date(value);
+  if (isNaN(d)) return String(value);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  return `${y}-${m}-${day} ${hh}:${mm}`;
+}
+
+function parseNumber(v) {
+  if (typeof v === 'number') return Number.isFinite(v) ? v : 0;
+  const cleaned = String(v ?? '').replace(/[,\s¥￥元]/g, '');
+  const n = parseFloat(cleaned);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function normalizePoLineType(value, partNo = '') {
+  const text = String(value ?? '').trim();
+  if (text.includes('非目录')) return '非目录';
+  if (text.includes('目录')) return '目录';
+  return String(partNo ?? '').trim() ? '目录' : '非目录';
+}
+
+function displayPartNo(row) {
+  const lineType = String(row.poLineType || '');
+  if (lineType === '非目录') return '-';
+  return lineType.includes('目录') ? (row.partNo || '-') : '-';
+}
+
+function renderCategoryCell(row) {
+  const text = String(row.category || '-');
+  const categories = row.categoryList?.length ? row.categoryList : text.split(' / ').filter(Boolean);
+  if (categories.length <= 2) {
+    return `<span title="${escapeHtml(text)}">${escapeHtml(text)}</span>`;
+  }
+  return `<details class="category-fold"><summary>${categories.length} 个品类</summary><span>${escapeHtml(text)}</span></details>`;
+}
+
+function findOrderDateMismatches(orders, fld) {
+  if (!fld.orderNo || !fld.amount || !fld.orderDate) return [];
+  const groups = new Map();
+  orders.forEach(row => {
+    const orderNo = String(row[fld.orderNo] ?? '').trim();
+    if (!orderNo) return;
+    const amount = parseNumber(row[fld.amount]);
+    const parsedDate = parseDate(row[fld.orderDate]);
+    const dateText = parsedDate ? fmtDate(parsedDate) : String(row[fld.orderDate] ?? '').trim();
+    const key = `${orderNo}__${amount.toFixed(2)}`;
+    if (!groups.has(key)) groups.set(key, { orderNo, amount, dates: new Set() });
+    if (dateText) groups.get(key).dates.add(dateText);
+  });
+  return [...groups.values()]
+    .filter(item => item.dates.size > 1)
+    .map(item => ({
+      ...item,
+      label: `${item.orderNo}/¥${formatAmount(item.amount)} 有 ${item.dates.size} 个订单时间`,
+    }));
+}
+
+function getRecognizedFieldCount(fields) {
+  return new Set(fields.filter(Boolean)).size;
+}
+
+function isInvalidContractStatus(value) {
+  const text = String(value ?? '').trim();
+  if (!text) return false;
+  return ['失效', '已失效', '无效', '作废', '已作废', '终止', '已终止', '关闭', '已关闭'].some(keyword => text.includes(keyword));
+}
+
+function isReceivedOrderStatus(value) {
+  return String(value ?? '').trim().toLowerCase() === 'received';
+}
+
+function groupOverdueOrders(rows) {
+  const groups = new Map();
+  rows.forEach((row, index) => {
+    const orderNo = String(row.orderNo || '').trim();
+    const key = orderNo && orderNo !== '-' ? orderNo : `__missing_order_${index}`;
+    if (!groups.has(key)) {
+      groups.set(key, {
+        ...row,
+        amount: 0,
+        acceptedAmount: 0,
+        categorySet: new Set(),
+        poLineTypes: new Set(),
+        prNos: new Set([row.prNo].filter(v => v && v !== '-')),
+        partNos: new Set(row.poLineType === '目录' && row.partNo ? [row.partNo] : []),
+        sourceCount: 0,
+      });
+    }
+    const target = groups.get(key);
+    target.amount += row.amount;
+    target.acceptedAmount += row.acceptedAmount;
+    target.overdueDays = Math.max(target.overdueDays, row.overdueDays);
+    if (row.orderDate < target.orderDate) target.orderDate = row.orderDate;
+    target.sourceCount += 1;
+    if (row.category && row.category !== '-') target.categorySet.add(row.category);
+    if (row.poLineType) target.poLineTypes.add(row.poLineType);
+    if (row.prNo && row.prNo !== '-') target.prNos.add(row.prNo);
+    if (row.poLineType === '目录' && row.partNo) target.partNos.add(row.partNo);
+    if (row.severity === 'high' || (row.severity === 'mid' && target.severity === 'low')) target.severity = row.severity;
+  });
+  return [...groups.values()].map(row => {
+    const categoryList = [...row.categorySet];
+    const poLineTypeList = [...row.poLineTypes];
+    const { categorySet, poLineTypes, prNos, partNos, sourceCount, ...cleanRow } = row;
+    return {
+      ...cleanRow,
+      category: categoryList.length ? categoryList.join(' / ') : (cleanRow.category || '-'),
+      categoryList,
+      poLineType: poLineTypeList.length === 1 ? poLineTypeList[0] : (poLineTypeList.length ? poLineTypeList.join(' / ') : cleanRow.poLineType),
+      poLineTypeList,
+      prNo: prNos.size ? [...prNos].slice(0, 3).join(',') + (prNos.size > 3 ? ` 等${prNos.size}个` : '') : '-',
+      partNo: partNos.size ? [...partNos].slice(0, 3).join(',') + (partNos.size > 3 ? ` 等${partNos.size}个` : '') : '',
+      mergedCount: sourceCount,
+    };
+  });
+}
+
+// =============================================================================
+// 渲染主入口
+// =============================================================================
+function render() {
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+
+  const { overdue30, overdue60, cleanup, orders, monitors } = STATE.result;
+
+  renderTaskProgress();
+  applyVisibility();
+
+  // KPI
+  const allPersons = new Set([...overdue30.map(x=>x.person), ...overdue60.map(x=>x.person)]);
+  const totalItems = orders.length + monitors.length;
+  const healthRate = totalItems ? ((totalItems - overdue30.length - overdue60.length) / totalItems * 100).toFixed(1) : '0.0';
+  document.getElementById('kpiOverdue30').textContent = overdue30.length;
+  document.getElementById('kpiOverdue60').textContent = overdue60.length;
+  document.getElementById('kpiPersons').textContent = allPersons.size;
+  document.getElementById('kpiHealth').textContent = healthRate + '%';
+
+  if (STATE.history) {
+    const h30 = Object.values(STATE.history).reduce((s,x)=>s+x.overdue30,0);
+    const h60 = Object.values(STATE.history).reduce((s,x)=>s+x.overdue60,0);
+    setDelta('kpiOverdue30Delta', overdue30.length, h30, true);
+    setDelta('kpiOverdue60Delta', overdue60.length, h60, true);
+    setDelta('kpiHealthDelta', parseFloat(healthRate), totalItems ? 100 - (h30+h60)/totalItems*100 : 0, false);
+  } else {
+    resetDelta('kpiOverdue30Delta');
+    resetDelta('kpiOverdue60Delta');
+    resetDelta('kpiPersonsDelta');
+    resetDelta('kpiHealthDelta');
+  }
+
+  renderRankingTable();
+  renderCatalogStats();
+  renderSeverityStats();
+  renderDataProfile();
+  fillFilters();
+  syncDetailFilters();
+  renderOverdueTable();
+  renderPendingTable();
+  renderCleanupTable();
+  generateImprovements();
+  renderConfirmedPeriods();
+}
+
+function syncDetailFilters() {
+  const person = STATE.selectedPerson || '';
+  setSelectValue('filterPerson30', person);
+  setSelectValue('filterPerson60', person);
+  setSelectValue('filterPersonCleanup', person);
+  setSelectValue('filterCity', '');
+}
+
+function setSelectValue(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.value = [...el.options].some(option => option.value === value) ? value : '';
+}
+
+function syncPersonControls(person) {
+  STATE.selectedPerson = person || '';
+  ['filterPerson30', 'filterPerson60', 'filterPersonCleanup', 'drillPerson'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = [...el.options].some(option => option.value === STATE.selectedPerson) ? STATE.selectedPerson : '';
+  });
+}
+
+function renderTaskProgress() {
+  const statusText = { done: '已完成', doing: '进行中', pending: '待补充' };
+  const statusIcon = { done: '✓', doing: '…', pending: '!' };
+  const tasks = TASK_PROGRESS.slice();
+  const doneCount = TASK_PROGRESS.filter(t => t.status === 'done').length;
+  const doingCount = TASK_PROGRESS.filter(t => t.status === 'doing').length;
+  const pendingCount = TASK_PROGRESS.filter(t => t.status === 'pending').length;
+  const completion = Math.round(TASK_PROGRESS.reduce((sum, t) => sum + t.percent, 0) / TASK_PROGRESS.length);
+
+  document.getElementById('taskCompletionRate').textContent = completion + '%';
+  document.getElementById('taskCompletionBar').style.width = completion + '%';
+  document.getElementById('taskDoneCount').textContent = doneCount;
+  document.getElementById('taskDoingCount').textContent = doingCount;
+  document.getElementById('taskPendingCount').textContent = pendingCount;
+
+  const list = document.getElementById('taskProgressList');
+  list.classList.add('scrollable');
+  list.innerHTML = tasks.map((t, index) => `
+    <div class="task-progress-item ${t.status}">
+      <div class="task-status-dot">${statusIcon[t.status]}</div>
+      <div>
+        <div class="task-progress-title">${escapeHtml(t.title)}${t.version ? ` <span style="color:#7c3aed;font-size:11px">${escapeHtml(t.version)}</span>` : ''}</div>
+        <div class="task-progress-detail">${escapeHtml(t.detail)}${t.updatedAt ? ` · ${escapeHtml(t.updatedAt)}` : ''}</div>
+      </div>
+      <div class="task-progress-percent">${t.percent}%<span>${statusText[t.status]}</span></div>
+    </div>
+  `).join('');
+}
+
+function setDelta(id, current, prev, lowerIsBetter) {
+  const el = document.getElementById(id);
+  const diff = current - prev;
+  const pct = prev === 0 ? 0 : (diff / prev * 100).toFixed(1);
+  if (Math.abs(diff) < 0.1) {
+    el.textContent = '→ 持平上期';
+    el.className = 'delta flat';
+  } else {
+    const arrow = diff > 0 ? '↑' : '↓';
+    const cls = (lowerIsBetter ? (diff < 0) : (diff > 0)) ? 'down' : 'up';
+    el.textContent = `${arrow} ${Math.abs(pct)}% vs 上期`;
+    el.className = 'delta ' + cls;
+  }
+}
+
+function resetDelta(id) {
+  const el = document.getElementById(id);
+  el.textContent = '暂无上期对比';
+  el.className = 'delta flat';
+}
+
+function renderDataProfile() {
+  const q = STATE.quality || {};
+  const fld = STATE.fieldMap || {};
+  const totalRows = (q.orderRows || 0) + (q.monitorRows || 0);
+  const invalidRows = (q.invalidOrderDateCount || 0) + (q.invalidMonitorDateCount || 0);
+  const validRate = totalRows ? (((totalRows - invalidRows) / totalRows) * 100).toFixed(1) : '0.0';
+  const mapItems = [
+    ['订单提单人', fld.person],
+    ['订单时间', fld.orderDate],
+    ['订单金额', fld.amount],
+    ['已验收金额', fld.acceptedAmount],
+    ['合同状态', fld.contractStatus],
+    ['订单状态', fld.orderStatus],
+    ['订单品类', fld.category],
+    ['订单PO行类型', fld.orderPoLineType],
+    ['订单部件号', fld.orderPartNo],
+    ['台账提单人', fld.monPerson],
+    ['预计提单时间', fld.expected],
+    ['台账PO行类型', fld.monPoLineType],
+    ['台账部件号', fld.monPartNo],
+    ['超期原因', fld.monReason],
+    ['城市', fld.city],
+    ['三级品类', fld.catL3],
+  ];
+
+  const profileHtml = `
+    <div class="profile-item">
+      <div class="label">订单表行数</div>
+      <div class="value">${q.orderRows || 0}</div>
+      <div class="hint">有效订单日期 ${q.validOrderDateCount || 0} 行</div>
+    </div>
+    <div class="profile-item">
+      <div class="label">监控台账行数</div>
+      <div class="value">${q.monitorRows || 0}</div>
+      <div class="hint">有效预计提单日期 ${q.validMonitorDateCount || 0} 行；额外列 ${q.extraMonitorColumnCount || 0} 个已忽略</div>
+    </div>
+    <div class="profile-item">
+      <div class="label">日期可解析率</div>
+      <div class="value">${validRate}%</div>
+      <div class="hint">无法解析 ${invalidRows} 行，已跳过</div>
+    </div>
+    <div class="profile-item">
+      <div class="label">预警命中率</div>
+      <div class="value">${totalRows ? (((STATE.result.overdue30.length + STATE.result.overdue60.length) / totalRows) * 100).toFixed(1) : '0.0'}%</div>
+      <div class="hint">待验收 + 待提单预警占全部行数</div>
+    </div>
+    <div class="profile-item">
+      <div class="label">订单时间一致性</div>
+      <div class="value">${q.orderDateMismatchCount || 0}</div>
+      <div class="hint">${q.orderDateMismatchSample ? escapeHtml(q.orderDateMismatchSample) : '按订单号 + 金额校验'}</div>
+    </div>
+    <div class="profile-item">
+      <div class="label">合同状态过滤</div>
+      <div class="value">${(q.invalidContractStatusCount || 0) + (q.excludedReceivedStatusCount || 0)}</div>
+      <div class="hint">失效 / 作废 / 终止 / 关闭 / received 行不参与分析</div>
+    </div>
+    <div class="profile-item">
+      <div class="label">订单合并</div>
+      <div class="value">${q.mergedOrderLineCount || 0}</div>
+      <div class="hint">同一订单号汇总金额，品类并排展示</div>
+    </div>
+    <div class="profile-item">
+      <div class="label">表2字段兼容</div>
+      <div class="value">${q.recognizedMonitorFields || 0}/${q.monitorColumnCount || 0}</div>
+      <div class="hint">只读取当前看板所需字段，表2多余列不影响分析</div>
+    </div>
+    <div class="field-map">
+      ${mapItems.map(([label, field]) => `
+        <div class="field-pill ${field ? '' : 'missing'}">
+          <b>${escapeHtml(label)}</b>
+          <span>${field ? escapeHtml(field) : '未识别'}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  document.getElementById('dataProfile').innerHTML = profileHtml;
+}
+
+function renderCatalogStats() {
+  const { overdue30, overdue60 } = STATE.result;
+  const types = ['目录', '非目录'];
+  document.getElementById('catalogStats').innerHTML = types.map(type => {
+    const acceptRows = overdue30.filter(r => r.poLineType === type);
+    const pendingRows = overdue60.filter(r => r.poLineType === type);
+    const amount = acceptRows.reduce((sum, r) => sum + r.unacceptedAmount, 0);
+    return `
+      <div class="split-card">
+        <h3>${type}</h3>
+        <div class="split-grid">
+          <div class="split-item">
+            <div class="label">超期未提单数量</div>
+            <div class="value">${pendingRows.length}</div>
+          </div>
+          <div class="split-item">
+            <div class="label">未验收数量</div>
+            <div class="value">${acceptRows.length}</div>
+          </div>
+          <div class="split-item">
+            <div class="label">待验收未验收金额</div>
+            <div class="value">¥${formatAmount(amount)}</div>
+          </div>
+          <div class="split-item">
+            <div class="label">涉及提单人</div>
+            <div class="value">${new Set([...acceptRows, ...pendingRows].map(r => r.person)).size}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderSeverityStats() {
+  const acceptRows = buildSeverityRows(STATE.result.overdue30, 'unacceptedAmount');
+  const pendingRows = buildSeverityRows(STATE.result.overdue60, null);
+  document.getElementById('severityStats').innerHTML = `
+    <div class="severity-card">
+      <h3>待验收严重等级</h3>
+      ${renderSeverityTable(acceptRows, { showAmount: true, showAmountPct: true })}
+    </div>
+    <div class="severity-card">
+      <h3>待提单严重等级</h3>
+      ${renderSeverityTable(pendingRows, { showPersonCount: true, showPersonPct: true })}
+    </div>
+  `;
+}
+
+function buildSeverityRows(rows, amountField) {
+  const totalCount = rows.length || 1;
+  const totalPersonCount = new Set(rows.map(r => r.person).filter(Boolean)).size || 1;
+  const totalAmount = amountField ? rows.reduce((sum, r) => sum + r[amountField], 0) : 0;
+  return [
+    ['high', '严重'],
+    ['mid', '中等'],
+    ['low', '一般'],
+  ].map(([key, label]) => {
+    const matched = rows.filter(r => r.severity === key);
+    const amount = amountField ? matched.reduce((sum, r) => sum + r[amountField], 0) : 0;
+    return {
+      key,
+      label,
+      count: matched.length,
+      amount,
+      personCount: new Set(matched.map(r => r.person)).size,
+      countPct: matched.length / totalCount * 100,
+      personPct: new Set(matched.map(r => r.person)).size / totalPersonCount * 100,
+      amountPct: totalAmount ? amount / totalAmount * 100 : 0,
+    };
+  });
+}
+
+function renderSeverityTable(rows, options = {}) {
+  const { showAmount = false, showAmountPct = false, showPersonCount = false, showPersonPct = false } = options;
+  return `
+    <table class="severity-table">
+      <thead>
+        <tr>
+          <th>等级</th>
+          <th class="center">数量</th>
+          ${showPersonCount ? '<th class="center">提单人数</th>' : ''}
+          ${showPersonPct ? '<th class="center">提单人数占比</th>' : ''}
+          ${showAmount ? '<th class="center">未验收金额(¥)</th>' : ''}
+          <th class="center">数量占比</th>
+          ${showAmountPct ? '<th class="center">金额占比</th>' : ''}
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(r => `
+          <tr>
+            <td><span class="severity-chip ${r.key}">${r.label}</span></td>
+            <td class="center">${r.count}</td>
+            ${showPersonCount ? `<td class="center">${r.personCount}</td>` : ''}
+            ${showPersonPct ? `<td class="center">${r.personPct.toFixed(1)}%</td>` : ''}
+            ${showAmount ? `<td class="center">${formatAmount(r.amount)}</td>` : ''}
+            <td class="center">${r.countPct.toFixed(1)}%</td>
+            ${showAmountPct ? `<td class="center">${r.amountPct.toFixed(1)}%</td>` : ''}
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+// =============================================================================
+// 提单人排名表（重点）
+// =============================================================================
+function buildPersonRanking() {
+  return buildPersonRankingFromResult(STATE.result);
+}
+
+function buildPersonRankingFromResult(result) {
+  const { overdue30 = [], overdue60 = [], cleanup = [] } = result || {};
+  const stats = {};
+  overdue30.forEach(r => {
+    if (!stats[r.person]) stats[r.person] = { o30:[], o60:[], cats:{} };
+    stats[r.person].o30.push(r);
+    const categories = r.categoryList?.length ? r.categoryList : [r.category];
+    categories.filter(Boolean).forEach(category => {
+      stats[r.person].cats[category] = (stats[r.person].cats[category] || 0) + 1;
+    });
+  });
+  overdue60.forEach(r => {
+    if (!stats[r.person]) stats[r.person] = { o30:[], o60:[], cats:{} };
+    stats[r.person].o60.push(r);
+  });
+
+  const rows = Object.entries(stats).map(([person, s]) => {
+    const totalAmount = s.o30.reduce((sum, r) => sum + r.unacceptedAmount, 0);
+    const maxOverdue = Math.max(0, ...s.o30.map(r => r.overdueDays));
+    const topCat = Object.entries(s.cats).sort((a,b)=>b[1]-a[1])[0];
+    const cleanupCount = cleanup.filter(r => r.person === person).length;
+    return {
+      person,
+      o30Count: s.o30.length,
+      o30Amount: totalAmount,
+      maxOverdueDays: maxOverdue,
+      o60Count: s.o60.length,
+      cleanupCount,
+      topCategory: topCat ? `${topCat[0]} (${topCat[1]})` : '-',
+      // 综合得分：金额权重最高、其次频次、再次最久天数
+      score: totalAmount * 0.0001 + s.o30.length * 5 + maxOverdue * 0.5 + s.o60.length * 3,
+    };
+  });
+
+  rows.sort((a,b) => b.score - a.score);
+  return rows;
+}
+
+function renderRankingTable() {
+  const rankingRows = buildPersonRanking();
+  const rows = rankingRows.slice(0, 10);
+  const maxAmount = Math.max(1, ...rows.map(r => r.o30Amount));
+  const maxOverdueDays = Math.max(1, ...rows.map(r => r.maxOverdueDays));
+
+  const tbody = document.getElementById('rankingBody');
+  if (STATE.selectedPerson && !getAllWarningPersons().includes(STATE.selectedPerson)) STATE.selectedPerson = '';
+  tbody.innerHTML = rows.map((r, i) => {
+    const amountPct = (r.o30Amount / maxAmount * 100).toFixed(1);
+    const daysPct = (r.maxOverdueDays / maxOverdueDays * 100).toFixed(1);
+    const histPrev = STATE.history?.[r.person];
+    const prevTotal = histPrev ? (histPrev.overdue30 + histPrev.overdue60) : 0;
+    const currTotal = r.o30Count + r.o60Count;
+    let trendHtml = '<span style="color:#9ca3af">-</span>';
+    if (histPrev) {
+      const diff = currTotal - prevTotal;
+      if (diff > 0) trendHtml = `<span class="severity-high">↑ ${diff} 单</span>`;
+      else if (diff < 0) trendHtml = `<span class="severity-low">↓ ${-diff} 单</span>`;
+      else trendHtml = '<span style="color:#6b7280">→ 持平</span>';
+    }
+    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i+1);
+    return `
+      <tr onclick="applyPersonDrill('${escapeJsString(r.person)}')" style="cursor:pointer">
+        <td>${medal}</td>
+        <td><b>${escapeHtml(r.person)}</b></td>
+        <td class="center">${r.o30Count}</td>
+        <td class="bar-cell center">
+          <div class="bar-bg" style="width:${amountPct}%"></div>
+          <div class="bar-text">${formatAmount(r.o30Amount)}</div>
+        </td>
+        <td class="bar-cell center">
+          <div class="bar-bg warn" style="width:${daysPct}%"></div>
+          <div class="bar-text severity-${r.maxOverdueDays>90?'high':r.maxOverdueDays>60?'mid':'low'}">${r.maxOverdueDays} 天</div>
+        </td>
+        <td class="center">${r.o60Count}</td>
+        <td>${escapeHtml(r.topCategory)}</td>
+        <td class="center">${r.cleanupCount}</td>
+        <td>${trendHtml}</td>
+      </tr>
+    `;
+  }).join('');
+  fillPersonDrill(rankingRows);
+}
+
+// =============================================================================
+// 筛选下拉
+// =============================================================================
+function fillFilters() {
+  const { overdue60 } = STATE.result;
+  const allPersons = getAllWarningPersons();
+
+  const sel30 = document.getElementById('filterPerson30');
+  sel30.innerHTML = '<option value="">全部</option>' +
+    allPersons.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+
+  const sel60 = document.getElementById('filterPerson60');
+  sel60.innerHTML = '<option value="">全部</option>' +
+    allPersons.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+
+  const cities = [...new Set(overdue60.map(x => x.city))].sort();
+  const selCity = document.getElementById('filterCity');
+  selCity.innerHTML = '<option value="">全部</option>' +
+    cities.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+
+  const selCleanup = document.getElementById('filterPersonCleanup');
+  selCleanup.innerHTML = '<option value="">全部</option>' +
+    allPersons.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+}
+
+function getAllWarningPersons() {
+  if (!STATE.result) return [];
+  const { overdue30, overdue60, cleanup } = STATE.result;
+  return [...new Set([...overdue30, ...overdue60, ...cleanup].map(x => x.person).filter(Boolean))].sort();
+}
+
+function fillPersonDrill(rankingRows = buildPersonRanking()) {
+  const select = document.getElementById('drillPerson');
+  if (!select) return;
+  const rankedPersons = rankingRows.map(r => r.person);
+  const persons = [...new Set([...rankedPersons, ...getAllWarningPersons()])];
+  if (STATE.selectedPerson && !persons.includes(STATE.selectedPerson)) STATE.selectedPerson = '';
+  select.innerHTML = '<option value="">请选择提单人</option>' +
+    persons.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+  select.value = persons.includes(STATE.selectedPerson) ? STATE.selectedPerson : '';
+  renderDrillSummary();
+  applyVisibility();
+}
+
+window.resetPublicPersonView = function() {
+  syncPersonControls('');
+  setSelectValue('filterCity', '');
+  applyVisibility();
+  renderOverdueTable();
+  renderPendingTable();
+  renderCleanupTable();
+  generateImprovements();
+  renderDrillSummary();
+};
+
+window.applyPersonDrill = function(person) {
+  syncPersonControls(person);
+  setSelectValue('filterCity', '');
+  applyVisibility();
+  renderOverdueTable();
+  renderPendingTable();
+  renderCleanupTable();
+  generateImprovements();
+  renderDrillSummary();
+};
+
+function renderDrillSummary() {
+  const summary = document.getElementById('drillSummary');
+  if (!summary) return;
+  const person = STATE.selectedPerson;
+  if (!person || !STATE.result) {
+    summary.className = 'person-drill-summary';
+    summary.innerHTML = '';
+    return;
+  }
+  const { overdue30, overdue60, cleanup } = STATE.result;
+  const acceptRows = overdue30.filter(r => r.person === person);
+  const pendingRows = overdue60.filter(r => r.person === person);
+  const cleanupRows = cleanup.filter(r => r.person === person);
+  const unacceptedAmount = acceptRows.reduce((sum, r) => sum + r.unacceptedAmount, 0);
+  summary.className = 'person-drill-summary show';
+  summary.innerHTML = `
+    <span class="person-chip">当前：${escapeHtml(person)}</span>
+    <span class="person-chip">待提单 ${pendingRows.length} 项</span>
+    <span class="person-chip">待验收 ${acceptRows.length} 单</span>
+    <span class="person-chip">待清理 ${cleanupRows.length} 单</span>
+    <span class="person-chip">未验收金额 ¥${formatAmount(unacceptedAmount)}</span>
+  `;
+}
+
+window.renderOverdueTable = function() {
+  const { overdue30 } = STATE.result;
+  const filterPerson = document.getElementById('filterPerson30').value;
+  syncPersonControls(filterPerson);
+  const rows = (filterPerson ? overdue30.filter(r => r.person === filterPerson) : overdue30)
+    .slice().sort((a,b) => b.overdueDays - a.overdueDays);
+  document.getElementById('badgeOverdue30').textContent = rows.length;
+
+  const tbody = document.querySelector('#overdueTable tbody');
+  tbody.innerHTML = rows.map(r => {
+    const sevText = r.severity === 'high' ? '🔴 严重' : r.severity === 'mid' ? '🟡 中等' : '🟢 一般';
+    return `<tr>
+      <td>${escapeHtml(r.person)}</td>
+      <td class="list-cell" title="${escapeHtml(r.poLineType)}">${escapeHtml(r.poLineType)}</td>
+      <td class="list-cell" title="${escapeHtml(displayPartNo(r))}">${escapeHtml(displayPartNo(r))}</td>
+      <td>${escapeHtml(r.prNo)}</td><td>${escapeHtml(r.orderNo)}</td><td class="list-cell">${renderCategoryCell(r)}</td>
+      <td class="num-center">${formatAmount(r.unacceptedAmount)}</td><td>${r.orderDate}</td>
+      <td class="center severity-${r.severity}">${r.overdueDays}</td>
+      <td class="center severity-${r.severity}">${sevText}</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="10" style="text-align:center;color:#9ca3af;padding:30px">无符合条件的预警</td></tr>';
+};
+
+window.renderPendingTable = function() {
+  const { overdue60 } = STATE.result;
+  const fp = document.getElementById('filterPerson60').value;
+  const fc = document.getElementById('filterCity').value;
+  syncPersonControls(fp);
+  const rows = overdue60.filter(r => (!fp || r.person === fp) && (!fc || r.city === fc))
+    .slice().sort((a,b) => b.overdueDays - a.overdueDays);
+  document.getElementById('badgeOverdue60').textContent = rows.length;
+
+  const tbody = document.querySelector('#pendingTable tbody');
+  tbody.innerHTML = rows.map(r => {
+    const sevText = r.severity === 'high' ? '🔴 严重' : r.severity === 'mid' ? '🟡 中等' : '🟢 一般';
+    const key = rowKey(r);
+    const reason = r.reason || getSavedReason(key);
+    const reasonId = 'reason_' + hashKey(key);
+    return `<tr>
+      <td>${escapeHtml(r.person)}</td>
+      <td>${escapeHtml(r.poLineType)}</td>
+      <td>${escapeHtml(displayPartNo(r))}</td>
+      <td>${escapeHtml(r.city)}</td><td>${escapeHtml(r.catL3)}</td>
+      <td>${r.expected}</td>
+      <td class="num-center severity-${r.severity}">${r.overdueDays}</td>
+      <td class="center severity-${r.severity}">${sevText}</td>
+      <td>
+        <input class="reason-input ${reason ? '' : 'missing'}" id="${reasonId}" value="${escapeHtml(reason)}"
+          placeholder="请填写超期原因" onchange="savePendingReason('${escapeJsString(key)}', this.value)">
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="9" style="text-align:center;color:#9ca3af;padding:30px">无符合条件的预警</td></tr>';
+};
+
+window.renderCleanupTable = function() {
+  const { cleanup } = STATE.result;
+  const fp = document.getElementById('filterPersonCleanup').value;
+  syncPersonControls(fp);
+  const rows = fp ? cleanup.filter(r => r.person === fp) : cleanup;
+  document.getElementById('badgeCleanup').textContent = rows.length;
+  const tbody = document.querySelector('#cleanupTable tbody');
+  tbody.innerHTML = rows.slice().sort((a, b) => b.overdueDays - a.overdueDays).map(r => `
+    <tr>
+      <td>${escapeHtml(r.person)}</td>
+      <td>${escapeHtml(r.poLineType)}</td>
+      <td>${escapeHtml(displayPartNo(r))}</td>
+      <td>${escapeHtml(r.orderNo)}</td>
+      <td class="list-cell">${renderCategoryCell(r)}</td>
+      <td class="center">${formatAmount(r.amount)}</td>
+      <td class="center">${formatAmount(r.unacceptedAmount)}</td>
+      <td>${r.orderDate}</td>
+      <td class="center severity-mid">建议及时清理关闭</td>
+    </tr>
+  `).join('') || '<tr><td colspan="9" style="text-align:center;color:#9ca3af;padding:30px">暂无待清理关闭订单</td></tr>';
+};
+
+function formatAmount(v) {
+  const n = parseFloat(v) || 0;
+  return n.toLocaleString('zh-CN', { maximumFractionDigits: 0 });
+}
+
+// =============================================================================
+// 改善建议
+// =============================================================================
+function generateImprovements() {
+  const ranking = (STATE.selectedPerson
+    ? buildPersonRanking().filter(r => r.person === STATE.selectedPerson)
+    : buildPersonRanking().slice(0, 6));
+
+  const html = ranking.map(r => {
+    const advice = [];
+    const cleanupCount = STATE.result.cleanup.filter(x => x.person === r.person).length;
+    const pendingSevere = STATE.result.overdue60.filter(x => x.person === r.person && x.severity === 'high').length;
+    if (r.o30Count > 5) advice.push(`未验收逾期 <b>${r.o30Count}</b> 单已超 30 天，累计未验收金额 <b>¥${formatAmount(r.o30Amount)}</b>，请及时验收，并提供合理原因及改善措施给后勤采履`);
+    if (r.maxOverdueDays > 90) advice.push(`存在未验收最久 <b>${r.maxOverdueDays}</b> 天严重逾期单据，请说明卡点、责任环节和预计关闭时间`);
+    if (pendingSevere > 0) advice.push(`存在未提单严重逾期 <b>${pendingSevere}</b> 项，请补充超期原因并给出改善措施`);
+    if (r.o60Count > 3) advice.push(`未提单 <b>${r.o60Count}</b> 项已逾期 60 天以上，请确认是否继续采购、是否需要关闭或重提`);
+    if (cleanupCount > 0) advice.push(`待清理关闭订单 <b>${cleanupCount}</b> 单，未验收金额小于等于 1 元，建议及时清理`);
+
+    if (STATE.history?.[r.person]) {
+      const h = STATE.history[r.person];
+      const prev = h.overdue30 + h.overdue60;
+      const curr = r.o30Count + r.o60Count;
+      if (curr > prev) advice.push(`相比上期 ↑ <b>${curr - prev}</b> 单，趋势恶化，建议谈话辅导`);
+      else if (curr < prev) advice.push(`相比上期 ↓ <b>${prev - curr}</b> 单，改善明显，可作为正向案例`);
+    }
+
+    if (r.topCategory && r.topCategory !== '-') {
+      const catName = r.topCategory.split(' ')[0];
+      const catCount = parseInt(r.topCategory.match(/\((\d+)\)/)?.[1] || 0);
+      if (catCount >= 3) advice.push(`<b>${escapeHtml(catName)}</b> 品类问题集中（${catCount} 单），请提供合理原因及改善措施给后勤采履`);
+    }
+
+    if (advice.length === 0) advice.push('当前预警量在可控范围，保持现状即可');
+
+    return `<div class="improvement-card">
+      <div class="name">👤 ${escapeHtml(r.person)} · 待提单 ${r.o60Count} 项 / 待验收 ${r.o30Count} 单 / 待清理 ${cleanupCount} 单</div>
+      <ul>${advice.map(a => `<li>${a}</li>`).join('')}</ul>
+    </div>`;
+  }).join('');
+
+  document.getElementById('improvementList').innerHTML = html || '<div class="empty">暂无需改善的提单人</div>';
+}
+
+// =============================================================================
+// 导出
+// =============================================================================
+function exportRanking() {
+  const source = STATE.selectedPerson ? buildPersonRanking().filter(r => r.person === STATE.selectedPerson) : buildPersonRanking();
+  const rows = source.map((r, i) => ({
+    '排名': i + 1,
+    '提单人': r.person,
+    '待验收单数': r.o30Count,
+    '未验收金额': r.o30Amount,
+    '最久超期天数': r.maxOverdueDays,
+    '待提单单数': r.o60Count,
+    '主要超期品类': r.topCategory,
+    '待清理关闭订单数': r.cleanupCount,
+  }));
+  exportSheet(rows, STATE.selectedPerson ? `提单人预警排名_${STATE.selectedPerson}` : '提单人预警排名');
+}
+
+function exportFiltered30() {
+  const { overdue30 } = STATE.result;
+  const fp = document.getElementById('filterPerson30').value;
+  syncPersonControls(fp);
+  const rows = (fp ? overdue30.filter(r => r.person === fp) : overdue30)
+    .map(r => ({
+      '提单人': r.person,
+      'PO行类型': r.poLineType,
+      '部件号': displayPartNo(r),
+      '提单单号': r.prNo,
+      '订单单号': r.orderNo,
+      '品类': r.category,
+      '合并条目数': r.mergedCount || 1,
+      '未验收金额': r.unacceptedAmount,
+      '订单时间': r.orderDate,
+      '超期天数': r.overdueDays,
+      '严重等级': r.severity === 'high' ? '严重' : r.severity === 'mid' ? '中等' : '一般',
+    }));
+  exportSheet(rows, fp ? `待验收预警_${fp}` : '待验收预警_全部');
+}
+
+function exportFiltered60() {
+  const { overdue60 } = STATE.result;
+  const fp = document.getElementById('filterPerson60').value;
+  const fc = document.getElementById('filterCity').value;
+  syncPersonControls(fp);
+  const rows = overdue60.filter(r => (!fp || r.person === fp) && (!fc || r.city === fc))
+    .map(r => ({
+      '提单人': r.person,
+      'PO行类型': r.poLineType,
+      '部件号': displayPartNo(r),
+      '城市': r.city,
+      '三级品类': r.catL3,
+      '预计提单时间': r.expected,
+      '已超期天数': r.overdueDays,
+      '超期原因': r.reason || getSavedReason(rowKey(r)),
+      '严重等级': r.severity === 'high' ? '严重' : r.severity === 'mid' ? '中等' : '一般',
+    }));
+  const suffix = [fp, fc].filter(x=>x).join('_') || '全部';
+  exportSheet(rows, `待提单预警_${suffix}`);
+}
+
+function exportCleanup() {
+  const fp = document.getElementById('filterPersonCleanup').value;
+  syncPersonControls(fp);
+  const source = fp ? STATE.result.cleanup.filter(r => r.person === fp) : STATE.result.cleanup;
+  const rows = source.map(r => ({
+    '提单人': r.person,
+    'PO行类型': r.poLineType,
+    '部件号': displayPartNo(r),
+    '订单单号': r.orderNo,
+    '品类': r.category,
+    '合并条目数': r.mergedCount || 1,
+    '订单金额': r.amount,
+    '未验收金额': r.unacceptedAmount,
+    '订单时间': r.orderDate,
+    '建议': '及时清理关闭订单',
+  }));
+  exportSheet(rows, fp ? `待清理关闭订单_${fp}` : '待清理关闭订单_全部');
+}
+
+function exportMonthlyRecord(period = null) {
+  const result = period?.result || STATE.result;
+  if (!result) { alert('请先完成分析'); return; }
+  const { overdue30, overdue60, cleanup } = result;
+  const person = STATE.selectedPerson;
+  const acceptRows = person ? overdue30.filter(r => r.person === person) : overdue30;
+  const pendingRows = person ? overdue60.filter(r => r.person === person) : overdue60;
+  const cleanupRows = person ? cleanup.filter(r => r.person === person) : cleanup;
+  const ranking = buildPersonRankingFromResult(result)
+    .filter(r => !person || r.person === person)
+    .slice(0, person ? undefined : 10);
+  const month = period?.month || fmtDate(TODAY).slice(0, 7);
+  const rows = [
+    { '记录类型': '汇总', '指标': '分析月份', '数值': month, '说明': '正式版本确认记录' },
+    { '记录类型': '汇总', '指标': '当前提单人', '数值': person || '全部', '说明': person ? '按提单人筛选导出' : '全部数据导出' },
+    { '记录类型': '汇总', '指标': '超期待验收订单数量', '数值': acceptRows.length, '说明': '订单 > 30 天' },
+    { '记录类型': '汇总', '指标': '超期未提单数量', '数值': pendingRows.length, '说明': '> 60 天' },
+    { '记录类型': '汇总', '指标': '待清理关闭订单数量', '数值': cleanupRows.length, '说明': '未验收金额 <= 1 元' },
+    ...ranking.map((r, idx) => ({
+      '记录类型': 'TOP提单人',
+      '指标': `${idx + 1}. ${r.person}`,
+      '数值': r.o30Count + r.o60Count,
+      '说明': `待验收${r.o30Count} / 待提单${r.o60Count} / 未验收金额¥${formatAmount(r.o30Amount)}`,
+    })),
+    ...pendingRows.map(r => ({
+      '记录类型': '未提单原因记录',
+      '指标': r.person,
+      '数值': r.overdueDays,
+      '说明': `PO行类型:${r.poLineType}；部件号:${displayPartNo(r)}；城市:${r.city}；三级品类:${r.catL3}；原因:${r.reason || getSavedReason(rowKey(r)) || '未填写'}`,
+    })),
+    ...acceptRows.map(r => ({
+      '记录类型': '超期未验收记录',
+      '指标': r.person,
+      '数值': r.overdueDays,
+      '说明': `订单:${r.orderNo}；品类:${r.category}；合并条目:${r.mergedCount || 1}；未验收金额:¥${formatAmount(r.unacceptedAmount)}；PO行类型:${r.poLineType}`,
+    })),
+  ];
+  exportSheet(rows, `月度分析记录_${person || '全部'}_${month}`);
+}
+
+function simulateAnnualPpt() {
+  const year = String(TODAY.getFullYear());
+  const periods = STATE.confirmedPeriods.filter(p => String(p.month || p.confirmedAt || '').startsWith(year));
+  if (periods.length) exportAnnualSummaryRows(year, periods);
+  else if (STATE.result) exportAnnualSummaryRows(year, [{ month: fmtDate(TODAY).slice(0, 7), result: STATE.result }]);
+  else alert('请先完成分析或确认期次');
+}
+
+function exportAnnualSummaryRows(year, periods) {
+  const rows = [];
+  periods.forEach(period => {
+    const result = period.result || {};
+    const ranking = buildPersonRankingFromResult(result).slice(0, 10);
+    rows.push({
+      '年度': year,
+      '月份': period.month || '-',
+      '记录类型': '年度汇总',
+      '指标': '月度预警总览',
+      '数值': (result.overdue30?.length || 0) + (result.overdue60?.length || 0),
+      '说明': `待验收${result.overdue30?.length || 0} / 待提单${result.overdue60?.length || 0} / 待清理${result.cleanup?.length || 0}`,
+    });
+    ranking.forEach((r, index) => rows.push({
+      '年度': year,
+      '月份': period.month || '-',
+      '记录类型': 'TOP提单人',
+      '指标': `${index + 1}. ${r.person}`,
+      '数值': r.o30Count + r.o60Count,
+      '说明': `待提单${r.o60Count} / 待验收${r.o30Count} / 待清理${r.cleanupCount}`,
+    }));
+  });
+  exportSheet(rows, `年度汇总_${year}`);
+}
+
+function exportImprovement() {
+  generateImprovements();
+  const items = [...document.querySelectorAll('.improvement-card')].map(c => ({
+    '提单人': c.querySelector('.name').textContent.replace('👤 ', '').split(' · ')[0],
+    '改善建议': [...c.querySelectorAll('li')].map(li => li.textContent).join(' | '),
+  }));
+  exportSheet(items, '提单人改善建议');
+}
+
+function exportSheet(rows, name) {
+  if (!rows.length) { alert('无数据可导出'); return; }
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  const safeName = sanitizeFileName(name);
+  XLSX.utils.book_append_sheet(wb, ws, safeName.slice(0, 31));
+  XLSX.writeFile(wb, `${safeName}_${fmtDate(TODAY)}.xlsx`);
+}
+
+function sanitizeFileName(name) {
+  return String(name || '导出数据').replace(/[\\/:*?"<>|]/g, '_').slice(0, 80);
+}
+</script>
+
+</body>
+</html>
