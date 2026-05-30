@@ -26,7 +26,15 @@ const handleClick = () => {
     :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)', minHeight: '220px' }"
   >
     <div class="bite-cut"></div>
-    <svg class="bite-trim" viewBox="0 0 28 28" preserveAspectRatio="none" aria-hidden="true">
+    <svg
+      v-if="bitten"
+      class="bite-trim"
+      width="28"
+      height="28"
+      viewBox="0 0 28 28"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
       <path
         d="M 1 0 A 27 27 0 0 0 28 27"
         fill="none"
