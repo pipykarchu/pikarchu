@@ -1,11 +1,18 @@
 <script setup>
 import StatusBadge from './StatusBadge.vue'
+import { useTracker } from '../composables/useTracker'
 
 defineProps({
   project: { type: Object, default: null },
   accent: { type: String, default: '#A78BFA' }
 })
 defineEmits(['close'])
+
+const { track } = useTracker()
+
+const handleActionClick = (project, action) => {
+  track('project_action_click', `${project?.id || project?.title || 'unknown'}:${action.label}`)
+}
 </script>
 
 <template>
@@ -83,14 +90,39 @@ defineEmits(['close'])
               </ul>
             </div>
 
-            <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3">
+            <div v-if="project.actions?.length || project.links?.demo" class="flex flex-col sm:flex-row sm:flex-wrap gap-3">
+              <template v-if="project.actions?.length">
+                <a
+                  v-for="action in project.actions.filter(item => item.href && !item.disabled)"
+                  :key="action.label"
+                  :href="action.href"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="px-5 py-3 sm:py-2.5 rounded-lg text-sm font-medium text-white text-center transition-transform hover:-translate-y-0.5"
+                  :style="{ background: `linear-gradient(135deg, ${accent} 0%, #F472B6 100%)` }"
+                  @click="handleActionClick(project, action)"
+                >
+                  {{ action.label }}
+                </a>
+                <button
+                  v-for="action in project.actions.filter(item => !item.href || item.disabled)"
+                  :key="action.label"
+                  type="button"
+                  disabled
+                  class="px-5 py-3 sm:py-2.5 rounded-lg text-sm font-medium text-center cursor-not-allowed opacity-60"
+                  :style="{ background: 'var(--color-linear-bg-tertiary)', color: 'var(--color-linear-text-tertiary)', border: '1px solid var(--color-linear-border)' }"
+                >
+                  {{ action.label }}
+                </button>
+              </template>
               <a
-                v-if="project.links?.demo"
+                v-else-if="project.links?.demo"
                 :href="project.links.demo"
                 target="_blank"
                 rel="noreferrer"
-                class="px-5 py-3 sm:py-2.5 rounded-full text-sm font-medium text-white text-center transition-transform hover:scale-105"
+                class="px-5 py-3 sm:py-2.5 rounded-lg text-sm font-medium text-white text-center transition-transform hover:-translate-y-0.5"
                 :style="{ background: `linear-gradient(135deg, ${accent} 0%, #F472B6 100%)` }"
+                @click="handleActionClick(project, { label: 'Demo' })"
               >
                 Demo
               </a>

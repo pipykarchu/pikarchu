@@ -11,9 +11,9 @@
   {
     "id": "paid-services",
     "type": "paid",
-    "title": "付费定制",
+    "title": "定制复用",
     "subtitle": "貔貅出马",
-    "desc": "工作流定制 / 1v1 咨询 / 团队培训。报价区间制，私聊详谈。",
+    "desc": "工作流定制 / 1v1 咨询 / 团队培训。私聊详谈。",
     "ctaText": "约我聊聊",
     "ctaAction": "open-contact"
   }

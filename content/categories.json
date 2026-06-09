@@ -32,12 +32,20 @@
     "order": 4
   },
   {
+    "id": "commercial",
+    "title": "商业验证",
+    "icon": "💎",
+    "accent": "#F472B6",
+    "desc": "把 AI 能力包装成可成交、可交付、可复盘的服务",
+    "order": 5
+  },
+  {
     "id": "health",
     "title": "她健康",
     "icon": "🌸",
     "accent": "#F472B6",
     "desc": "女性健康管理：减肥规划、经期照顾",
-    "order": 5
+    "order": 6
   },
   {
     "id": "general",
@@ -45,6 +53,6 @@
     "icon": "🧰",
     "accent": "#34D399",
     "desc": "跨领域可复用的 Skill / 提示词 / 模板",
-    "order": 6
+    "order": 7
   }
 ]

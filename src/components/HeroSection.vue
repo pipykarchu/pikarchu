@@ -1,12 +1,55 @@
 <script setup>
+import { computed } from 'vue'
 import { useContent } from '../composables/useContent'
 
-defineEmits(['open-contact', 'scroll-to-projects'])
+const props = defineProps({
+  mode: { type: String, default: 'business' },
+  modeLabel: { type: String, default: '商业版' }
+})
+defineEmits(['open-contact', 'scroll-to-projects', 'scroll-to-services', 'set-mode'])
 
 const { profile } = useContent()
 
 const handleScroll = (emit) => {
-  emit('scroll-to-projects')
+  if (props.mode === 'business') emit('scroll-to-services')
+  else emit('scroll-to-projects')
+}
+
+const heroCopy = computed(() => {
+  if (props.mode === 'demo') {
+    return {
+      badge: '简历演示入口',
+      title: '皮玺玉 · AI 产品与工作流作品集',
+      slogan: '给面试官看的演示版：项目、方法、Demo 路径一次讲清',
+      intro: '这里保留求职作战中心、采购预警看板、个人站和 AI Skills 的演示链路，适合面试时按“痛点-方案-实现-边界”讲项目。',
+      primary: '查看作品演示',
+      secondary: '切到商业版',
+      metrics: [
+        { value: '10min', label: '面试讲解' },
+        { value: '3', label: '主讲项目' },
+        { value: 'Demo', label: '可点击' }
+      ]
+    }
+  }
+
+  return {
+    badge: '商业接单入口',
+    title: 'AI 工具、PRD 和求职材料，帮你快速做成可交付成果',
+    slogan: '居家远程可交付 · 小单快做 · 明码标价',
+    intro: '面向个人、小团队和求职者，提供 AI 工作流定制、HTML/Excel 小工具、PRD 方案、简历与面试项目包装。先用低成本小单验证需求，再扩展成完整工具。',
+    primary: '查看套餐价格',
+    secondary: '切到演示版',
+    metrics: [
+      { value: '99+', label: '小单起价' },
+      { value: '24h', label: '快单反馈' },
+      { value: '远程', label: '在线交付' }
+    ]
+  }
+})
+
+const handleSecondary = (emit) => {
+  if (props.mode === 'demo') emit('set-mode', 'business')
+  else emit('set-mode', 'demo')
 }
 </script>
 
@@ -22,39 +65,31 @@ const handleScroll = (emit) => {
           :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text-secondary)' }"
         >
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          AI 貔貅营业中
+          {{ heroCopy.badge }} · {{ modeLabel }}
         </div>
 
         <h1
           class="max-w-2xl text-3xl sm:text-4xl md:text-6xl font-bold leading-[1.1] tracking-tight mb-4 md:mb-5"
           :style="{ color: 'var(--color-linear-text)' }"
         >
-          {{ profile.greeting }}
+          {{ heroCopy.title }}
         </h1>
 
         <p
           class="text-lg sm:text-xl md:text-2xl font-semibold leading-snug mb-3 md:mb-4"
           style="background: linear-gradient(135deg, #A78BFA 0%, #F472B6 100%); -webkit-background-clip: text; background-clip: text; color: transparent;"
         >
-          {{ profile.slogan }}
+          {{ heroCopy.slogan }}
         </p>
 
         <p class="max-w-xl text-sm sm:text-base md:text-lg leading-relaxed mb-5 md:mb-6" :style="{ color: 'var(--color-linear-text-secondary)' }">
-          {{ profile.intro }}
+          {{ heroCopy.intro }}
         </p>
 
         <div class="grid grid-cols-3 gap-2 sm:max-w-md mb-6 md:mb-8">
-          <div class="metric-tile">
-            <strong>10+</strong>
-            <span>作品沉淀</span>
-          </div>
-          <div class="metric-tile">
-            <strong>3</strong>
-            <span>合作入口</span>
-          </div>
-          <div class="metric-tile">
-            <strong>AI</strong>
-            <span>工作流</span>
+          <div v-for="metric in heroCopy.metrics" :key="metric.label" class="metric-tile">
+            <strong>{{ metric.value }}</strong>
+            <span>{{ metric.label }}</span>
           </div>
         </div>
 
@@ -64,14 +99,22 @@ const handleScroll = (emit) => {
             class="px-6 py-3 rounded-lg text-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
             style="background: linear-gradient(135deg, #A78BFA 0%, #F472B6 100%); box-shadow: 0 8px 24px rgba(167,139,250,0.35);"
           >
-            看看貔貅囤了啥 →
+            {{ heroCopy.primary }} →
           </button>
           <button
-            @click="$emit('open-contact')"
+            @click="handleSecondary($emit)"
             class="px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5"
             :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
           >
-            约我聊聊
+            {{ heroCopy.secondary }}
+          </button>
+          <button
+            v-if="mode === 'business'"
+            @click="$emit('open-contact')"
+            class="px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5"
+            :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
+          >
+            直接咨询
           </button>
         </div>
       </div>

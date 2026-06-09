@@ -5,6 +5,9 @@ import { useTracker } from '../composables/useTracker'
 import ProjectCard from './ProjectCard.vue'
 import ProjectDetailModal from './ProjectDetailModal.vue'
 
+const props = defineProps({
+  mode: { type: String, default: 'business' }
+})
 const { categories, projectsByCategory } = useContent()
 const { track } = useTracker()
 const selectedProject = ref(null)
@@ -25,10 +28,10 @@ const openProject = (project) => {
     <div class="max-w-6xl mx-auto">
       <div class="mb-8 md:mb-11 text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-3" :style="{ color: 'var(--color-linear-text)' }">
-          貔貅囤的宝贝
+          {{ mode === 'business' ? '可参考案例' : '貔貅囤的宝贝' }}
         </h2>
         <p class="text-sm sm:text-base" :style="{ color: 'var(--color-linear-text-secondary)' }">
-          按领域归档 · 状态徽章一目了然
+          {{ mode === 'business' ? '用真实项目说明我能交付什么，不只停留在口头介绍' : '按领域归档 · 状态徽章一目了然' }}
         </p>
       </div>
 

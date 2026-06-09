@@ -36,12 +36,16 @@ const notifyEmail = process.env.CONTACT_NOTIFY_EMAIL || '1654387747@qq.com'
 const sessionTtlMs = 1000 * 60 * 60 * 12
 const allowedContactStatuses = new Set(['unread', 'read', 'replied', 'archived'])
 const rateLimitBuckets = new Map()
+const aiApiKey = process.env.DASHSCOPE_API_KEY || process.env.QWEN_API_KEY || process.env.OPENAI_API_KEY || ''
+const aiModel = process.env.AI_MODEL || 'qwen-turbo'
+const aiApiUrl = process.env.AI_API_URL || 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions'
 
 const rateLimitRules = {
   login: { limit: 10, windowMs: 1000 * 60 * 15 },
   contact: { limit: 20, windowMs: 1000 * 60 * 10 },
   track: { limit: 120, windowMs: 1000 * 60 },
-  admin: { limit: 180, windowMs: 1000 * 60 }
+  admin: { limit: 180, windowMs: 1000 * 60 },
+  chat: { limit: 30, windowMs: 1000 * 60 * 10 }
 }
 
 const sendJson = (res, statusCode, data) => {
@@ -188,6 +192,106 @@ const getContent = async () => {
     projects: projects.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0)),
     services
   }
+}
+
+const normalizeChatMessages = (messages) => {
+  if (!Array.isArray(messages)) return []
+
+  return messages
+    .slice(-8)
+    .map((item) => ({
+      role: item?.role === 'assistant' ? 'assistant' : 'user',
+      content: String(item?.content || '').trim().slice(0, 800)
+    }))
+    .filter(item => item.content)
+}
+
+const buildPortfolioKnowledge = (content) => {
+  const projects = content.projects.slice(0, 8).map(project => ({
+    title: project.title,
+    status: project.status,
+    summary: project.shortDesc || project.longDesc || '',
+    tags: project.tags || [],
+    highlights: (project.highlights || []).slice(0, 5)
+  }))
+
+  return JSON.stringify({
+    profile: content.profile,
+    services: content.services,
+    projects
+  })
+}
+
+const getFallbackChatReply = (question) => {
+  const text = question.toLowerCase()
+  if (text.includes('contact') || question.includes('联系') || question.includes('微信') || question.includes('邮箱')) {
+    return '可以通过页面里的“留言/联系”入口留下联系方式，也可以查看微信、小红书或邮箱信息。'
+  }
+
+  return '我现在还没有接入 AI 模型，只能先回答基础问题。你可以问个人介绍、作品介绍、联系方式；更具体的问题可以点击“留言/联系”留下信息。'
+}
+
+const chatWithAi = async (messages, content) => {
+  const lastUserMessage = [...messages].reverse().find(item => item.role === 'user')?.content || ''
+
+  if (!aiApiKey) {
+    return {
+      ok: true,
+      reply: getFallbackChatReply(lastUserMessage),
+      fallback: true
+    }
+  }
+
+  const systemPrompt = [
+    'You are the AI assistant for this personal portfolio website.',
+    'Answer in Simplified Chinese by default.',
+    'Only answer from the provided profile, service, contact, and project information.',
+    'If the answer is not in the provided information, say you are not sure and invite the visitor to leave contact details.',
+    'Keep replies concise, friendly, and useful. Do not invent prices, private facts, links, or project results.',
+    `Portfolio information: ${buildPortfolioKnowledge(content)}`
+  ].join('\n')
+
+  const response = await fetch(aiApiUrl, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${aiApiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: aiModel,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        ...messages
+      ],
+      temperature: 0.3,
+      max_tokens: 500
+    })
+  })
+
+  const data = await response.json().catch(() => ({}))
+  if (!response.ok) {
+    const error = new Error(data?.error?.message || 'AI service request failed')
+    error.statusCode = response.status
+    throw error
+  }
+
+  return {
+    ok: true,
+    reply: String(data?.choices?.[0]?.message?.content || '').trim() || getFallbackChatReply(lastUserMessage),
+    model: aiModel
+  }
+}
+
+const handleChat = async (req) => {
+  const body = await readBody(req)
+  const payload = body ? JSON.parse(body) : {}
+  const messages = normalizeChatMessages(payload.messages)
+
+  if (!messages.length) {
+    return { ok: false, error: 'message is required' }
+  }
+
+  return chatWithAi(messages, await getContent())
 }
 
 const saveContact = async (req) => {
@@ -457,6 +561,12 @@ const server = createServer(async (req, res) => {
     if (req.method === 'POST' && url.pathname === '/api/track') {
       enforceRateLimit(req, 'track')
       return sendJson(res, 201, await saveTrackEvent(req))
+    }
+
+    if (req.method === 'POST' && url.pathname === '/api/chat') {
+      enforceRateLimit(req, 'chat')
+      const result = await handleChat(req)
+      return sendJson(res, result.ok ? 200 : 400, result)
     }
 
     if (req.method === 'POST' && url.pathname === '/api/admin/login') {
