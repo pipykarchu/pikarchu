@@ -1,7 +1,7 @@
 import { createServer } from 'node:http'
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto'
 import { existsSync, readFileSync } from 'node:fs'
-import { readFile, mkdir, appendFile } from 'node:fs/promises'
+import { readFile, mkdir, appendFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import nodemailer from 'nodemailer'
@@ -52,8 +52,8 @@ const sendJson = (res, statusCode, data) => {
   res.writeHead(statusCode, {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
+    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
   })
   res.end(JSON.stringify(data))
 }
@@ -88,6 +88,11 @@ const enforceRateLimit = (req, bucketName) => {
 const readJson = async (fileName) => {
   const raw = await readFile(join(contentDir, fileName), 'utf8')
   return JSON.parse(raw)
+}
+
+const writeJson = async (fileName, data) => {
+  await mkdir(contentDir, { recursive: true })
+  await writeFile(join(contentDir, fileName), `${JSON.stringify(data, null, 2)}\n`, 'utf8')
 }
 
 const readJsonl = async (fileName) => {
@@ -179,18 +184,20 @@ const readBody = (req) => {
 }
 
 const getContent = async () => {
-  const [profile, categories, projects, services] = await Promise.all([
+  const [profile, categories, projects, services, servicePackages] = await Promise.all([
     readJson('profile.json'),
     readJson('categories.json'),
     readJson('projects.json'),
-    readJson('services.json')
+    readJson('services.json'),
+    readJson('servicePackages.json')
   ])
 
   return {
     profile,
     categories: categories.sort((a, b) => a.order - b.order),
     projects: projects.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0)),
-    services
+    services,
+    servicePackages
   }
 }
 
@@ -462,12 +469,49 @@ const updateContactStatus = async (req, contactId) => {
   return { ok: true, update }
 }
 
+const normalizeServicePackage = (item, index) => {
+  const normalizeText = (value, max = 300) => String(value || '').trim().slice(0, max)
+  const delivery = Array.isArray(item?.delivery)
+    ? item.delivery
+    : String(item?.delivery || '').split('\n')
+
+  return {
+    id: normalizeText(item?.id, 60) || `package-${index + 1}`,
+    title: normalizeText(item?.title, 60),
+    price: normalizeText(item?.price, 40),
+    subtitle: normalizeText(item?.subtitle, 100),
+    desc: normalizeText(item?.desc, 260),
+    delivery: delivery.map(point => normalizeText(point, 80)).filter(Boolean).slice(0, 6),
+    cycle: normalizeText(item?.cycle, 60)
+  }
+}
+
+const updateServicePackages = async (req) => {
+  const body = await readBody(req)
+  const payload = body ? JSON.parse(body) : {}
+  const packages = Array.isArray(payload.packages) ? payload.packages : null
+
+  if (!packages || packages.length < 1 || packages.length > 8) {
+    return { ok: false, error: '价格卡片数量需要在 1-8 个之间' }
+  }
+
+  const normalized = packages.map(normalizeServicePackage)
+  const invalid = normalized.find(item => !item.title || !item.price || !item.desc)
+  if (invalid) {
+    return { ok: false, error: '每张价格卡片都需要填写标题、价格和描述' }
+  }
+
+  await writeJson('servicePackages.json', normalized)
+  return { ok: true, servicePackages: normalized }
+}
+
 const getAdminSummary = async () => {
-  const [rawContacts, events, statusMap, reminderMap] = await Promise.all([
+  const [rawContacts, events, statusMap, reminderMap, servicePackages] = await Promise.all([
     readJsonl('contacts.jsonl'),
     readJsonl('events.jsonl'),
     getContactStatusMap(),
-    getContactReminderMap()
+    getContactReminderMap(),
+    readJson('servicePackages.json')
   ])
   const contacts = rawContacts.map(contact => {
     const id = getContactId(contact)
@@ -515,6 +559,7 @@ const getAdminSummary = async () => {
     recentEvents: events.slice(-120).reverse(),
     eventCounts,
     statusCounts,
+    servicePackages,
     reminder: {
       email: notifyEmail,
       enabled: Boolean(process.env.RESEND_API_KEY || (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS)),
@@ -586,6 +631,13 @@ const server = createServer(async (req, res) => {
       enforceRateLimit(req, 'admin')
       requireAdmin(req)
       const result = await updateContactStatus(req, decodeURIComponent(contactStatusMatch[1]))
+      return sendJson(res, result.ok ? 200 : 400, result)
+    }
+
+    if (req.method === 'PATCH' && url.pathname === '/api/admin/service-packages') {
+      enforceRateLimit(req, 'admin')
+      requireAdmin(req)
+      const result = await updateServicePackages(req)
       return sendJson(res, result.ok ? 200 : 400, result)
     }
 

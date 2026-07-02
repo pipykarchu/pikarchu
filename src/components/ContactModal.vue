@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue'
 import { useContent } from '../composables/useContent'
 import { useTracker } from '../composables/useTracker'
+import { withBase } from '../composables/useAssetPath'
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false }
@@ -105,7 +106,7 @@ const copyEmail = async () => {
             🐉 貔貅闻到 buff 了。下面三个入口，挑顺手的来。
           </p>
 
-          <form class="space-y-3 mb-5" @submit.prevent="handleSubmit">
+          <form v-if="false" class="space-y-3 mb-5" @submit.prevent="handleSubmit">
             <div class="grid sm:grid-cols-2 gap-3">
               <input
                 v-model="form.name"
@@ -141,6 +142,10 @@ const copyEmail = async () => {
             <p v-if="submitError" class="text-xs text-center text-red-400">{{ submitError }}</p>
           </form>
 
+          <div class="mb-5 rounded-2xl p-3 text-sm leading-6" :style="{ background: 'var(--color-linear-bg-tertiary)', color: 'var(--color-linear-text-secondary)' }">
+            公开面试版暂不启用在线留言，避免无后端时提交失败。可以直接扫码或复制邮箱联系。
+          </div>
+
           <div class="space-y-3">
             <button
               type="button"
@@ -162,7 +167,7 @@ const copyEmail = async () => {
               :style="{ background: 'var(--color-linear-bg-tertiary)' }"
             >
               <img
-                :src="profile.contact.wechat"
+                :src="withBase(profile.contact.wechat)"
                 alt="微信二维码"
                 class="mx-auto w-44 h-44 rounded-xl object-contain bg-white p-2"
                 draggable="false"
@@ -190,7 +195,7 @@ const copyEmail = async () => {
               :style="{ background: 'var(--color-linear-bg-tertiary)' }"
             >
               <img
-                :src="profile.contact.xiaohongshu"
+                :src="withBase(profile.contact.xiaohongshu)"
                 alt="小红书二维码"
                 class="mx-auto w-44 h-44 rounded-xl object-contain bg-white p-2"
                 draggable="false"

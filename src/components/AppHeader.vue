@@ -1,5 +1,6 @@
 <script setup>
 import ThemeToggle from './ThemeToggle.vue'
+import { withBase, withVersion } from '../composables/useAssetPath'
 
 defineProps({
   mode: { type: String, default: 'business' }
@@ -15,7 +16,7 @@ defineEmits(['open-contact', 'set-mode'])
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-2.5 md:py-3 flex items-center justify-between gap-3">
       <a href="#top" class="flex items-center gap-2 group min-w-0">
         <img
-          src="/mascot/pixiu-hero.png?v=0.1.0"
+          :src="withVersion('/mascot/pixiu-hero.png')"
           alt="皮玺玉"
           class="w-8 h-8 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
         />
@@ -60,13 +61,6 @@ defineEmits(['open-contact', 'set-mode'])
             演示版
           </button>
         </div>
-        <a
-          href="/admin"
-          class="hidden sm:inline-flex px-3 py-2 md:py-1.5 rounded-lg text-xs font-medium transition-all duration-300 hover:-translate-y-0.5 whitespace-nowrap"
-          :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
-        >
-          后台
-        </a>
         <ThemeToggle />
         <button
           @click="$emit('open-contact')"

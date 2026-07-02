@@ -1,14 +1,18 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
+import defaultServicePackages from '../../content/servicePackages.json'
 
 const tokenKey = 'pixiyu_admin_token'
 const token = ref(localStorage.getItem(tokenKey) || '')
 const username = ref('admin')
 const password = ref('')
+const showPassword = ref(false)
 const loading = ref(false)
 const error = ref('')
+const saveStatus = ref('')
 const summary = ref(null)
 const activeTab = ref('messages')
+const servicePackageDrafts = ref([])
 
 const statusOptions = [
   { value: 'unread', label: '未读' },
@@ -23,6 +27,10 @@ const contacts = computed(() => summary.value?.contacts || [])
 const events = computed(() => summary.value?.recentEvents || [])
 const eventCounts = computed(() => summary.value?.eventCounts || {})
 const statusCounts = computed(() => summary.value?.statusCounts || {})
+const servicePackages = computed(() => {
+  const packages = summary.value?.servicePackages
+  return Array.isArray(packages) && packages.length ? packages : defaultServicePackages
+})
 
 const statusLabel = (value) => statusOptions.find(item => item.value === value)?.label || value || '未读'
 
@@ -46,6 +54,7 @@ const loadSummary = async () => {
   error.value = ''
   try {
     summary.value = await requestAdmin('/api/admin/summary')
+    servicePackageDrafts.value = servicePackages.value.map(cloneServicePackage)
   } catch (err) {
     error.value = err.message || '后台数据加载失败'
     if (String(error.value).includes('Unauthorized')) logout()
@@ -53,6 +62,16 @@ const loadSummary = async () => {
     loading.value = false
   }
 }
+
+const cloneServicePackage = (item = {}, index = 0) => ({
+  id: item.id || `package-${index + 1}`,
+  title: item.title || '',
+  price: item.price || '',
+  subtitle: item.subtitle || '',
+  desc: item.desc || '',
+  deliveryText: Array.isArray(item.delivery) ? item.delivery.join('\n') : '',
+  cycle: item.cycle || ''
+})
 
 const login = async () => {
   loading.value = true
@@ -93,6 +112,55 @@ const updateStatus = async (contact, status) => {
     await loadSummary()
   } catch (err) {
     error.value = err.message || '状态更新失败'
+  } finally {
+    loading.value = false
+  }
+}
+
+const addServicePackage = () => {
+  servicePackageDrafts.value.push(cloneServicePackage({}, servicePackageDrafts.value.length))
+}
+
+const resetServicePackageDrafts = () => {
+  servicePackageDrafts.value = servicePackages.value.map(cloneServicePackage)
+  saveStatus.value = '已载入当前前台价格卡片，可继续修改后保存。'
+}
+
+const removeServicePackage = (index) => {
+  if (servicePackageDrafts.value.length <= 1) {
+    error.value = '至少保留一张价格卡片'
+    return
+  }
+  servicePackageDrafts.value.splice(index, 1)
+}
+
+const saveServicePackages = async () => {
+  loading.value = true
+  error.value = ''
+  saveStatus.value = ''
+  try {
+    const packages = servicePackageDrafts.value.map((item, index) => ({
+      id: item.id || `package-${index + 1}`,
+      title: item.title,
+      price: item.price,
+      subtitle: item.subtitle,
+      desc: item.desc,
+      delivery: item.deliveryText.split('\n').map(point => point.trim()).filter(Boolean),
+      cycle: item.cycle
+    }))
+
+    const data = await requestAdmin('/api/admin/service-packages', {
+      method: 'PATCH',
+      body: JSON.stringify({ packages })
+    })
+    summary.value = {
+      ...summary.value,
+      servicePackages: data.servicePackages
+    }
+    servicePackageDrafts.value = data.servicePackages.map(cloneServicePackage)
+    saveStatus.value = '价格卡片已保存，前台刷新后生效。'
+  } catch (err) {
+    error.value = err.message || '价格卡片保存失败'
   } finally {
     loading.value = false
   }
@@ -140,14 +208,24 @@ onMounted(loadSummary)
             :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
             placeholder="账号"
           />
-          <input
-            v-model="password"
-            type="password"
-            autocomplete="current-password"
-            class="w-full rounded-2xl px-4 py-3 text-sm outline-none"
-            :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
-            placeholder="密码"
-          />
+          <div class="relative">
+            <input
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              autocomplete="current-password"
+              class="w-full rounded-2xl py-3 pl-4 pr-20 text-sm outline-none"
+              :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
+              placeholder="密码"
+            />
+            <button
+              type="button"
+              class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full px-3 py-1.5 text-xs"
+              :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text-secondary)' }"
+              @click="showPassword = !showPassword"
+            >
+              {{ showPassword ? '隐藏' : '显示' }}
+            </button>
+          </div>
           <button
             class="w-full rounded-full px-4 py-3 text-sm font-medium text-white disabled:opacity-60"
             style="background: linear-gradient(135deg, #A78BFA 0%, #F472B6 100%);"
@@ -166,6 +244,7 @@ onMounted(loadSummary)
               v-for="tab in [
                 { id: 'messages', label: '留言' },
                 { id: 'analytics', label: '数据' },
+                { id: 'pricing', label: '价格卡片' },
                 { id: 'settings', label: '提醒与安全' }
               ]"
               :key="tab.id"
@@ -284,6 +363,150 @@ onMounted(loadSummary)
                 <p class="mt-1 break-all text-xs" :style="{ color: 'var(--color-linear-text-tertiary)' }">{{ formatTime(event.createdAt) }} · {{ event.path }}</p>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section v-if="activeTab === 'pricing'" class="space-y-4">
+          <div
+            class="rounded-2xl p-4"
+            :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)' }"
+          >
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 class="text-lg font-semibold">前台价格卡片</h2>
+                <p class="mt-1 text-sm" :style="{ color: 'var(--color-linear-text-secondary)' }">
+                  修改商业版“可接单服务”里的套餐标题、价格、交付内容和周期。
+                </p>
+              </div>
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  class="rounded-full px-4 py-2 text-sm"
+                  :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)' }"
+                  @click="addServicePackage"
+                >
+                  新增卡片
+                </button>
+                <button
+                  type="button"
+                  class="rounded-full px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
+                  style="background: linear-gradient(135deg, #14B8A6 0%, #60A5FA 100%);"
+                  :disabled="loading"
+                  @click="saveServicePackages"
+                >
+                  {{ loading ? '保存中...' : '保存价格卡片' }}
+                </button>
+              </div>
+            </div>
+            <p v-if="saveStatus" class="mt-3 text-sm text-emerald-500">{{ saveStatus }}</p>
+          </div>
+
+          <article
+            v-for="(item, index) in servicePackageDrafts"
+            :key="`${item.id}-${index}`"
+            class="rounded-2xl p-4"
+            :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)' }"
+          >
+            <div class="mb-4 flex items-center justify-between gap-3">
+              <h3 class="font-semibold">价格卡片 {{ index + 1 }}</h3>
+              <button
+                type="button"
+                class="rounded-full px-3 py-1.5 text-xs"
+                :style="{ background: 'var(--color-linear-bg-tertiary)', color: 'var(--color-linear-text-secondary)' }"
+                @click="removeServicePackage(index)"
+              >
+                删除
+              </button>
+            </div>
+
+            <div class="grid gap-3 md:grid-cols-2">
+              <label class="space-y-1 text-sm">
+                <span :style="{ color: 'var(--color-linear-text-tertiary)' }">ID</span>
+                <input
+                  v-model="item.id"
+                  class="w-full rounded-2xl px-3 py-2.5 text-sm outline-none"
+                  :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
+                  placeholder="resume"
+                />
+              </label>
+              <label class="space-y-1 text-sm">
+                <span :style="{ color: 'var(--color-linear-text-tertiary)' }">标题</span>
+                <input
+                  v-model="item.title"
+                  class="w-full rounded-2xl px-3 py-2.5 text-sm outline-none"
+                  :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
+                  placeholder="简历 / JD 优化"
+                />
+              </label>
+              <label class="space-y-1 text-sm">
+                <span :style="{ color: 'var(--color-linear-text-tertiary)' }">价格</span>
+                <input
+                  v-model="item.price"
+                  class="w-full rounded-2xl px-3 py-2.5 text-sm outline-none"
+                  :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
+                  placeholder="99 元起"
+                />
+              </label>
+              <label class="space-y-1 text-sm">
+                <span :style="{ color: 'var(--color-linear-text-tertiary)' }">周期</span>
+                <input
+                  v-model="item.cycle"
+                  class="w-full rounded-2xl px-3 py-2.5 text-sm outline-none"
+                  :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
+                  placeholder="24-48 小时"
+                />
+              </label>
+            </div>
+
+            <label class="mt-3 block space-y-1 text-sm">
+              <span :style="{ color: 'var(--color-linear-text-tertiary)' }">副标题</span>
+              <input
+                v-model="item.subtitle"
+                class="w-full rounded-2xl px-3 py-2.5 text-sm outline-none"
+                :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
+                placeholder="适合求职、转岗、面试前冲刺"
+              />
+            </label>
+
+            <label class="mt-3 block space-y-1 text-sm">
+              <span :style="{ color: 'var(--color-linear-text-tertiary)' }">描述</span>
+              <textarea
+                v-model="item.desc"
+                rows="3"
+                class="w-full resize-none rounded-2xl px-3 py-2.5 text-sm outline-none"
+                :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
+                placeholder="这张价格卡片解决什么问题"
+              ></textarea>
+            </label>
+
+            <label class="mt-3 block space-y-1 text-sm">
+              <span :style="{ color: 'var(--color-linear-text-tertiary)' }">交付内容（每行一条）</span>
+              <textarea
+                v-model="item.deliveryText"
+                rows="4"
+                class="w-full resize-none rounded-2xl px-3 py-2.5 text-sm outline-none"
+                :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
+                placeholder="1 版简历修改建议&#10;JD 匹配亮点&#10;面试讲稿要点"
+              ></textarea>
+            </label>
+          </article>
+
+          <div
+            v-if="!servicePackageDrafts.length"
+            class="rounded-2xl p-6 text-center"
+            :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)' }"
+          >
+            <p class="text-sm" :style="{ color: 'var(--color-linear-text-secondary)' }">
+              还没有加载到可编辑的价格卡片。
+            </p>
+            <button
+              type="button"
+              class="mt-3 rounded-full px-4 py-2 text-sm"
+              :style="{ background: 'var(--color-linear-bg-tertiary)', border: '1px solid var(--color-linear-border)' }"
+              @click="resetServicePackageDrafts"
+            >
+              载入当前前台价格卡片
+            </button>
           </div>
         </section>
 

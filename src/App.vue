@@ -9,7 +9,6 @@ import InterviewSection from './components/InterviewSection.vue'
 import AppFooter from './components/AppFooter.vue'
 import ContactModal from './components/ContactModal.vue'
 import AdminDashboard from './components/AdminDashboard.vue'
-import ChatWidget from './components/ChatWidget.vue'
 import { useTracker } from './composables/useTracker'
 
 const APP_VERSION = '0.1.0'
@@ -18,7 +17,7 @@ const isAdminRoute = window.location.pathname.startsWith('/admin')
 const { track } = useTracker()
 const allowedModes = new Set(['business', 'demo'])
 const initialMode = new URLSearchParams(window.location.search).get('mode')
-const siteMode = ref(allowedModes.has(initialMode) ? initialMode : 'business')
+const siteMode = ref(allowedModes.has(initialMode) ? initialMode : 'demo')
 const modeLabel = computed(() => siteMode.value === 'demo' ? '演示版' : '商业版')
 
 const setSiteMode = (mode) => {
@@ -26,7 +25,7 @@ const setSiteMode = (mode) => {
 
   siteMode.value = mode
   const url = new URL(window.location.href)
-  if (mode === 'business') url.searchParams.delete('mode')
+  if (mode === 'demo') url.searchParams.delete('mode')
   else url.searchParams.set('mode', mode)
   window.history.replaceState({}, '', url)
   track('mode_switch', mode)
@@ -93,6 +92,5 @@ onMounted(() => {
     </main>
     <AppFooter />
     <ContactModal v-model="contactOpen" />
-    <ChatWidget @open-contact="handleOpenContact" />
   </div>
 </template>

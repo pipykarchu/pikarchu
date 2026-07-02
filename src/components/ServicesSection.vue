@@ -2,53 +2,17 @@
 import { computed } from 'vue'
 import { useContent } from '../composables/useContent'
 
-const { services } = useContent()
+const { services, servicePackages } = useContent()
 const props = defineProps({
   mode: { type: String, default: 'business' }
 })
 defineEmits(['open-contact', 'scroll-to-projects'])
 
-const packages = [
-  {
-    id: 'resume',
-    title: '简历 / JD 优化',
-    price: '99 元起',
-    subtitle: '适合求职、转岗、面试前冲刺',
-    desc: '围绕目标岗位改简历表达、项目讲法和面试自我介绍，让材料更贴近岗位要求。',
-    delivery: ['1 版简历修改建议', 'JD 匹配亮点', '面试讲稿要点'],
-    cycle: '24-48 小时'
-  },
-  {
-    id: 'prd',
-    title: 'PRD / 项目方案',
-    price: '199 元起',
-    subtitle: '适合有想法但说不清需求的人',
-    desc: '把一个产品想法整理成目标用户、场景、功能范围、页面结构和交付计划。',
-    delivery: ['PRD 文档', 'MVP 范围', '风险和验收标准'],
-    cycle: '1-3 天'
-  },
-  {
-    id: 'workflow',
-    title: 'AI 工作流定制',
-    price: '299 元起',
-    subtitle: '适合重复写文档、整理资料、做表的人',
-    desc: '把你的重复工作拆成可复用流程，沉淀成提示词、SOP、表格模板或本地工具。',
-    delivery: ['流程拆解', '可复用提示词', '操作 SOP'],
-    cycle: '2-4 天'
-  },
-  {
-    id: 'tool',
-    title: 'HTML / Excel 小工具',
-    price: '399 元起',
-    subtitle: '适合需要演示、看板、自动分析的人',
-    desc: '做一个可打开、可演示、可交付的小页面或表格分析工具，优先解决一个明确问题。',
-    delivery: ['单页工具或看板', '演示数据', '使用说明'],
-    cycle: '3-7 天'
-  }
-]
-
 const serviceGridClass = computed(() => {
-  if (props.mode === 'business') return 'md:grid-cols-2 xl:grid-cols-4'
+  if (props.mode === 'business') {
+    if (servicePackages.value.length <= 2) return 'md:grid-cols-2'
+    return 'md:grid-cols-2 xl:grid-cols-4'
+  }
   if (services.value.length === 1) return 'md:grid-cols-1'
   if (services.value.length === 2) return 'md:grid-cols-2'
   return 'md:grid-cols-3'
@@ -80,7 +44,7 @@ const handleClick = (action, emit) => {
 
       <div v-if="mode === 'business'" class="grid gap-4 md:gap-5" :class="serviceGridClass">
         <article
-          v-for="item in packages"
+          v-for="item in servicePackages"
           :key="item.id"
           class="service-package p-5 sm:p-6 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex flex-col"
           :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)' }"

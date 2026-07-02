@@ -1,6 +1,7 @@
 <script setup>
 import StatusBadge from './StatusBadge.vue'
 import { useTracker } from '../composables/useTracker'
+import { withBase, withVersion } from '../composables/useAssetPath'
 
 defineProps({
   project: { type: Object, default: null },
@@ -50,7 +51,7 @@ const handleActionClick = (project, action) => {
           <div class="p-4 sm:p-6">
             <div v-if="project.cover" class="mb-5 sm:mb-6 h-44 md:h-64 rounded-2xl overflow-hidden" :style="{ background: 'var(--color-linear-bg-tertiary)' }">
               <img
-                :src="project.cover + '?v=0.1.0'"
+                :src="withVersion(project.cover)"
                 :alt="project.title"
                 class="w-full h-full object-cover"
                 draggable="false"
@@ -95,7 +96,7 @@ const handleActionClick = (project, action) => {
                 <a
                   v-for="action in project.actions.filter(item => item.href && !item.disabled)"
                   :key="action.label"
-                  :href="action.href"
+                  :href="withBase(action.href)"
                   target="_blank"
                   rel="noreferrer"
                   class="px-5 py-3 sm:py-2.5 rounded-lg text-sm font-medium text-white text-center transition-transform hover:-translate-y-0.5"
@@ -117,7 +118,7 @@ const handleActionClick = (project, action) => {
               </template>
               <a
                 v-else-if="project.links?.demo"
-                :href="project.links.demo"
+                :href="withBase(project.links.demo)"
                 target="_blank"
                 rel="noreferrer"
                 class="px-5 py-3 sm:py-2.5 rounded-lg text-sm font-medium text-white text-center transition-transform hover:-translate-y-0.5"

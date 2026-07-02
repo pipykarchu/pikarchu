@@ -1,5 +1,6 @@
 <script setup>
 import { useTracker } from '../composables/useTracker'
+import { withBase } from '../composables/useAssetPath'
 
 defineEmits(['open-contact'])
 
@@ -103,7 +104,7 @@ const handleMaterialClick = (label) => {
 
           <div class="grid gap-2">
             <a
-              href="/docs/personal-ip-site-prd.md"
+              :href="withBase('/docs/personal-ip-site-prd.md')"
               target="_blank"
               rel="noreferrer"
               class="px-4 py-3 rounded-lg text-sm font-medium text-center transition-transform hover:-translate-y-0.5"

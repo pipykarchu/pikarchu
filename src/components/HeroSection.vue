@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useContent } from '../composables/useContent'
+import { withVersion } from '../composables/useAssetPath'
 
 const props = defineProps({
   mode: { type: String, default: 'business' },
@@ -125,7 +126,7 @@ const handleSecondary = (emit) => {
           style="background: rgba(167,139,250,0.18); filter: blur(18px);"
         ></div>
         <img
-          src="/mascot/pixiu-hero.png?v=0.1.0"
+          :src="withVersion('/mascot/pixiu-hero.png')"
           alt="皮玺玉的 AI 貔貅"
           class="relative w-56 sm:w-64 md:w-80 lg:w-[22rem] float-anim drop-shadow-2xl select-none"
           draggable="false"

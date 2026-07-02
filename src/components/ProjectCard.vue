@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import StatusBadge from './StatusBadge.vue'
+import { withBase, withVersion } from '../composables/useAssetPath'
 
 const props = defineProps({
   project: { type: Object, required: true },
@@ -10,12 +11,26 @@ const emit = defineEmits(['open-detail'])
 
 const bitten = ref(false)
 const biteNonce = ref(0)
+let detailTimer = null
+
+const getDetailDelay = () => {
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return 0
+  return 420
+}
 
 const handleClick = () => {
   bitten.value = true
   biteNonce.value++
-  emit('open-detail', props.project)
+
+  window.clearTimeout(detailTimer)
+  detailTimer = window.setTimeout(() => {
+    emit('open-detail', props.project)
+  }, getDetailDelay())
 }
+
+onBeforeUnmount(() => {
+  window.clearTimeout(detailTimer)
+})
 </script>
 
 <template>
@@ -66,7 +81,7 @@ const handleClick = () => {
 
       <div v-if="project.cover" class="mt-4 aspect-[16/9] rounded-lg overflow-hidden" :style="{ background: 'var(--color-linear-bg-tertiary)' }">
         <img
-          :src="project.cover + '?v=0.1.0'"
+          :src="withVersion(project.cover)"
           :alt="project.title"
           class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           draggable="false"
@@ -104,8 +119,8 @@ const handleClick = () => {
   pointer-events: none;
   z-index: 3;
   transition:
-    width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-    height 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    width 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+    height 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .card-bite.bitten .bite-cut {
@@ -122,7 +137,7 @@ const handleClick = () => {
   pointer-events: none;
   z-index: 4;
   opacity: 0;
-  transition: opacity 0.5s ease 0.55s;
+  transition: opacity 0.18s ease 0.26s;
 }
 
 .card-bite.bitten .bite-trim {
@@ -131,50 +146,48 @@ const handleClick = () => {
 
 .pixiu-bite {
   position: absolute;
-  top: -28px;
-  right: -16px;
-  width: 64px;
-  height: 64px;
+  top: -34px;
+  right: -22px;
+  width: 78px;
+  height: 78px;
   pointer-events: none;
-  background-image: url('/mascot/pixiu-hero.png?v=0.1.0');
-  background-size: 220% auto;
-  background-position: 50% 12%;
+  background-image: v-bind("'url(' + withVersion('/mascot/pixiu-bite-sprite.png') + ')'");
+  background-size: auto 100%;
+  background-position: 0 0;
   background-repeat: no-repeat;
   filter: drop-shadow(0 6px 14px rgba(167, 139, 250, 0.4));
   transform-origin: 30% 90%;
   will-change: transform, opacity;
   z-index: 5;
-  animation: pixiuBite 1.1s forwards;
+  animation:
+    pixiuBiteFrames 0.2s steps(2, end) forwards,
+    pixiuBite 0.42s forwards;
+}
+
+@keyframes pixiuBiteFrames {
+  from { background-position: 0 0; }
+  to { background-position: -156px 0; }
 }
 
 @keyframes pixiuBite {
   0% {
     opacity: 0;
-    transform: translate(60px, -45px) scale(0.2) rotate(-30deg);
+    transform: translate(12px, -10px) scale(0.86) rotate(-10deg);
     animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  20% {
+  30% {
     opacity: 1;
-    transform: translate(0, 0) scale(1) rotate(-6deg);
-    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
-  }
-  38% {
-    opacity: 1;
-    transform: translate(-12px, 12px) scale(1.18) rotate(14deg);
+    transform: translate(0, 0) scale(1.02) rotate(-5deg);
     animation-timing-function: cubic-bezier(0.55, 0, 0.45, 1);
   }
-  52% {
+  58% {
     opacity: 1;
-    transform: translate(-4px, 4px) scale(1.05) rotate(-2deg);
-    animation-timing-function: cubic-bezier(0.4, 0, 1, 0.6);
-  }
-  70% {
-    opacity: 0.5;
-    transform: translate(25px, -18px) scale(0.7) rotate(-12deg);
+    transform: translate(-7px, 7px) scale(1.18) rotate(9deg);
+    animation-timing-function: cubic-bezier(0.55, 0, 0.45, 1);
   }
   100% {
     opacity: 0;
-    transform: translate(60px, -50px) scale(0.15) rotate(-28deg);
+    transform: translate(12px, -10px) scale(0.72) rotate(-12deg);
   }
 }
 

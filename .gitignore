@@ -16,8 +16,8 @@ dist-ssr
 .env.*.local
 *.log
 npm-debug.log*
+*.zip
 
 # 貔貅 AI 试错素材（非项目资产）
 # 真正用到的 2 张已经复制到 public/mascot/ 入库
 吉祥物貔貅形象/
-
