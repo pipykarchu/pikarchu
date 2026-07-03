@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>《娃娃仙》漫剧项目 PRD</title><style>
+:root{--ink:#202124;--line:#dadce0;--bg:#f7f8fa;--panel:#fff;--accent:#7b2d26}*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}main{max-width:1120px;margin:0 auto;padding:32px 20px 64px}h1{font-size:32px;margin:0 0 18px;letter-spacing:0}h2{margin:34px 0 14px;padding-top:16px;border-top:1px solid var(--line);font-size:24px}h3{margin:24px 0 10px;font-size:18px;color:var(--accent)}p,li{font-size:15px}.table-wrap{overflow-x:auto;margin:12px 0 22px;background:var(--panel);border:1px solid var(--line);border-radius:8px}table{width:100%;border-collapse:collapse;min-width:720px}th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:9px 11px;vertical-align:top;font-size:14px}th:last-child,td:last-child{border-right:0}tr:last-child td{border-bottom:0}th{background:#f1f3f4;text-align:left;font-weight:700}pre{background:#202124;color:#f8f9fa;padding:14px 16px;border-radius:8px;overflow-x:auto}code{font-family:Consolas,"Courier New",monospace;font-size:.94em}ul,ol{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 22px}
+</style></head><body><main><h1>《娃娃仙》漫剧项目 PRD</h1>
+<h2>0. 文档说明</h2>
+<div class="table-wrap"><table>
+<tr><th>项目</th><th>内容</th></tr>
+<tr><td>文档版本</td><td>V1.4</td></tr>
+<tr><td>创建日期</td><td>2026-05-31</td></tr>
+<tr><td>最近更新</td><td>2026-05-31</td></tr>
+<tr><td>项目名称</td><td>娃娃仙</td></tr>
+<tr><td>项目类型</td><td>民俗奇幻 / 真实恐怖志怪 / 护主报恩漫剧</td></tr>
+<tr><td>项目状态</td><td>正式 PRD V1.4</td></tr>
+<tr><td>核心素材</td><td><code>09_素材与参考/娃娃仙显灵护主事迹分析_原始纪要.txt</code> 第 104 行起</td></tr>
+<tr><td>输出位置</td><td><code>娃娃仙/00_PRD/娃娃仙_PRD.md</code></td></tr>
+</table></div>
+<h3>0.1 修订记录</h3>
+<div class="table-wrap"><table>
+<tr><th>版本</th><th>日期</th><th>修订内容</th><th>状态</th></tr>
+<tr><td>V0.1</td><td>2026-05-31</td><td>创建概念待确认版 PRD</td><td>已归档</td></tr>
+<tr><td>V1.0</td><td>2026-05-31</td><td>按用户确认方向生成正式 PRD：12 集、每集 1 分钟、竖屏、真实恐怖志怪、主投 B 站，兼顾抖音/红果</td><td>已归档</td></tr>
+<tr><td>V1.1</td><td>2026-05-31</td><td>确认现实层孩子名：女儿姜苗、弟弟姜生，并进入角色与第 1 集剧本阶段</td><td>已归档</td></tr>
+<tr><td>V1.2</td><td>2026-05-31</td><td>明确双线叙事：现实线负责清明前夜讲述入口和第 12 集扫墓收束，故事线负责娃娃仙护主主线</td><td>已归档</td></tr>
+<tr><td>V1.3</td><td>2026-05-31</td><td>合并 <code>PRD生成工作流.md</code>：补充素材接入、PRD 输出、下游交接、生图提示词和小白照做版流程</td><td>已归档</td></tr>
+<tr><td>V1.4</td><td>2026-05-31</td><td>整理当前生产口径：同步第 2 集带糖回家结尾、第 4 集脑海闪回与草丛动静、第 1-10 集完整制作进度</td><td>当前版本</td></tr>
+</table></div>
+<h3>0.2 已确认方向</h3>
+<div class="table-wrap"><table>
+<tr><th>项目</th><th>已确认内容</th></tr>
+<tr><td>项目关系</td><td>《娃娃仙》和《瓷娃仙》不是同一个故事</td></tr>
+<tr><td>集数</td><td>12 集</td></tr>
+<tr><td>单集时长</td><td>每集约 1 分钟</td></tr>
+<tr><td>画幅</td><td>竖屏 9:16</td></tr>
+<tr><td>画风</td><td>真实恐怖志怪，真人质感，民俗阴冷氛围</td></tr>
+<tr><td>地理背景</td><td>娘子关一带旧村，保留太行山关隘、河沟、坡坟、竹林和旧院气质</td></tr>
+<tr><td>平台</td><td>主要 B 站；同时适配抖音、红果</td></tr>
+<tr><td>讲述方式</td><td>双线叙事：现实线从姜苗、姜生睡前要故事开始，清明扫墓收束；故事线讲姥爷救道士和娃娃仙显灵护主</td></tr>
+<tr><td>主角称呼</td><td>不直接叫“妈妈”，参考太行山语境，暂用“妮儿/小妮儿”作为剧中称呼</td></tr>
+<tr><td>现实层孩子</td><td>女儿姜苗，弟弟姜生</td></tr>
+<tr><td>当前生产进度</td><td>第 1-10 集剧本、分镜表、生图提示词完整包已完成；下一步进入第 11 集《婚礼上的道士》</td></tr>
+</table></div>
+<h2>1. 项目定义</h2>
+<h3>1.1 一句话定义</h3>
+<p>《娃娃仙》是一部 12 集竖屏真实恐怖志怪漫剧：女儿缠着母亲讲家族旧事，母亲讲起自己小时候被一个粗布娃娃多次显灵保护，最终娃娃仙为斩旱魃耗尽灵力，只留下一颗象征重生的姜。</p>
+<h3>1.2 核心看点</h3>
+<div class="table-wrap"><table>
+<tr><th>看点</th><th>表现方式</th></tr>
+<tr><td>家族旧事感</td><td>现实层从女儿追问开始，母亲以“睡前故事”方式讲述</td></tr>
+<tr><td>民俗恐怖</td><td>娘子关一带旧村、竹林深坑、拦路鬼、旱魃、红毛菌丝、火堆梦境</td></tr>
+<tr><td>护主报恩</td><td>姥爷救道士种善因，娃娃仙多次救“妮儿”</td></tr>
+<tr><td>代价递增</td><td>每救一次，娃娃少一根辫子；最后辫子全无，灵力耗尽</td></tr>
+<tr><td>情绪余味</td><td>道士取回娃娃，留下姜；现实层回到墓前，等待姜发芽</td></tr>
+</table></div>
+<h3>1.3 目标观众</h3>
+<div class="table-wrap"><table>
+<tr><th>观众类型</th><th>核心期待</th><th>适配重点</th></tr>
+<tr><td>B 站民俗故事观众</td><td>有完整故事、有细节、有情绪后劲</td><td>旁白质感、章节感、评论讨论点</td></tr>
+<tr><td>志怪恐怖观众</td><td>诡异事件、民间禁忌、压迫氛围</td><td>竹林、拦路鬼、旱魃画面要有记忆点</td></tr>
+<tr><td>情绪向观众</td><td>善良被回报、守护与牺牲、结尾希望</td><td>娃娃仙的“少一根辫子”要反复强化</td></tr>
+<tr><td>短剧平台观众</td><td>每集开头有钩子，结尾有追更点</td><td>抖音/红果版每集前 3 秒必须有强冲突</td></tr>
+</table></div>
+<h2>2. 叙事方案</h2>
+<h3>2.1 总体叙事结构</h3>
+<p>采用“现实层包裹主线回忆”的讲述方式。</p>
+<pre><code>现实层：女儿缠着阿妮讲娃娃仙的故事
+  -&gt; 回忆主线：姥爷救道士，娃娃仙多次显灵护主
+  -&gt; 高潮：娃娃仙斩旱魃，耗尽灵力
+  -&gt; 现实层回归：清明墓前，姜没有发芽，但家人仍相信她会回来</code></pre>
+<p>双线职责固定如下：</p>
+<div class="table-wrap"><table>
+<tr><th>线索</th><th>负责内容</th><th>出现节奏</th><th>作用</th></tr>
+<tr><td>现实线</td><td>2026 年清明前一晚，阿妮给姜苗、姜生讲娃娃仙；第 12 集清明扫墓，看墓前姜是否发芽</td><td>第 1 集开口，第 12 集收束；中段尽量不频繁切回</td><td>让“红布姜”“孩子名字带姜”“扫墓看姜”形成闭环</td></tr>
+<tr><td>故事线</td><td>姥爷救道士、五辫娃娃来到小妮儿身边、娃娃仙多次显灵护主、斩旱魃、婚礼被道士取回</td><td>第 1 集进入后持续推进到第 11 集</td><td>承担主要恐怖志怪事件和情绪牺牲</td></tr>
+</table></div>
+<h3>2.2 现实层设置</h3>
+<div class="table-wrap"><table>
+<tr><th>项目</th><th>设定</th></tr>
+<tr><td>讲述者</td><td>成年后的妮儿，已为人母</td></tr>
+<tr><td>听故事的人</td><td>弟弟姜生主问，女儿姜苗说自己从小听姥姥讲到都会背；两个名字都带“姜”以呼应结尾</td></tr>
+<tr><td>现实层时间</td><td>2026 年清明前一晚，第二天要早起给姥姥姥爷上坟</td></tr>
+<tr><td>进入主线方式</td><td>阿妮给两个孩子盖被子，说“明儿清明，还得早起去给你姥姥姥爷上坟”；姜生缠着要听娃娃仙</td></tr>
+<tr><td>现实层道具</td><td>床头柜里上密码锁的小盒子、红布包着的干姜、旧布娃娃记忆、清明墓前泥土</td></tr>
+<tr><td>回归现实方式</td><td>第 12 集回到清明，女儿问姜会不会发芽，妮儿回答“这世上没有什么是不可能的”</td></tr>
+</table></div>
+<h3>2.3 主角称呼规则</h3>
+<p>原文使用“妈妈”是讲述视角，不适合剧中主线一直出现。剧中主角暂定：</p>
+<div class="table-wrap"><table>
+<tr><th>阶段</th><th>称呼</th><th>用法</th></tr>
+<tr><td>幼年</td><td>小妮儿</td><td>家人、旁白称呼，符合太行山一带对小姑娘的亲昵称呼感</td></tr>
+<tr><td>成年</td><td>妮儿 / 阿妮</td><td>现实层女儿称“娘”，旁白可称“阿妮”</td></tr>
+<tr><td>正式姓名</td><td>待确认</td><td>如果后续需要身份证式姓名，可另取，不影响主线</td></tr>
+</table></div>
+<h2>3. 内容范围</h2>
+<h3>3.1 MVP 范围</h3>
+<div class="table-wrap"><table>
+<tr><th>优先级</th><th>内容</th><th>说明</th></tr>
+<tr><td>Must</td><td>12 集完整主线</td><td>从女儿追问开始，到姜的希望结尾</td></tr>
+<tr><td>Must</td><td>每集 1 分钟竖屏</td><td>适配 B 站竖屏和抖音/红果切发</td></tr>
+<tr><td>Must</td><td>真实恐怖志怪画风</td><td>真人质感、民俗旧村、阴冷光影</td></tr>
+<tr><td>Must</td><td>固定角色和道具锚点</td><td>妮儿、娃娃仙、姥姥姥爷、道士、祖奶、拦路鬼、旱魃</td></tr>
+<tr><td>Must</td><td>每集钩子</td><td>开头 3 秒和结尾 5 秒都要有追更点</td></tr>
+<tr><td>Should</td><td>B 站合集包装</td><td>标题、封面、简介、合集顺序统一</td></tr>
+<tr><td>Should</td><td>抖音/红果短剧版</td><td>强化前 3 秒恐怖钩子和字幕节奏</td></tr>
+</table></div>
+<h3>3.2 本版不做</h3>
+<div class="table-wrap"><table>
+<tr><th>不做项</th><th>原因</th></tr>
+<tr><td>不复用《瓷娃仙》角色和剧情</td><td>用户已确认是不同故事</td></tr>
+<tr><td>不做强血腥重口恐怖</td><td>降低审核风险，保留民俗志怪恐惧感</td></tr>
+<tr><td>不把故事包装成绝对真实事件证明</td><td>原始材料为口述家族传说，需避免误导</td></tr>
+<tr><td>不使用真实村名、真实墓地、真实人物姓名</td><td>保护隐私，减少现实争议</td></tr>
+<tr><td>不使用明星脸或真实人物肖像</td><td>降低肖像权和平台审核风险</td></tr>
+</table></div>
+<h2>4. 12 集分集结构</h2>
+<div class="table-wrap"><table>
+<tr><th>集数</th><th>标题</th><th>核心事件</th><th>开头钩子</th><th>结尾追更点</th></tr>
+<tr><td>01</td><td>女儿要听娃娃仙</td><td>姜生缠着要听娃娃仙，姜苗说自己都会背；回忆里姥爷救道士，道士赠五辫布娃娃后天亮消失，娃娃交到婴儿小妮儿手里</td><td>红布打开，露出干裂的姜</td><td>阿妮旁白：“它第一次保人，是从我五岁那年开始的。”</td></tr>
+<tr><td>02</td><td>祖奶带小妮儿进竹林</td><td>下午小妮儿抱着五辫娃娃玩，祖奶从西屋门帘后探头观察；姥姥姥爷上山后，祖奶把她骗进竹林并推入深坑</td><td>西屋门帘后，祖奶探头看小妮儿和娃娃</td><td>祖奶回西屋装睡；姥姥姥爷天擦黑带糖回家开门，但本集不发现孩子不见</td></tr>
+<tr><td>03</td><td>深坑里的姐姐</td><td>姥姥姥爷发现小妮儿不见后寻找；小妮儿在坑底哭到天黑，娃娃仙姐姐垂下长辫救她回家</td><td>姥姥姥爷发现院里和屋里都没有小妮儿</td><td>回家后娃娃少了一根辫子，姥姥姥爷决定分家</td></tr>
+<tr><td>04</td><td>烂肚子蛇</td><td>小妮儿放羊被蛇咬、崴脚；看到蛇时脑海闪回以前听乡亲说“烂肚子”最爱躲草里</td><td>毒蛇从草里扑出，脑海闪回“咬了人，半条命都要交出去”</td><td>草丛动静越来越近，娃娃仙姐姐出现并用草蚂蚱转移她的恐惧</td></tr>
+<tr><td>05</td><td>羊自己回来了</td><td>姐姐用槐树枝处理蛇伤，并把散开的羊群找回来；家里正式供起娃娃仙</td><td>伤口和脚踝疼痛缓下来</td><td>娃娃又少一根辫子，家里点香供奉</td></tr>
+<tr><td>06</td><td>看电影的人</td><td>少女妮儿看露天电影回家，村西山坡听见陌生男人叫名，男人从草丛探出半张脸</td><td>热闹电影散场后，妮儿独自走黑坡</td><td>男人笑着说“南边有席，跟我走”</td></tr>
+<tr><td>07</td><td>拦路鬼进屋</td><td>妮儿被拦路鬼纠缠，娃娃仙持扫把赶鬼</td><td>被窝外有人绕床摸索</td><td>上香时娃娃辫子再少，只剩两根</td></tr>
+<tr><td>08</td><td>曹老头的坟</td><td>曹老头下葬后村里大旱，牲畜死亡，道士判断有旱魃</td><td>圈里牲畜一夜死去</td><td>棺材打开，红毛尸体露出</td></tr>
+<tr><td>09</td><td>火烧不化</td><td>村民焚烧旱魃无效，妮儿夜里梦见山顶火光</td><td>火堆烧了一下午，尸体不坏</td><td>梦里娃娃仙被旱魃摔向火边</td></tr>
+<tr><td>10</td><td>辫子化剑</td><td>娃娃仙揪下最后两根辫子化剑，跃入火堆斩旱魃</td><td>娃娃仙满脸火光回头看她</td><td>清晨娃娃破烂、辫子全无</td></tr>
+<tr><td>11</td><td>婚礼上的道士</td><td>妮儿结婚回老家办酒，道士年轻模样归来，要取走娃娃</td><td>酒宴后门口站着盘发男人</td><td>道士拆开娃娃，取出一颗姜</td></tr>
+<tr><td>12</td><td>姜会发芽吗</td><td>回到现实层，姜被种在姥姥姥爷墓前，女儿追问娃娃仙是否会回来</td><td>清明墓前，泥土没有发芽</td><td>妮儿说“这世上没有什么是不可能的”</td></tr>
+</table></div>
+<h2>5. 角色与视觉锚点</h2>
+<h3>5.1 核心角色</h3>
+<div class="table-wrap"><table>
+<tr><th>角色</th><th>固定设定</th><th>画面锚点</th></tr>
+<tr><td>小妮儿 / 阿妮</td><td>娘子关一带农家女，幼年懂事，成年后成为现实层讲述者</td><td>幼年粗布衣、清瘦脸、受惊时攥衣角；成年朴素母亲气质</td></tr>
+<tr><td>女儿姜苗</td><td>现实层听故事的人，主动追问娃娃仙</td><td>睡前缠问、清明墓前追问，名字带姜</td></tr>
+<tr><td>弟弟姜生</td><td>现实层旁听孩子，年龄小于姜苗</td><td>半睡半醒听故事，名字呼应“重生”</td></tr>
+<tr><td>娃娃仙姐姐</td><td>十五六岁姑娘，花袄灰裤，大眼睛，红扑扑脸蛋，长麻花辫</td><td>每次出手后辫子减少；最后短发、衣服破损、火光映眼</td></tr>
+<tr><td>布娃娃</td><td>粗布女娃，红布腮红，大分头，五条麻花辫</td><td>辫子数量是剧情进度条</td></tr>
+<tr><td>姥爷</td><td>娘子关一带务农老人，善良质朴</td><td>山坡、河边、粗布衣、背人回家</td></tr>
+<tr><td>姥姥</td><td>勤俭善良，照顾家人</td><td>灶台熬粥、堂屋供奉、哭抱小妮儿</td></tr>
+<tr><td>道士 / 修行者</td><td>外表年龄变化，盘发髻，声音异于外貌</td><td>破布袍、破布包、孩童声、婚礼年轻化回归</td></tr>
+<tr><td>祖奶</td><td>重男轻女、冷漠狠心</td><td>竹林背影、推人入坑，不强化脸谱化夸张</td></tr>
+<tr><td>拦路鬼</td><td>刚死未婚男人，诱拐少女</td><td>草丛探头、吃席邀约、床边绕行</td></tr>
+<tr><td>旱魃</td><td>红毛菌丝、长指甲长头发、火烧不化</td><td>棺材腥臭、红色菌丝、火堆黑影</td></tr>
+</table></div>
+<h3>5.2 画风规则</h3>
+<div class="table-wrap"><table>
+<tr><th>项目</th><th>规则</th></tr>
+<tr><td>基础风格</td><td>真实人物质感、民俗恐怖志怪、低饱和、阴冷自然光</td></tr>
+<tr><td>画面比例</td><td>竖屏 9:16</td></tr>
+<tr><td>恐怖尺度</td><td>恐怖但不过度血腥；以压迫、异常、民俗道具制造恐惧</td></tr>
+<tr><td>禁止项</td><td>明星脸、真实公众人物、露骨血腥、真实未成年人受虐细节过度展示、文字水印、卡通 Q 版</td></tr>
+<tr><td>B 站版</td><td>可保留较完整旁白与细节铺垫</td></tr>
+<tr><td>抖音/红果版</td><td>前 3 秒必须强钩子，字幕短句化，结尾追更更明显</td></tr>
+</table></div>
+<h2>6. 平台策略</h2>
+<div class="table-wrap"><table>
+<tr><th>平台</th><th>定位</th><th>发布形式</th><th>重点</th></tr>
+<tr><td>B 站</td><td>主阵地</td><td>竖屏连载 + 合集 + 可选幕后解析</td><td>完整故事感、民俗细节、评论讨论</td></tr>
+<tr><td>抖音</td><td>分发阵地</td><td>竖屏切集，每集强钩子</td><td>前 3 秒恐怖点、标题刺激、结尾催更</td></tr>
+<tr><td>红果</td><td>短剧阵地</td><td>12 集短剧结构</td><td>集与集之间的连续追更、短剧标题包装</td></tr>
+</table></div>
+<p>平台规则、AI 内容标识、恐怖内容审核标准会变化，发布前需要按当时平台规则复核。本 PRD 不写死具体规则数值。</p>
+<h2>7. 制作流程</h2>
+<pre><code>flowchart TD
+  A[确认 PRD] --&gt; B[角色档案与固定提示词]
+  B --&gt; C[12 集分集大纲]
+  C --&gt; D[第 1 集剧本]
+  D --&gt; E[第 1 集分镜表]
+  E --&gt; F[AI 生图提示词]
+  F --&gt; G[出图与角色一致性筛选]
+  G --&gt; H[配音/字幕/剪辑]
+  H --&gt; I[平台发布版本适配]
+  I --&gt; J[数据复盘]
+  J --&gt; C</code></pre>
+<h2>8. 验收标准</h2>
+<div class="table-wrap"><table>
+<tr><th>阶段</th><th>成功标志</th></tr>
+<tr><td>PRD</td><td>12 集方向、叙事方式、平台、画风、主角称呼明确</td></tr>
+<tr><td>角色档案</td><td>小妮儿、娃娃仙、道士、姥姥姥爷、祖奶、拦路鬼、旱魃都有固定外貌和禁止变化</td></tr>
+<tr><td>分集大纲</td><td>每集 1 分钟内能讲清一个事件，并留下追更点</td></tr>
+<tr><td>剧本</td><td>保留“女儿缠讲故事”的现实层，不把故事写成普通流水账</td></tr>
+<tr><td>分镜</td><td>每个镜头可画出来，避免抽象心理描写硬塞进画面</td></tr>
+<tr><td>生图提示词</td><td>每集都重复角色锚点、画风锚点和负面提示词</td></tr>
+<tr><td>成片</td><td>前 3 秒有钩子，结尾有悬念或情绪落点，恐怖尺度不过线</td></tr>
+</table></div>
+<h2>9. 风险与处理</h2>
+<div class="table-wrap"><table>
+<tr><th>风险</th><th>影响</th><th>处理</th></tr>
+<tr><td>原始纪要为 AI 生成，可能有误</td><td>细节可能偏离原口述</td><td>以 <code>原始纪要.txt</code> 第 104 行后为主，关键剧情后续人工核对</td></tr>
+<tr><td>恐怖志怪内容审核风险</td><td>平台限流或下架</td><td>以民间故事/家族传说改编表达，不宣称绝对真实，不渲染血腥</td></tr>
+<tr><td>主角称呼地域感不准</td><td>观众出戏</td><td>暂用“妮儿/小妮儿”，后续可按太行山具体口音修正</td></tr>
+<tr><td>AI 生图角色不一致</td><td>影响追剧连续性</td><td>先做角色定妆图，再批量出分镜图</td></tr>
+<tr><td>12 集节奏过散</td><td>完播率下降</td><td>每集只保留一个强事件，现实层只做钩子和收束</td></tr>
+</table></div>
+<h2>10. 下游制作交接</h2>
+<p>交给 <code>screenplay-director</code> 的输入：</p>
+<ul><li><code>09_素材与参考/娃娃仙大纲.md</code></li><li><code>09_素材与参考/娃娃仙显灵护主事迹分析_原始纪要.txt</code></li><li>本 PRD 的“叙事方案”“12 集分集结构”“角色与视觉锚点”</li></ul>
+<p>当前已完成输出：</p>
+<ul><li><code>03_角色设定/角色档案.md</code></li><li><code>03_角色设定/角色固定提示词.md</code></li><li><code>04_分集大纲/娃娃仙_12集分集大纲.md</code></li><li><code>05_剧本/第01集_女儿要听娃娃仙.md</code> 至 <code>05_剧本/第10集_辫子化剑.md</code></li><li><code>06_分镜表/第01集_女儿要听娃娃仙_分镜脚本.md</code> 至 <code>06_分镜表/第10集_辫子化剑_分镜脚本.md</code></li><li><code>07_绘图提示词/第01集_女儿要听娃娃仙_生图提示词.md</code> 至 <code>07_绘图提示词/第10集_辫子化剑_生图提示词.md</code></li></ul>
+<p>下一步输出：</p>
+<ul><li><code>05_剧本/第11集_婚礼上的道士.md</code></li><li><code>06_分镜表/第11集_婚礼上的道士_分镜脚本.md</code></li><li><code>07_绘图提示词/第11集_婚礼上的道士_生图提示词.md</code></li></ul>
+<h2>11. PRD 生成与生产交接工作流</h2>
+<p>本章节合并自 <code>00_PRD/PRD生成工作流.md</code>，作为《娃娃仙》后续继续生产、复盘和外包交接的统一流程。独立工作流文件可保留作模板，但项目执行以本 PRD 为准。</p>
+<h3>11.1 输入素材</h3>
+<div class="table-wrap"><table>
+<tr><th>素材</th><th>《娃娃仙》当前来源</th><th>成功标志</th></tr>
+<tr><td>原始故事</td><td><code>09_素材与参考/娃娃仙显灵护主事迹分析_原始纪要.txt</code></td><td>有完整起因、经过、显灵事件、高潮和结尾</td></tr>
+<tr><td>项目方向</td><td>本 PRD 的“已确认方向”</td><td>12 集、1 分钟、竖屏、真实恐怖志怪、主平台明确</td></tr>
+<tr><td>叙事方式</td><td>现实线 + 故事线双线叙事</td><td>开头能进入故事，结尾能回到清明扫墓</td></tr>
+<tr><td>角色偏好</td><td><code>03_角色设定/角色档案.md</code></td><td>小妮儿、娃娃仙、祖奶、道士等不会混乱</td></tr>
+<tr><td>平台目标</td><td>B 站主投，兼顾抖音、红果</td><td>能明确剪辑节奏、钩子和审核边界</td></tr>
+</table></div>
+<p>风险提示：</p>
+<ul><li>外部链接可能无法读取正文，必须优先保存可离线查看的文本或导出文件。</li><li>录音纪要为 AI 生成时，关键细节必须标注“待人工核对”。</li><li>涉及真实人物、真实村名、墓地、家族隐私时，剧本和提示词必须改编脱敏。</li></ul>
+<h3>11.2 素材接入</h3>
+<div class="table-wrap"><table>
+<tr><th>步骤</th><th>操作</th><th>成功标志</th></tr>
+<tr><td>1</td><td>将原始素材保存到 <code>09_素材与参考/</code></td><td>原始文件有留档，不覆盖</td></tr>
+<tr><td>2</td><td>整理 <code>09_素材与参考/娃娃仙大纲.md</code></td><td>没看过原文的人也能看懂故事</td></tr>
+<tr><td>3</td><td>提取一句话故事、人物、核心规则、时间线、高潮、结尾</td><td>不凭空发明关键剧情</td></tr>
+<tr><td>4</td><td>把年代、场景、口语规则写入 <code>02_世界观/年代设定与场景刻画.md</code></td><td>后续分镜和生图不会乱年代</td></tr>
+</table></div>
+<h3>11.3 正式 PRD 输出标准</h3>
+<p>PRD 必须包含：</p>
+<ol><li>文档说明和修订记录。</li><li>已确认方向。</li><li>一句话项目定义。</li><li>核心看点。</li><li>目标观众。</li><li>叙事方案。</li><li>内容范围和本版不做。</li><li>分集结构。</li><li>角色与视觉锚点。</li><li>平台策略。</li><li>制作流程。</li><li>验收标准。</li><li>风险与处理。</li><li>下游制作交接。</li><li>待确认项。</li></ol>
+<p>输出文件：</p>
+<div class="table-wrap"><table>
+<tr><th>文件</th><th>用途</th></tr>
+<tr><td><code>00_PRD/娃娃仙_PRD.md</code></td><td>正式 PRD 主文件</td></tr>
+<tr><td><code>00_PRD/娃娃仙_PRD.html</code></td><td>浏览器查看和分享</td></tr>
+<tr><td><code>项目状态.md</code></td><td>记录当前阶段、已完成文件和下一步</td></tr>
+</table></div>
+<h3>11.4 下游交接顺序</h3>
+<pre><code>PRD
+  -&gt; 角色档案
+  -&gt; 角色固定提示词
+  -&gt; 分集大纲
+  -&gt; 单集剧本
+  -&gt; 分镜表
+  -&gt; 生图提示词
+  -&gt; 出图/剪辑/配音/字幕
+  -&gt; 成片质检
+  -&gt; 发布复盘</code></pre>
+<div class="table-wrap"><table>
+<tr><th>下一阶段</th><th>需要 PRD 提供</th></tr>
+<tr><td>角色档案</td><td>主要人物、外貌、关系、成长变化、禁止变化</td></tr>
+<tr><td>剧本</td><td>分集结构、叙事方式、单集时长、平台节奏</td></tr>
+<tr><td>分镜</td><td>画风、画幅、角色固定描述、每集核心事件</td></tr>
+<tr><td>生图提示词</td><td>角色提示词、风格锚点、负面提示词、场景规则</td></tr>
+<tr><td>质检</td><td>验收标准、平台风险、本版不做</td></tr>
+</table></div>
+<h3>11.5 生图提示词交接标准</h3>
+<p>生图提示词阶段按 <code>storyboard-image-prompts</code> 工作流执行，顺序固定为：</p>
+<pre><code>世界观约束 -&gt; 场景美术规则 -&gt; 角色设定锚点 -&gt; 当前镜头动作/情绪 -&gt; 平台化提示词</code></pre>
+<div class="table-wrap"><table>
+<tr><th>项目</th><th>要求</th></tr>
+<tr><td>视觉圣经</td><td>每集提示词文件开头必须包含全片风格锚点、角色锚点、统一负面提示词</td></tr>
+<tr><td>镜头覆盖</td><td>分镜表每一行都必须有对应生图提示词</td></tr>
+<tr><td>角色一致性</td><td>复用 <code>03_角色设定/角色固定提示词.md</code> 的锚点，不临时改年龄、服装、脸型</td></tr>
+<tr><td>世界观可视化</td><td>“真实恐怖志怪”“娘子关一带旧村”等抽象词必须落成关隘山路、河沟、土墙/石墙旧屋、竹林、灶火、供桌、旧布娃娃等可见元素</td></tr>
+<tr><td>平台选择</td><td>中文短剧/漫剧优先即梦、可灵、通义万相、混元、FLUX/SD；正式付费批量前需按当时平台能力复核</td></tr>
+<tr><td>风险标注</td><td>涉及儿童、恐怖、墓地、真实人物肖像、上传参考图时必须标注审核和隐私风险</td></tr>
+</table></div>
+<p>提示词表默认字段：</p>
+<div class="table-wrap"><table>
+<tr><th>字段</th><th>用途</th></tr>
+<tr><td>镜号</td><td>对应分镜表镜号</td></tr>
+<tr><td>画面目的</td><td>说明这一镜为什么要出图</td></tr>
+<tr><td>推荐平台/模型</td><td>写明平台和简短理由</td></tr>
+<tr><td>主提示词</td><td>描述画面中可见主体、动作、环境、年代、画幅</td></tr>
+<tr><td>角色锚点</td><td>重复稳定人物描述</td></tr>
+<tr><td>场景/镜头</td><td>景别、角度、构图</td></tr>
+<tr><td>光影色彩</td><td>时间、光源、色调</td></tr>
+<tr><td>负面提示词</td><td>排除变形、文字水印、血腥过度、真实肖像等</td></tr>
+<tr><td>参数/备注</td><td>画幅、seed、参考图、LoRA、一致性提醒</td></tr>
+</table></div>
+<h3>11.6 《娃娃仙》当前应用结果</h3>
+<div class="table-wrap"><table>
+<tr><th>阶段</th><th>文件</th><th>当前状态</th></tr>
+<tr><td>原始素材</td><td><code>09_素材与参考/娃娃仙显灵护主事迹分析_原始纪要.txt</code></td><td>已保存</td></tr>
+<tr><td>结构化大纲</td><td><code>09_素材与参考/娃娃仙大纲.md</code></td><td>已整理</td></tr>
+<tr><td>正式 PRD</td><td><code>00_PRD/娃娃仙_PRD.md</code></td><td>V1.4，已同步当前制作口径</td></tr>
+<tr><td>网页版 PRD</td><td><code>00_PRD/娃娃仙_PRD.html</code></td><td>已同步 V1.4</td></tr>
+<tr><td>12 集大纲</td><td><code>04_分集大纲/娃娃仙_12集分集大纲.md</code></td><td>已拆分，后续可随单集迭代微调</td></tr>
+<tr><td>角色档案</td><td><code>03_角色设定/角色档案.md</code></td><td>已生成</td></tr>
+<tr><td>角色提示词</td><td><code>03_角色设定/角色固定提示词.md</code></td><td>已生成</td></tr>
+<tr><td>第 1-10 集剧本</td><td><code>05_剧本/</code></td><td>Markdown + Word 已完成</td></tr>
+<tr><td>第 1-10 集分镜表</td><td><code>06_分镜表/</code></td><td>Markdown + Excel 已完成</td></tr>
+<tr><td>第 1-10 集生图提示词</td><td><code>07_绘图提示词/</code></td><td>已完成</td></tr>
+<tr><td>下一步</td><td>第 11 集《婚礼上的道士》</td><td>待生成</td></tr>
+</table></div>
+<h3>11.7 当前已确认的单集细节口径</h3>
+<div class="table-wrap"><table>
+<tr><th>集数</th><th>已确认口径</th><th>影响</th></tr>
+<tr><td>01</td><td>现实线清明前夜开场，阿妮提醒姜苗、姜生第二天要给姥姥姥爷上坟</td><td>结尾扫墓逻辑更顺</td></tr>
+<tr><td>02</td><td>下午小妮儿抱娃玩，祖奶从西屋门帘后探头；祖奶推人入坑后回西屋装睡；姥姥姥爷天擦黑带糖回家开门，本集不发现孩子不见</td><td>第 3 集开场承接“发现孩子不见”</td></tr>
+<tr><td>03</td><td>姥姥姥爷发现小妮儿不见并寻找，娃娃仙姐姐第一次显灵救人，娃娃少一根辫子</td><td>完成第一次护主代价</td></tr>
+<tr><td>04</td><td>“烂肚子蛇”信息不是旁白科普，而是小妮儿脑海里闪回以前听过的乡亲闲聊声；后半段用草丛动静越来越近替代旁白</td><td>更贴近主观惊吓</td></tr>
+<tr><td>05</td><td>娃娃仙姐姐治伤找羊，家里正式供起娃娃仙</td><td>建立信仰关系</td></tr>
+<tr><td>06</td><td>少女妮儿看露天电影后独自走黑坡，陌生男人从草里探头，诱她去“南边吃席”</td><td>第 7 集进入拦路鬼纠缠</td></tr>
+<tr><td>07</td><td>拦路鬼追到屋里，娃娃仙姐姐持扫把赶鬼；家里发现娃娃辫子再少，只剩两根</td><td>承接第 8 集旱魃事件前的代价递增</td></tr>
+<tr><td>08</td><td>曹老头下葬后村里大旱、牲畜异常，道士判断有旱魃；开棺见红毛菌丝尸体</td><td>第 9 集承接“火烧不化”</td></tr>
+<tr><td>09</td><td>村民焚烧旱魃无效，道士做法也压不住；妮儿夜里梦见山顶火光，娃娃仙被旱魃摔向火边</td><td>第 10 集承接“辫子化剑”</td></tr>
+<tr><td>10</td><td>娃娃仙揪下最后两根辫子化剑，跃入火堆斩旱魃；清晨娃娃破烂、辫子全无</td><td>第 11 集承接婚礼上道士取回娃娃</td></tr>
+</table></div>
+<h3>11.8 小白照做版</h3>
+<ol><li>把故事原文放进 <code>09_素材与参考/</code>。</li><li>让 AI 先整理成 <code>&lt;项目名&gt;大纲.md</code>。</li><li>确认集数、时长、画幅、画风、平台。</li><li>确认讲故事方式和主角称呼。</li><li>生成或更新 <code>&lt;项目名&gt;_PRD.md</code>。</li><li>同步生成 <code>&lt;项目名&gt;_PRD.html</code>。</li><li>更新 <code>项目状态.md</code>。</li><li>再开始做角色、剧本、分镜和提示词。</li></ol>
+<p>成功标志：打开 PRD 后，不用再翻原始素材，也能知道这部剧怎么拍、给谁看、做几集、每集多长、什么画风、下一步该产出什么文件。</p>
+<h2>12. 待确认项</h2>
+<div class="table-wrap"><table>
+<tr><th>编号</th><th>问题</th><th>当前建议</th></tr>
+<tr><td>1</td><td>“妮儿/小妮儿”是否作为主角称呼</td><td>建议先用，后续可改</td></tr>
+<tr><td>2</td><td>B 站版是否保留更长旁白</td><td>建议保留，但单集仍控制 1 分钟</td></tr>
+<tr><td>3</td><td>是否先做样片验证画风</td><td>建议先用第 1、2、4、6 集各选 1-2 张关键图验证现实线、竹林、蛇咬、夜路鬼物四类场景</td></tr>
+</table></div>
+</main></body></html>

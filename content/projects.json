@@ -197,10 +197,14 @@
     ],
     "cover": "",
     "links": {
-      "demo": "https://www.bilibili.com/video/BV1UCju6QEQ6/?share_source=copy_web&vd_source=d18a68822216878234a3dca384b8c895",
-      "demoNote": "B站成片：截至 2026 年 7 月 3 日，54 赞、791 播放。"
+      "demo": "/docs/ciwaxian-prd.html",
+      "demoNote": "打开《娃娃仙》项目 PRD；B 站成片入口在详情按钮中保留。"
     },
     "actions": [
+      {
+        "label": "查看娃娃仙 PRD",
+        "href": "/docs/ciwaxian-prd.html"
+      },
       {
         "label": "打开 B 站成片",
         "href": "https://www.bilibili.com/video/BV1UCju6QEQ6/?share_source=copy_web&vd_source=d18a68822216878234a3dca384b8c895"
@@ -265,7 +269,7 @@
     "id": "bilibili-ai-learning-assistant",
     "title": "视频学习助手",
     "category": "learning",
-    "status": "wip",
+    "status": "live",
     "shortDesc": "把 B 站视频片段转成逐字稿、人物区分、学习纲要、脑图和 PPT 大纲的 Web 学习工具。",
     "longDesc": "这是一个 AI 学习工具 PRD 项目。目标是解决看 B 站课程、访谈、讲座时“线性观看慢、重点难定位、复习成本高”的问题。MVP 支持 B 站链接与时间区间输入、视频上传兜底、原始逐字稿、整理稿、说话人区分、时间戳跳转、Markdown 导出、学习纲要、Mermaid 脑图和 PPT 大纲。面试时适合讲产品范围控制、合规边界、本地历史和 AI 成本风险。",
     "tags": [
@@ -285,20 +289,24 @@
     ],
     "cover": "",
     "links": {
-      "demo": "/projects/bilibili-ai-learning-assistant/index.html",
-      "demoNote": "打开 B站视频 AI 学习助手项目页面，展示输入、转写、整理稿、脑图和 PPT 大纲的产品方案。"
+      "demo": "/projects/bilibili-ai-learning-assistant/demo/index.html",
+      "demoNote": "打开从 D:/AI/AI训练演示/视频学习/B站视频AI学习助手 构建产物复制来的前端演示页；需要真实转写时再连接后端服务。"
     },
     "highlights": [
-      "面试讲法：从学习低效痛点出发，拆出明确 MVP 范围和不做项。",
+      "真实项目演示：已把视频学习项目 dist 前端搬进个人站，面试官可直接打开界面。",
       "强调合规：不绕过 B 站权限，不读取 Cookie，不处理会员/付费限制。",
       "学习闭环：视频 → 文字稿 → 整理稿 → 纲要 → 脑图 → PPT 大纲。",
       "本地优先：历史记录和任务结果默认保存在浏览器 IndexedDB。",
-      "已产出完整 PRD 和 HTML 页面，可作为后续开发输入。"
+      "开发边界：静态演示可看界面；真实转写需要连接原项目后端服务。"
     ],
     "priority": 84,
     "actions": [
       {
-        "label": "打开项目页面",
+        "label": "打开真实项目演示",
+        "href": "/projects/bilibili-ai-learning-assistant/demo/index.html"
+      },
+      {
+        "label": "查看项目方案页",
         "href": "/projects/bilibili-ai-learning-assistant/index.html"
       }
     ]
@@ -328,17 +336,17 @@
     ],
     "cover": "",
     "links": {
-      "demo": "http://127.0.0.1:8790/",
-      "demoNote": "优先打开工作流 PRD；本机 8790 评审网页需要对应本地服务保持运行。"
+      "demo": "/projects/wawaxian-visual-review-demo/index.html",
+      "demoNote": "打开个人站内置的《娃娃仙》视觉定版评审静态演示，不依赖本机 8790 服务。"
     },
     "actions": [
       {
-        "label": "查看工作流 PRD",
-        "href": "/docs/manju-production-workflow-prd.html"
+        "label": "打开评审演示",
+        "href": "/projects/wawaxian-visual-review-demo/index.html"
       },
       {
-        "label": "打开评审网页",
-        "href": "http://127.0.0.1:8790/"
+        "label": "查看工作流 PRD",
+        "href": "/docs/manju-production-workflow-prd.html"
       },
       {
         "label": "GitHub 安装下载",
@@ -379,13 +387,13 @@
     ],
     "cover": "",
     "links": {
-      "demo": "http://127.0.0.1:8790/",
-      "demoNote": "打开本机 8790 端口的定妆造选择网页；需要该本地服务保持运行。"
+      "demo": "/projects/wawaxian-visual-review-demo/index.html",
+      "demoNote": "打开个人站内置的《娃娃仙》视觉定版评审静态演示；可说明定妆造 Skill 如何做候选对比、锁定项和下一轮调整。"
     },
     "actions": [
       {
-        "label": "打开网页演示",
-        "href": "http://127.0.0.1:8790/"
+        "label": "打开定妆造评审演示",
+        "href": "/projects/wawaxian-visual-review-demo/index.html"
       },
       {
         "label": "GitHub 安装下载",
@@ -603,7 +611,7 @@
     "cover": "",
     "links": {
       "demo": "/projects/weight-loss-tracker/index.html",
-      "demoNote": "打开减肥记录仪本地工具；数据保存在浏览器 localStorage，可导入导出 JSON。"
+      "demoNote": "打开从 D:/AI/AI训练演示/减肥/减肥记录仪.html 复制来的真实工具演示；数据保存在浏览器 localStorage。"
     },
     "highlights": [
       "已有项目：不是想法储备，已经有可打开的单文件 HTML 工具。",
@@ -616,7 +624,7 @@
     "longDesc": "这是一个本地优先的减肥记录工具。它已经有可打开的单文件 HTML：记录身高、目标体重、体重、胸围、腰围、臀围、运动强度、饮食模式、生理期状态、经期第几天和身体感受；自动计算 BMI、腰臀比、目标差距和体重变化，并按经前、经期、经后恢复期、排卵期等状态调整饮食和运动建议。经期健康管家不再单独作为项目展示，已合并到这个减肥记录仪里。",
     "actions": [
       {
-        "label": "打开减肥记录仪",
+        "label": "打开减肥项目演示",
         "href": "/projects/weight-loss-tracker/index.html"
       },
       {

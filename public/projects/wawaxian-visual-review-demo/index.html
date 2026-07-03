@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>娃娃仙 · 视觉定版评审演示</title>
+  <style>
+    :root { --bg:#10130f; --panel:#171b16; --card:#1f251e; --text:#f5f1e8; --muted:#aaa391; --line:#343b30; --gold:#d8b76a; --cyan:#9bd5d0; --red:#b86754; }
+    * { box-sizing:border-box; }
+    body { margin:0; background: radial-gradient(circle at top left, rgba(216,183,106,.16), transparent 30%), var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif; }
+    header { padding:28px 22px 18px; border-bottom:1px solid var(--line); background:rgba(23,27,22,.88); position:sticky; top:0; z-index:10; backdrop-filter: blur(12px); }
+    .wrap { max-width:1180px; margin:0 auto; }
+    .eyebrow { color:var(--gold); font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { margin:8px 0 8px; font-size:34px; line-height:1.18; letter-spacing:0; }
+    p { margin:0; color:var(--muted); line-height:1.7; }
+    .metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:16px; }
+    .metric { border:1px solid var(--line); background:rgba(31,37,30,.86); border-radius:8px; padding:12px; }
+    .metric strong { display:block; font-size:22px; color:var(--cyan); }
+    .metric span { color:var(--muted); font-size:12px; }
+    main { max-width:1180px; margin:0 auto; padding:20px 22px 44px; }
+    .flow { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; margin-bottom:18px; }
+    .node { border:1px solid var(--line); border-radius:8px; background:var(--panel); padding:13px; min-height:90px; }
+    .node b { color:var(--gold); display:block; margin-bottom:6px; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    .thumb { aspect-ratio:16/10; background:#0b0d0a; display:grid; place-items:center; }
+    .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+    .body { padding:12px; display:grid; gap:7px; }
+    .tag { width:max-content; max-width:100%; border:1px solid rgba(216,183,106,.35); color:var(--gold); padding:2px 8px; border-radius:999px; font-size:12px; }
+    h3 { margin:0; font-size:16px; line-height:1.35; }
+    .meta { color:var(--muted); font-size:13px; line-height:1.55; }
+    .callout { margin:18px 0; padding:14px; border:1px solid rgba(155,213,208,.22); background:rgba(155,213,208,.08); border-radius:8px; color:var(--muted); }
+    @media (max-width:900px) { .metrics,.flow,.grid { grid-template-columns:1fr 1fr; } }
+    @media (max-width:560px) { h1{font-size:26px;} .metrics,.flow,.grid { grid-template-columns:1fr; } header, main { padding-left:14px; padding-right:14px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">Wawaxian Visual Review Demo</div>
+      <h1>娃娃仙 · 视觉定版评审演示</h1>
+      <p>从原本 8790 本地评审页搬出的静态演示版，面试官可直接在个人站打开。展示角色、场景、候选图、锁定项和下一轮调整思路，不依赖本地服务或 API。</p>
+      <div class="metrics">
+        <div class="metric"><strong>24</strong><span>已确认视觉项</span></div>
+        <div class="metric"><strong>33</strong><span>角色/场景状态</span></div>
+        <div class="metric"><strong>10</strong><span>评审模块</span></div>
+        <div class="metric"><strong>18</strong><span>演示图卡</span></div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="flow">
+      <div class="node"><b>1. 角色/场景</b><span>按人物、场景、道具拆分视觉资产。</span></div>
+      <div class="node"><b>2. 候选对比</b><span>Image2、Gemini、图生图等候选同屏看。</span></div>
+      <div class="node"><b>3. 锁定要素</b><span>锁脸、发型、身体、服装、色彩和构图。</span></div>
+      <div class="node"><b>4. 下一版提示</b><span>把心仪点和调整点写回下一轮生成。</span></div>
+      <div class="node"><b>5. 下游生产</b><span>进入三视图、场景美术、人景合一和视频。</span></div>
+    </section>
+    <div class="callout">演示定位：这不是图片墙，而是“AI 漫剧生产中如何做视觉一致性评审”的操作界面样例。真实项目数据来自娃娃仙视觉定版评审目录。</div>
+    <section class="grid">
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-01.png" alt="小妮儿 / 妮儿 / 阿妮"></div>
+          <div class="body">
+            <span class="tag">Gemini Image</span>
+            <h3>小妮儿 / 妮儿 / 阿妮 · 少女</h3>
+            <div class="meta">人物定妆 · 主线 · 小妮儿/阿妮</div>
+            <div class="meta">锁定项：clothes、hair、face、body</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-02.png" alt="小妮儿 / 妮儿 / 阿妮"></div>
+          <div class="body">
+            <span class="tag">图生图</span>
+            <h3>小妮儿 / 妮儿 / 阿妮 · 成年现实层</h3>
+            <div class="meta">人物定妆 · 主线 · 小妮儿/阿妮</div>
+            <div class="meta">锁定项：face、body</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-03.png" alt="小妮儿 / 妮儿 / 阿妮"></div>
+          <div class="body">
+            <span class="tag">Gemini Image</span>
+            <h3>小妮儿 / 妮儿 / 阿妮 · 清明墓前期</h3>
+            <div class="meta">人物定妆 · 主线 · 小妮儿/阿妮</div>
+            <div class="meta">锁定项：face、clothes、body、hair</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-04.png" alt="娃娃仙姐姐"></div>
+          <div class="body">
+            <span class="tag">Gemini Image</span>
+            <h3>娃娃仙姐姐 · 显灵救人期</h3>
+            <div class="meta">人物定妆 · 守护灵体与道具</div>
+            <div class="meta">锁定项：face、hair、clothes、body</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-05.png" alt="五辫布娃娃"></div>
+          <div class="body">
+            <span class="tag">Gemini Image</span>
+            <h3>五辫布娃娃 · 五辫完整期</h3>
+            <div class="meta">人物定妆 · 守护灵体与道具</div>
+            <div class="meta">锁定项：face、body、clothes</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-06.png" alt="姥爷"></div>
+          <div class="body">
+            <span class="tag">Gemini Image</span>
+            <h3>姥爷 · 壮年救道士期</h3>
+            <div class="meta">人物定妆 · 家族长辈</div>
+            <div class="meta">锁定项：face、body、clothes、hair</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-07.png" alt="姥爷"></div>
+          <div class="body">
+            <span class="tag">图生图</span>
+            <h3>姥爷 · 年老守护期</h3>
+            <div class="meta">人物定妆 · 家族长辈</div>
+            <div class="meta">锁定项：face、clothes、hair、body</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-08.png" alt="姥姥"></div>
+          <div class="body">
+            <span class="tag">图生图</span>
+            <h3>姥姥 · 中老年农妇期</h3>
+            <div class="meta">人物定妆 · 家族长辈</div>
+            <div class="meta">最终候选</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-09.png" alt="道士 / 修行者"></div>
+          <div class="body">
+            <span class="tag">Gemini Image</span>
+            <h3>道士 / 修行者 · 婚礼取娃期</h3>
+            <div class="meta">人物定妆 · 家族长辈</div>
+            <div class="meta">锁定项：clothes、face</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-10.png" alt="祖奶"></div>
+          <div class="body">
+            <span class="tag">图生图</span>
+            <h3>祖奶 · 重男轻女作祸期</h3>
+            <div class="meta">人物定妆 · 家族长辈</div>
+            <div class="meta">最终候选</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-11.png" alt="拦路鬼"></div>
+          <div class="body">
+            <span class="tag">Gemini Image</span>
+            <h3>拦路鬼 · 夜路纠缠期</h3>
+            <div class="meta">人物定妆 · 鬼怪 · 反派</div>
+            <div class="meta">锁定项：face、body、hair</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-12.png" alt="旱魃"></div>
+          <div class="body">
+            <span class="tag">Gemini Image</span>
+            <h3>旱魃 · 尸变灾祸期</h3>
+            <div class="meta">人物定妆 · 鬼怪 · 反派</div>
+            <div class="meta">锁定项：clothes、body</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-13.png" alt="姜苗"></div>
+          <div class="body">
+            <span class="tag">Image2</span>
+            <h3>姜苗 · 听故事期</h3>
+            <div class="meta">人物定妆 · 现实层 · 旁听</div>
+            <div class="meta">最终候选</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-14.png" alt="姜生"></div>
+          <div class="body">
+            <span class="tag">Gemini Image</span>
+            <h3>姜生 · 缠听期</h3>
+            <div class="meta">人物定妆 · 现实层 · 旁听</div>
+            <div class="meta">锁定项：face、clothes</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-15.png" alt="旧屋卧室"></div>
+          <div class="body">
+            <span class="tag">Gemini Image</span>
+            <h3>旧屋卧室 · 夜晚暖灯冷风</h3>
+            <div class="meta">场景美术 · 现实层 · 老家与墓前</div>
+            <div class="meta">锁定项：composition、atmosphere、color</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-16.jpg" alt="清明墓前"></div>
+          <div class="body">
+            <span class="tag">Nano Banana Pro</span>
+            <h3>清明墓前 · 清晨山风素冷</h3>
+            <div class="meta">场景美术 · 现实层 · 老家与墓前</div>
+            <div class="meta">最终候选</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-17.jpg" alt="山溪河沟"></div>
+          <div class="body">
+            <span class="tag">Gemini Image</span>
+            <h3>山溪河沟 · 晨雾贴水横移</h3>
+            <div class="meta">场景美术 · 故事线 · 旧村童年</div>
+            <div class="meta">最终候选</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb"><img src="assets/asset-18.png" alt="旧村堂屋"></div>
+          <div class="body">
+            <span class="tag">Image2</span>
+            <h3>旧村堂屋 · 昏黄供桌静物</h3>
+            <div class="meta">场景美术 · 故事线 · 旧村童年</div>
+            <div class="meta">锁定项：composition、color</div>
+          </div>
+        </article>
+
+    </section>
+  </main>
+</body>
+</html>
