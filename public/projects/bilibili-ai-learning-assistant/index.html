@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>B站视频 AI 学习助手</title>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --panel: #ffffff;
+      --line: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent-2: #10b981;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      padding: 36px 20px 24px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .wrap { max-width: 1080px; margin: 0 auto; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--accent-2); }
+    h1 { margin: 0; font-size: clamp(32px, 5vw, 56px); line-height: 1.05; letter-spacing: 0; }
+    .lead { margin: 18px 0 0; max-width: 760px; color: var(--muted); font-size: 18px; line-height: 1.8; }
+    main { padding: 28px 20px 44px; }
+    .grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 18px; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+    }
+    h2 { margin: 0 0 14px; font-size: 20px; }
+    p { color: var(--muted); line-height: 1.75; margin: 0; }
+    .flow { display: grid; gap: 10px; }
+    .step {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+    .num {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .step strong { display: block; margin-bottom: 4px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .chip {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: 13px;
+    }
+    .note {
+      margin-top: 18px;
+      padding: 14px;
+      border-left: 4px solid var(--accent);
+      background: #eff6ff;
+      color: #1e3a8a;
+      border-radius: 8px;
+      line-height: 1.7;
+    }
+    @media (max-width: 820px) {
+      .grid { grid-template-columns: 1fr; }
+      header { padding-top: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="badge"><span class="dot"></span>PRD 项目 · Web 学习工具</div>
+      <h1>B站视频 AI 学习助手</h1>
+      <p class="lead">把 B 站视频片段转成逐字稿、人物区分、学习纲要、脑图和 PPT 大纲，降低长视频学习和复习成本。</p>
+    </div>
+  </header>
+  <main>
+    <div class="wrap grid">
+      <section class="card">
+        <h2>核心流程</h2>
+        <div class="flow">
+          <div class="step"><div class="num">1</div><div><strong>输入视频</strong><p>支持 B 站链接和时间区间；不能绕过权限，不读取 Cookie。</p></div></div>
+          <div class="step"><div class="num">2</div><div><strong>转写与说话人区分</strong><p>输出原始逐字稿、整理稿、时间戳和人物标签。</p></div></div>
+          <div class="step"><div class="num">3</div><div><strong>学习结构化</strong><p>生成学习纲要、重点回看位置、Mermaid 脑图和 PPT 大纲。</p></div></div>
+          <div class="step"><div class="num">4</div><div><strong>本地保存与导出</strong><p>历史结果默认存在浏览器 IndexedDB，支持 Markdown 导出。</p></div></div>
+        </div>
+      </section>
+      <aside class="card">
+        <h2>MVP 边界</h2>
+        <p>本项目当前作为 PRD 和产品方案展示，重点说明学习场景、合规边界、任务状态、本地历史、AI 成本和导出结果，不做会员/付费视频绕过。</p>
+        <div class="chips">
+          <span class="chip">视频学习</span>
+          <span class="chip">ASR</span>
+          <span class="chip">Diarization</span>
+          <span class="chip">Markdown</span>
+          <span class="chip">Mermaid</span>
+          <span class="chip">PPT 大纲</span>
+        </div>
+        <div class="note">成功标志：用户输入一个可访问视频后，能拿到可复习、可跳转、可导出的学习材料。</div>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>

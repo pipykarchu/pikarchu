@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>漫剧生产工作流 PRD</title>
+  <style>
+    :root {
+      --bg: #fafaf7;
+      --paper: #ffffff;
+      --paper-soft: #f5f3ee;
+      --text: #1c1c1e;
+      --text-secondary: #6b6b73;
+      --text-tertiary: #9a9aa3;
+      --line: #e8e6e0;
+      --purple: #A78BFA;
+      --pink: #F472B6;
+      --teal: #14b8a6;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --danger: #ef4444;
+      --gradient-brand: linear-gradient(135deg, #A78BFA 0%, #F472B6 100%);
+      --shadow-brand: 0 8px 24px rgba(167, 139, 250, 0.18);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.78), rgba(250,250,247,.94) 36%, var(--bg)),
+        linear-gradient(135deg, rgba(167,139,250,.12), transparent 40%),
+        linear-gradient(225deg, rgba(20,184,166,.12), transparent 42%);
+      line-height: 1.68;
+    }
+    a { color: inherit; }
+    .shell { max-width: 1180px; margin: 0 auto; padding: 28px 20px 56px; }
+    .hero {
+      display: grid;
+      gap: 18px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--paper) 90%, transparent);
+      box-shadow: var(--shadow-brand);
+      margin-bottom: 18px;
+    }
+    .eyebrow {
+      color: var(--text-tertiary);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0; font-size: 34px; line-height: 1.18; letter-spacing: 0; }
+    .brand-text { background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .subtitle { margin: 0; max-width: 780px; color: var(--text-secondary); font-size: 16px; }
+    .chips, .metrics { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(167,139,250,.12);
+      color: #6d4cc2;
+      font-size: 13px;
+      border: 1px solid rgba(167,139,250,.18);
+    }
+    .metric {
+      min-width: 132px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+    .metric strong { display: block; font-size: 20px; line-height: 1.2; }
+    .metric span { color: var(--text-tertiary); font-size: 12px; }
+    .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 18px; align-items: start; }
+    .toc {
+      position: sticky;
+      top: 16px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--paper) 90%, transparent);
+    }
+    .toc strong { display: block; margin-bottom: 8px; font-size: 14px; }
+    .toc a { display: block; padding: 7px 0; color: var(--text-secondary); text-decoration: none; font-size: 13px; }
+    .content { display: grid; gap: 14px; }
+    section {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+    h2 { margin: 0 0 12px; font-size: 22px; letter-spacing: 0; }
+    h3 { margin: 18px 0 8px; font-size: 17px; }
+    p { margin: 0 0 12px; color: var(--text-secondary); }
+    ul { margin: 0; padding-left: 20px; color: var(--text-secondary); }
+    li + li { margin-top: 6px; }
+    .callout {
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: rgba(20,184,166,.08);
+      border: 1px solid rgba(20,184,166,.16);
+      color: var(--text-secondary);
+    }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; font-size: 14px; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: var(--paper-soft); color: var(--text); font-weight: 700; }
+    tr:last-child td { border-bottom: 0; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 9px 13px;
+      border-radius: 8px;
+      background: var(--gradient-brand);
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    @media (max-width: 820px) {
+      .shell { padding: 18px 14px 40px; }
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      h1 { font-size: 28px; }
+      section, .hero { padding: 18px; }
+      .metric { flex: 1 1 130px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div class="eyebrow">PRD Writer Skill Output</div>
+      <h1><span class="brand-text">漫剧生产工作流 PRD</span></h1>
+      <p class="subtitle">把漫剧从想法、PRD、剧本、分镜、定妆造、提示词、成片到发布复盘串成可复用生产线。</p>
+      <div class="chips"><span class="chip">v1.0</span><span class="chip">状态：Live</span><span class="chip">内容生产工作流</span><span class="chip">Skill 分工</span></div>
+      <div class="metrics"><div class="metric"><strong>6</strong><span>生产环节</span></div><div class="metric"><strong>4</strong><span>核心 Skill</span></div><div class="metric"><strong>54/791</strong><span>赞 / 播放</span></div></div>
+      
+    </header>
+    <div class="layout">
+      <nav class="toc">
+        <strong>目录</strong>
+        <a href="#position">1. 产品定位</a><a href="#why">2. 为什么需要这个工作流</a><a href="#skills">3. Skill 分工</a><a href="#progress">4. 当前项目进度</a><a href="#acceptance">5. 验收标准</a>
+      </nav>
+      <div class="content">
+        
+          <section id="position">
+            <h2>1. 产品定位</h2>
+            
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>项目</th><th>内容</th></tr></thead>
+      <tbody><tr><td>产品名称</td><td>漫剧生产工作流</td></tr><tr><td>代表验证</td><td>《娃娃仙》剪辑先行版测试，截至 2026-07-03 为 54 赞、791 播放</td></tr><tr><td>使用对象</td><td>需要用 AI 做短剧、漫剧、竖屏内容生产的创作者或团队</td></tr></tbody>
+    </table>
+  </div>
+          </section>
+          <section id="why">
+            <h2>2. 为什么需要这个工作流</h2>
+            <p>单独写剧本、单独做分镜、单独生图都会遇到角色不稳定、画风不统一、镜头不可生产和复盘没有数据的问题。这个工作流把每个 Skill 放到明确位置，让内容生产从一次性尝试变成可复盘流程。</p>
+          </section>
+          <section id="skills">
+            <h2>3. Skill 分工</h2>
+            
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>环节</th><th>Skill / 工具</th><th>负责内容</th><th>输出</th></tr></thead>
+      <tbody><tr><td>项目定义</td><td>PRD Writer</td><td>题材、平台、受众、集数、风格、风险边界</td><td>漫剧 PRD</td></tr><tr><td>剧情与人物</td><td>Screenplay Director</td><td>剧情大纲、角色档案、人物一致性、剧本片段</td><td>剧本和角色档案</td></tr><tr><td>镜头拆解</td><td>Script to Storyboard</td><td>镜号、景别、运镜、画面、对白、音效</td><td>分镜表 / Excel</td></tr><tr><td>角色视觉</td><td>定妆造 Skill</td><td>角色候选、网页评审、确认造型、三视图</td><td>角色视觉资产</td></tr><tr><td>生图提示词</td><td>Storyboard Image Prompts</td><td>镜头级提示词、负面词、平台适配</td><td>AI 生图提示词</td></tr><tr><td>成片复盘</td><td>手动剪辑 + 平台数据</td><td>发布、播放、点赞、反馈分析</td><td>发布复盘</td></tr></tbody>
+    </table>
+  </div>
+          </section>
+          <section id="progress">
+            <h2>4. 当前项目进度</h2>
+            
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>项目</th><th>状态</th></tr></thead>
+      <tbody><tr><td>《娃娃仙》题材和定位</td><td>已完成</td></tr><tr><td>剪辑先行版测试</td><td>已完成并发布</td></tr><tr><td>B 站数据</td><td>截至 2026 年 7 月 3 日：54 赞、791 播放</td></tr><tr><td>角色/定妆造评审页</td><td>本机 8790 可看，依赖本地服务</td></tr><tr><td>批量 12 集生产</td><td>未直接展开，需根据测试反馈决定</td></tr></tbody>
+    </table>
+  </div>
+          </section>
+          <section id="acceptance">
+            <h2>5. 验收标准</h2>
+            
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>标准</th><th>成功标志</th></tr></thead>
+      <tbody><tr><td>结构清晰</td><td>能讲清每个 Skill 在生产线里的位置</td></tr><tr><td>可演示</td><td>评审网页可打开；打不开时 PRD 可作为说明入口</td></tr><tr><td>有真实验证</td><td>《娃娃仙》已有公开成片和平台数据</td></tr><tr><td>可复用</td><td>下一部漫剧能复用同一套 PRD、剧本、分镜、定妆造和复盘流程</td></tr></tbody>
+    </table>
+  </div>
+          </section>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

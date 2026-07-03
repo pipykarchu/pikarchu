@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>皮玺玉个人 IP 站 SOP</title>
+  <style>
+    :root { --bg:#fafaf7; --paper:#fff; --text:#1c1c1e; --muted:#6b6b73; --line:#e8e6e0; --purple:#A78BFA; --pink:#F472B6; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:linear-gradient(135deg,rgba(167,139,250,.10),transparent 38%),var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif; line-height:1.75; }
+    main { max-width:980px; margin:0 auto; padding:32px 18px 56px; }
+    header, article { background:var(--paper); border:1px solid var(--line); border-radius:8px; }
+    header { padding:24px; margin-bottom:14px; }
+    article { padding:24px; overflow:auto; }
+    .eyebrow { color:var(--muted); font-size:12px; font-weight:700; text-transform:uppercase; }
+    h1 { margin:6px 0 8px; font-size:32px; line-height:1.2; letter-spacing:0; }
+    header h1 { background:linear-gradient(135deg,var(--purple),var(--pink)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    h2 { margin:28px 0 10px; font-size:22px; border-left:4px solid var(--purple); padding-left:10px; }
+    h3 { margin:20px 0 8px; font-size:17px; }
+    p { margin:8px 0; color:var(--muted); }
+    li { margin:6px 0 6px 20px; color:var(--muted); }
+    code { background:#f5f3ee; padding:2px 5px; border-radius:6px; }
+    @media (max-width: 640px) { h1 { font-size:26px; } header, article { padding:18px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">Portfolio Document</div>
+      <h1>皮玺玉个人 IP 站 SOP</h1>
+      <p>面向运行、维护、上线检查和文档更新的操作手册。</p>
+    </header>
+    <article><h1>皮玺玉个人 IP 站 SOP</h1>
+
+<h2>0. 使用说明</h2>
+
+<p>这份 SOP 给自己和协作者照着做，目标是让面试演示版稳定、可维护、可复盘。</p>
+
+<p>| SOP 类型 | 使用时机 | 成功标志 |</p>
+<p>| --- | --- | --- |</p>
+<p>| 面试前检查 SOP | 面试前 1 天或当天 | 10 分钟演示链路能完整跑通 |</p>
+<p>| 内容维护 SOP | 新增作品、改服务、换二维码时 | 不改业务代码也能更新页面 |</p>
+<p>| 本地运行 SOP | 需要展示客服、留言、后台时 | 前台和 API 都可用 |</p>
+<p>| 上线前检查 SOP | 准备公开访问时 | 无默认密码、无 Key 泄露、基础隐私说明完整 |</p>
+
+<h2>1. 面试前检查 SOP</h2>
+
+<h3>目的</h3>
+
+<p>确保面试现场不会因为链接、图片、后台、客服或文档问题打断演示。</p>
+
+<h3>步骤</h3>
+
+<p>| 步骤 | 操作 | 成功标志 |</p>
+<p>| --- | --- | --- |</p>
+<p>| 1 | 打开首页 | 首屏文字、吉祥物、按钮正常显示 |</p>
+<p>| 2 | 点击“看看貔貅囤了啥” | 页面滚动到作品区 |</p>
+<p>| 3 | 打开 2 个代表项目 | 项目详情能展示背景、亮点、技术栈 |</p>
+<p>| 4 | 点击 Live 项目 Demo | Demo 能打开；打不开就准备截图 |</p>
+<p>| 5 | 打开智能客服 | 客服浮窗能展开 |</p>
+<p>| 6 | 问“有哪些作品” | 返回作品相关答案或兜底说明 |</p>
+<p>| 7 | 打开联系弹窗 | 表单、二维码、邮箱正常 |</p>
+<p>| 8 | 提交测试留言 | 后台能看到留言 |</p>
+<p>| 9 | 进入 `/admin` | 能登录并看到留言和事件 |</p>
+<p>| 10 | 打开 PRD HTML | 能讲清当前是面试演示版，小程序商业化是后续方向 |</p>
+
+<h2>2. 内容维护 SOP</h2>
+
+<h3>目的</h3>
+
+<p>以后改内容优先改数据，不动业务代码，降低维护成本。</p>
+
+<p>| 事项 | 文件 | 操作 | 成功标志 |</p>
+<p>| --- | --- | --- | --- |</p>
+<p>| 改个人介绍 | `content/profile.json` | 修改 `greeting/slogan/intro/contact` | 首页和联系弹窗同步更新 |</p>
+<p>| 加新作品 | `content/projects.json` | 复制一个项目对象并修改字段 | 对应分区出现新卡片 |</p>
+<p>| 改作品状态 | `content/projects.json` | 修改 `status` | 徽章变成 Live/WIP/Idea/Paid |</p>
+<p>| 改分区 | `content/categories.json` | 修改 `title/desc/order/accent` | 分区名称、顺序或颜色变化 |</p>
+<p>| 改服务文案 | `content/services.json` | 修改服务对象 | 服务区文案更新 |</p>
+<p>| 换二维码 | `public/qrcodes/` | 替换 `wechat.png` 或 `xhs.png` | 联系弹窗显示新二维码 |</p>
+<p>| 换吉祥物 | `public/mascot/` | 替换对应 PNG | 首页或客服入口显示新图 |</p>
+
+<h2>3. 本地运行 SOP</h2>
+
+<h3>目的</h3>
+
+<p>如果只看静态页面，可以直接打开；如果要展示客服、留言和后台，必须启动 API。</p>
+
+<p>| 场景 | 操作 | 成功标志 |</p>
+<p>| --- | --- | --- |</p>
+<p>| 只看 PRD | 打开 `皮玺玉个人IP站_PRD.html` | 文档正常显示 |</p>
+<p>| 只看前台静态效果 | 运行 `npm run dev` | 首页可访问 |</p>
+<p>| 展示客服/留言/后台 | 运行 `npm run dev:full` | 前台和 API 都可用 |</p>
+<p>| 检查 API | 打开 `/api/health` | 返回 `ok: true` |</p>
+<p>| 登录后台 | 打开 `/admin` 并登录 | 能看到留言和数据 |</p>
+
+<h3>风险</h3>
+
+<li>如果没有配置 AI Key，客服会走本地兜底，这不是坏事，可以讲成“防幻觉和无 Key 降级策略”。</li>
+<li>如果没有配置邮件，留言仍然保存，只是不会邮件提醒。</li>
+<li>不要把 `.env`、真实 API Key、邮箱授权码提交到 Git。</li>
+
+<h2>4. 上线前检查 SOP</h2>
+
+<h3>目的</h3>
+
+<p>从面试演示版转公开访问时，先把安全、隐私、配置补齐。</p>
+
+<p>| 检查项 | 操作 | 成功标志 |</p>
+<p>| --- | --- | --- |</p>
+<p>| 后台账号 | 配置 `ADMIN_USER`、`ADMIN_PASS` | 默认账号密码不可用 |</p>
+<p>| Token 密钥 | 配置 `ADMIN_SECRET` | 重启后签名逻辑稳定 |</p>
+<p>| AI Key | 配置后端环境变量 | 前端代码搜不到真实 Key |</p>
+<p>| 邮件提醒 | 配置 Resend 或 SMTP | 新留言能收到邮件 |</p>
+<p>| 隐私说明 | 页面或文档说明数据用途 | 访客知道留言和埋点用途 |</p>
+<p>| 二维码 | 上传真实二维码 | 联系弹窗可扫码 |</p>
+<p>| 移动端 | 用 390px/430px 检查 | 不遮挡主要内容 |</p>
+<p>| 构建 | 运行 `npm run build` | 构建成功 |</p>
+
+<h2>5. PRD/SOP 更新 SOP</h2>
+
+<p>| 触发条件 | 操作 | 成功标志 |</p>
+<p>| --- | --- | --- |</p>
+<p>| 范围变化 | 更新 PRD 修订记录和范围定义 | 文档版本递增 |</p>
+<p>| 工作流变化 | 更新 PRD 的工作流设计和本文件 | 流程没有旧口径 |</p>
+<p>| 上线配置变化 | 更新配置清单 | 环境变量表可照着配 |</p>
+<p>| 真实成本数据补充 | 更新 AI 成本、产出、ROI 实际追踪表 | 不再只有待统计 |</p>
+<p>| 小程序开始立项 | 新建小程序商业化 PRD | 不把商业化内容硬塞进当前作品集 PRD |</p>
+
+</article>
+  </main>
+</body>
+</html>

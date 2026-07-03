@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -89,6 +89,23 @@
   }
   .access-status.show { display: block; background: #fef2f2; color: #991b1b; }
   .access-status.success { display: block; background: #f0fdf4; color: #047857; }
+  .demo-entry {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px dashed #c4b5fd;
+  }
+  .demo-entry-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .demo-entry-title { font-size: 13px; font-weight: 700; color: #4c1d95; }
+  .demo-entry-desc { font-size: 12px; color: #6b7280; line-height: 1.6; }
 
   .upload-section {
     background: #fff;
@@ -542,6 +559,11 @@
         <button class="btn btn-primary" id="accessBtn">验证</button>
       </div>
       <div class="access-status" id="accessStatus"></div>
+      <div class="demo-entry">
+        <div class="demo-entry-head">
+          <button class="btn btn-demo" id="demoAccessBtn" type="button">面试演示免秘钥版</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -806,6 +828,7 @@ const STATE = {
 };
 
 const ACCESS_KEY = 'hqcl123';
+const DEMO_ACCESS_KEY = 'demo';
 const APP_VERSION = {
   code: 'V24',
   updatedAt: '2026-05-14 01:52',
@@ -1085,10 +1108,48 @@ document.getElementById('monitorFile').addEventListener('change', e => loadFile(
 document.getElementById('analyzeBtn').addEventListener('click', () => analyze(STATE.orderData, STATE.monitorData));
 document.getElementById('demoBtn').addEventListener('click', confirmCurrentMonth);
 document.getElementById('accessBtn').addEventListener('click', verifyAccess);
+document.getElementById('demoAccessBtn').addEventListener('click', enterDemoMode);
 document.getElementById('accessKey').addEventListener('keydown', e => {
   if (e.key === 'Enter') verifyAccess();
 });
 restoreConfirmedResult();
+
+function buildDemoRows() {
+  const orderData = [
+    { 'PR创建人姓名': '林栀', 'PR号': 'PR20260601001', '订单号': 'PO20260601001', '采购品类中文名称': '办公空间维修', '采购金额（PO行）不含税CNY': 86000, '已验收金额(PO行)不含税CNY': 12000, '原始订单日期': '2026-03-05', '行内合同状态': '有效', '订单状态': '待验收', 'PO行类型': '目录', '供应商部件号': 'WX-001' },
+    { 'PR创建人姓名': '林栀', 'PR号': 'PR20260601002', '订单号': 'PO20260601002', '采购品类中文名称': '弱电施工', '采购金额（PO行）不含税CNY': 45000, '已验收金额(PO行)不含税CNY': 0, '原始订单日期': '2026-04-01', '行内合同状态': '有效', '订单状态': '待验收', 'PO行类型': '非目录', '供应商部件号': '' },
+    { 'PR创建人姓名': '周宁', 'PR号': 'PR20260602001', '订单号': 'PO20260602001', '采购品类中文名称': '空调维保', '采购金额（PO行）不含税CNY': 62000, '已验收金额(PO行)不含税CNY': 1000, '原始订单日期': '2026-02-18', '行内合同状态': '有效', '订单状态': '待验收', 'PO行类型': '目录', '供应商部件号': 'KT-021' },
+    { 'PR创建人姓名': '周宁', 'PR号': 'PR20260602002', '订单号': 'PO20260602002', '采购品类中文名称': '保洁服务', '采购金额（PO行）不含税CNY': 18000, '已验收金额(PO行)不含税CNY': 18000, '原始订单日期': '2026-05-30', '行内合同状态': '有效', '订单状态': 'received', 'PO行类型': '非目录', '供应商部件号': '' },
+    { 'PR创建人姓名': '陈一', 'PR号': 'PR20260603001', '订单号': 'PO20260603001', '采购品类中文名称': '消防整改', '采购金额（PO行）不含税CNY': 99000, '已验收金额(PO行)不含税CNY': 0, '原始订单日期': '2026-01-12', '行内合同状态': '有效', '订单状态': '待验收', 'PO行类型': '目录', '供应商部件号': 'XF-119' },
+    { 'PR创建人姓名': '陈一', 'PR号': 'PR20260603002', '订单号': 'PO20260603002', '采购品类中文名称': '会议室改造', '采购金额（PO行）不含税CNY': 31000, '已验收金额(PO行)不含税CNY': 31000, '原始订单日期': '2026-06-18', '行内合同状态': '有效', '订单状态': '已完成', 'PO行类型': '非目录', '供应商部件号': '' }
+  ];
+  const monitorData = [
+    { '业务对接人': '林栀', '预计下次提单日期': '2026-03-20', '监控项目': '办公室漏水维修复盘提单', 'PO行类型': '目录', '供应商部件号': 'WX-001', '影响业务': '深圳办公区', '城市': '深圳', '三级品类': '维修工程', '超期原因': '供应商补充验收资料延迟' },
+    { '业务对接人': '林栀', '预计下次提单日期': '2026-04-10', '监控项目': '弱电施工二次提单', 'PO行类型': '非目录', '供应商部件号': '', '影响业务': '广州办公区', '城市': '广州', '三级品类': '弱电施工', '超期原因': '' },
+    { '业务对接人': '周宁', '预计下次提单日期': '2026-02-25', '监控项目': '空调维保月度提单', 'PO行类型': '目录', '供应商部件号': 'KT-021', '影响业务': '上海办公区', '城市': '上海', '三级品类': '空调维保', '超期原因': '等待区域负责人确认' },
+    { '业务对接人': '陈一', '预计下次提单日期': '2026-01-30', '监控项目': '消防整改验收后提单', 'PO行类型': '目录', '供应商部件号': 'XF-119', '影响业务': '北京办公区', '城市': '北京', '三级品类': '消防整改', '超期原因': '' },
+    { '业务对接人': '陈一', '预计下次提单日期': '2026-06-05', '监控项目': '会议室改造收尾提单', 'PO行类型': '非目录', '供应商部件号': '', '影响业务': '北京办公区', '城市': '北京', '三级品类': '空间改造', '超期原因': '' }
+  ];
+  return { orderData, monitorData };
+}
+
+function enterDemoMode() {
+  const { orderData, monitorData } = buildDemoRows();
+  STATE.authorized = true;
+  STATE.publicView = false;
+  STATE.orderData = orderData;
+  STATE.monitorData = monitorData;
+  STATE.history = {
+    '2026-05': { overdue30: 2, overdue60: 3 },
+    '2026-06': { overdue30: 4, overdue60: 4 }
+  };
+  document.getElementById('uploadSection').style.display = 'grid';
+  document.querySelector('.task-progress-section').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('accessKey').value = DEMO_ACCESS_KEY;
+  showAccessMessage('演示版已进入：已加载虚拟订单表和监控台账，可直接展示虚拟数据结果。', true);
+  analyze(orderData, monitorData, { skipAccess: true });
+}
 
 function verifyAccess() {
   const input = document.getElementById('accessKey');

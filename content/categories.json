@@ -1,58 +1,34 @@
 [
   {
-    "id": "procurement",
-    "title": "采购智能",
-    "icon": "🛒",
+    "id": "work",
+    "title": "工作",
+    "icon": "💼",
     "accent": "#A78BFA",
-    "desc": "把采购流程里的重复观察、异常预警交给 AI",
+    "desc": "求职、采购、个人站、智能客服和商业服务",
     "order": 1
   },
   {
-    "id": "job",
-    "title": "求职作战",
-    "icon": "💼",
-    "accent": "#F472B6",
-    "desc": "从简历到面试，全流程的 AI 副本",
-    "order": 2
-  },
-  {
-    "id": "prd",
-    "title": "PRD 工厂",
-    "icon": "📋",
+    "id": "learning",
+    "title": "学习",
+    "icon": "📚",
     "accent": "#60A5FA",
-    "desc": "产品经理的工具链，把需求拆给 AI 写",
-    "order": 3
+    "desc": "视频学习、知识整理和可复用方法",
+    "order": 2
   },
   {
     "id": "content",
     "title": "内容创作",
     "icon": "🎬",
     "accent": "#FB923C",
-    "desc": "漫剧、视频特效、AIGC 生产线",
-    "order": 4
+    "desc": "漫剧项目和漫剧生产工作流",
+    "order": 3
   },
   {
-    "id": "commercial",
-    "title": "商业验证",
-    "icon": "💎",
-    "accent": "#F472B6",
-    "desc": "把 AI 能力包装成可成交、可交付、可复盘的服务",
-    "order": 5
-  },
-  {
-    "id": "health",
-    "title": "她健康",
-    "icon": "🌸",
-    "accent": "#F472B6",
-    "desc": "女性健康管理：减肥规划、经期照顾",
-    "order": 6
-  },
-  {
-    "id": "general",
-    "title": "通用 AIGC",
-    "icon": "🧰",
+    "id": "life",
+    "title": "生活",
+    "icon": "🌿",
     "accent": "#34D399",
-    "desc": "跨领域可复用的 Skill / 提示词 / 模板",
-    "order": 7
+    "desc": "健康管理和生活规划方向",
+    "order": 4
   }
 ]

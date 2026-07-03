@@ -1,8 +1,10 @@
 <script setup>
 import { computed } from 'vue'
 import { useContent } from '../composables/useContent'
+import { useTracker } from '../composables/useTracker'
 
 const { services, servicePackages } = useContent()
+const { track } = useTracker()
 const props = defineProps({
   mode: { type: String, default: 'business' }
 })
@@ -25,8 +27,14 @@ const typeStyle = {
 }
 
 const handleClick = (action, emit) => {
+  track('service_click', action)
   if (action === 'open-contact') emit('open-contact')
   else if (action === 'scroll-to-projects') emit('scroll-to-projects')
+}
+
+const handlePackageClick = (item, emit) => {
+  track('service_package_click', item.id || item.title)
+  emit('open-contact')
 }
 </script>
 
@@ -82,7 +90,7 @@ const handleClick = (action, emit) => {
           </div>
 
           <button
-            @click="$emit('open-contact')"
+            @click="handlePackageClick(item, $emit)"
             class="w-full py-3 md:py-2.5 rounded-lg text-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5"
             style="background: linear-gradient(135deg, #14B8A6 0%, #60A5FA 100%);"
           >

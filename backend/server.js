@@ -195,7 +195,7 @@ const getContent = async () => {
   return {
     profile,
     categories: categories.sort((a, b) => a.order - b.order),
-    projects: projects.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0)),
+    projects: projects.filter(project => !project.hidden).sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0)),
     services,
     servicePackages
   }
@@ -505,6 +505,109 @@ const updateServicePackages = async (req) => {
   return { ok: true, servicePackages: normalized }
 }
 
+
+const getEventModule = (event) => {
+  const label = String(event.label || '')
+  const path = String(event.path || '')
+
+  if (event.type === 'chat_open' || event.type === 'chat_send') return '智能客服'
+  if (event.type === 'contact_open' || event.type === 'contact_submit') return '联系转化'
+  if (event.type === 'service_click' || event.type === 'service_package_click') return '服务区'
+  if (event.type === 'mode_switch') return '模式切换'
+  if (event.type === 'interview_material_click') return '资料文档'
+  if (event.type === 'button_click') {
+    if (label.includes('projects')) return '作品区'
+    if (label.includes('services')) return '服务区'
+    return '按钮点击'
+  }
+  if (event.type === 'project_detail_open' || event.type === 'project_action_click') {
+    const projectLabel = label.split(':')[0]
+    if (/求职|采购|个人站|智能客服|PRD|Skill 库|商业|福瑞/.test(projectLabel)) return '工作'
+    if (/视频学习|B站/.test(projectLabel)) return '学习'
+    if (/娃娃仙|漫剧|定妆|剧本|分镜|视频特效/.test(projectLabel)) return '内容创作'
+    if (/减肥|经期|健康/.test(projectLabel)) return '生活'
+    return '作品区'
+  }
+  if (path.includes('/projects/procurement')) return '工作'
+  if (path.includes('/projects/bilibili')) return '学习'
+  return '其他'
+}
+
+const buildAnalytics = (events, now = Date.now()) => {
+  const oneDay = 1000 * 60 * 60 * 24
+  const usableEvents = events.filter(event => event.sessionId)
+  const sessions = new Set(usableEvents.map(event => event.sessionId))
+  const totalSessions = sessions.size || 1
+  const moduleMap = new Map()
+
+  for (const event of usableEvents) {
+    const moduleName = getEventModule(event)
+    if (!moduleMap.has(moduleName)) {
+      moduleMap.set(moduleName, {
+        module: moduleName,
+        events: 0,
+        sessions: new Set(),
+        clicks: 0,
+        opens: 0,
+        actions: 0
+      })
+    }
+    const item = moduleMap.get(moduleName)
+    item.events += 1
+    item.sessions.add(event.sessionId)
+    if (event.type.includes('click')) item.clicks += 1
+    if (event.type.includes('open')) item.opens += 1
+    if (event.type.includes('action')) item.actions += 1
+  }
+
+  const moduleUsage = [...moduleMap.values()]
+    .map(item => ({
+      module: item.module,
+      events: item.events,
+      sessions: item.sessions.size,
+      clicks: item.clicks,
+      opens: item.opens,
+      actions: item.actions,
+      usageRate: Math.round((item.sessions.size / totalSessions) * 1000) / 10
+    }))
+    .sort((a, b) => b.sessions - a.sessions || b.events - a.events)
+
+  const sessionDays = new Map()
+  for (const event of usableEvents) {
+    const time = new Date(event.createdAt).getTime()
+    if (!Number.isFinite(time)) continue
+    const day = new Date(time).toISOString().slice(0, 10)
+    if (!sessionDays.has(event.sessionId)) sessionDays.set(event.sessionId, new Set())
+    sessionDays.get(event.sessionId).add(day)
+  }
+  const retainedSessions = [...sessionDays.values()].filter(days => days.size >= 2).length
+  const active7dSessions = new Set(
+    usableEvents
+      .filter(event => now - new Date(event.createdAt).getTime() <= oneDay * 7)
+      .map(event => event.sessionId)
+  ).size
+  const previous7dSessions = new Set(
+    usableEvents
+      .filter(event => {
+        const time = new Date(event.createdAt).getTime()
+        return now - time > oneDay * 7 && now - time <= oneDay * 14
+      })
+      .map(event => event.sessionId)
+  ).size
+
+  return {
+    moduleUsage,
+    retention: {
+      totalSessions: sessions.size,
+      retainedSessions,
+      retentionRate: sessions.size ? Math.round((retainedSessions / sessions.size) * 1000) / 10 : 0,
+      active7dSessions,
+      previous7dSessions,
+      returning7dRate: previous7dSessions ? Math.round((active7dSessions / previous7dSessions) * 1000) / 10 : 0
+    }
+  }
+}
+
 const getAdminSummary = async () => {
   const [rawContacts, events, statusMap, reminderMap, servicePackages] = await Promise.all([
     readJsonl('contacts.jsonl'),
@@ -542,6 +645,8 @@ const getAdminSummary = async () => {
     return acc
   }, {})
 
+  const analytics = buildAnalytics(events, now)
+
   return {
     ok: true,
     stats: {
@@ -558,6 +663,8 @@ const getAdminSummary = async () => {
     contacts: contacts.slice(-80).reverse(),
     recentEvents: events.slice(-120).reverse(),
     eventCounts,
+    moduleUsage: analytics.moduleUsage,
+    retention: analytics.retention,
     statusCounts,
     servicePackages,
     reminder: {

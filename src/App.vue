@@ -5,10 +5,10 @@ import HeroSection from './components/HeroSection.vue'
 import CategorySection from './components/CategorySection.vue'
 import ServicesSection from './components/ServicesSection.vue'
 import OperationDemoSection from './components/OperationDemoSection.vue'
-import InterviewSection from './components/InterviewSection.vue'
 import AppFooter from './components/AppFooter.vue'
 import ContactModal from './components/ContactModal.vue'
 import AdminDashboard from './components/AdminDashboard.vue'
+import ChatWidget from './components/ChatWidget.vue'
 import { useTracker } from './composables/useTracker'
 
 const APP_VERSION = '0.1.0'
@@ -88,9 +88,9 @@ onMounted(() => {
           @scroll-to-projects="handleScrollToProjects"
         />
       </template>
-      <InterviewSection v-if="siteMode === 'demo'" @open-contact="handleOpenContact" />
     </main>
     <AppFooter />
     <ContactModal v-model="contactOpen" />
+    <ChatWidget @open-contact="handleOpenContact" />
   </div>
 </template>

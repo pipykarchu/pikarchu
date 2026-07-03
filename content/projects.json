@@ -2,10 +2,10 @@
   {
     "id": "job-war-room",
     "title": "Studio · 求职作战中心",
-    "category": "job",
+    "category": "work",
     "status": "live",
     "shortDesc": "本地优先的 AI Agent 求职工作台：档案、路径推演、JD 决策、简历定制、面试演练、学习作战和作品集展示全闭环。",
-    "longDesc": "这是最适合面试重点讲的项目。我把自己的求职流程拆成一个 AI Agent 工作台：先建立个人档案，再做路径推演，之后围绕每个 JD 做解析、决策建议、公司信息、简历定制、面试手册、面试演练和学习计划。最新补充了作品集展示口径，把项目背景、功能模块、Demo 链接、面试讲法和风险边界整理成可投递、可演示、可复盘的作品集内容。产品上重点解决三个问题：AI 不能编事实、求职材料不能散、每个岗位的决策和产物要能复盘。工程上实现了本地 JSON/Markdown 持久化、多模型分工、演示模式、版本留痕和 serverless 部署。",
+    "longDesc": "我把自己的求职流程拆成一个 AI Agent 工作台：先建立个人档案，再做路径推演，之后围绕每个 JD 做解析、决策建议、公司信息、简历定制、面试手册、面试演练和学习计划。最新补充了作品集展示口径，把项目背景、功能模块、Demo 链接、讲解方法和风险边界整理成可投递、可演示、可复盘的作品集内容。产品上重点解决三个问题：AI 不能编事实、求职材料不能散、每个岗位的决策和产物要能复盘。工程上实现了本地 JSON/Markdown 持久化、多模型分工、演示模式、版本留痕和 serverless 部署。",
     "tags": [
       "AI Agent",
       "求职系统",
@@ -30,8 +30,8 @@
       "demoNote": "打开线上李明演示档案，只读预览，不进入真实档案。"
     },
     "highlights": [
-      "面试讲法：这是一个从真实痛点出发的 AI Agent 产品，不是单点 prompt demo。",
-      "作品集内容：已整理项目背景、核心功能、Demo 入口、面试讲法和风险边界，方便投递与现场演示。",
+      "项目讲法：这是一个从真实痛点出发的 AI Agent 产品，不是单点 prompt demo。",
+      "作品集内容：已整理项目背景、核心功能、Demo 入口、项目讲法和风险边界，方便投递与现场演示。",
       "核心产品规则：信息分级铁律，不让 AI 编公司事实、量化数字和未来预测。",
       "完整闭环：路径推演 → JD 解析 → 决策建议 → 简历定制 → 面试演练 → 学习计划 → 作品集展示。",
       "演示模式：虚拟档案、预录响应和只读数据隔离，适合公开演示且不泄露真实隐私。",
@@ -42,7 +42,7 @@
   {
     "id": "procurement-dashboard",
     "title": "提单履行预警看板",
-    "category": "procurement",
+    "category": "work",
     "status": "live",
     "shortDesc": "把订单表和监控台账导入单文件 HTML，自动生成履行预警、清理建议和提单人改善排名。",
     "longDesc": "这是最适合证明业务理解和落地能力的项目。面向荣耀后勤不动产采购履行场景，导入订单表和监控台账两份 Excel 后，自动识别字段、计算待验收、待提单、待清理关闭订单和提单人预警排名。产品设计上区分管理者视图和普通用户视图，强调本地处理、零部署、可留痕、可导出，适合在面试中讲“如何把真实业务规则产品化”。",
@@ -62,10 +62,11 @@
     ],
     "cover": "/mascot/pixiu-mini.png",
     "links": {
-      "demo": "/projects/procurement-dashboard/index.html"
+      "demo": "/projects/procurement-dashboard/index.html",
+      "demoNote": "管理者上传入口秘钥：hqcl123；验证后可导入订单表和监控台账。"
     },
     "highlights": [
-      "面试讲法：从后勤采购真实流程里抽出可计算的异常规则。",
+      "秘钥说明：管理者上传入口秘钥为 hqcl123，验证后显示上传和数据质量识别区。",
       "字段智能识别：提单人、订单时间等核心字段支持多种别名。",
       "权限分层：管理者看全量，普通用户只看个人改善建议。",
       "数据质量校验：自动发现订单号和金额对应多个时间的异常。",
@@ -76,16 +77,16 @@
   {
     "id": "personal-ip-site",
     "title": "皮玺玉 × AI 貔貅个人站",
-    "category": "general",
+    "category": "work",
     "status": "live",
-    "shortDesc": "数据驱动的个人作品集门户，承载作品展示、联系转化、后台留言、埋点复盘、智能客服和面试演示包。",
-    "longDesc": "这是我的个人 IP 和作品集门户。它不是静态简历页，而是把个人定位、AI 貔貅 IP、作品数据、联系入口、后台管理、埋点复盘、智能客服和面试演示包串起来。内容由 content/*.json 驱动，新增作品不需要改组件；页面支持深浅主题、项目详情弹窗、联系弹窗、后台查看留言和事件记录。最新版本新增 Interview Pack，把 PRD、演示路径、项目主讲顺序和兜底话术整理成 10 分钟面试链路，面试时可以用它作为总入口，再跳到各个项目 Demo。",
+    "shortDesc": "数据驱动的个人作品集门户，承载作品展示、联系转化、后台留言、埋点复盘、智能客服和文档资产。",
+    "longDesc": "这是我的个人 IP 和作品集门户。它不是静态简历页，而是把个人定位、AI 貔貅 IP、作品数据、联系入口、后台管理、埋点复盘、智能客服和文档资产串起来。内容由 content/*.json 驱动，新增作品不需要改组件；页面支持深浅主题、项目详情弹窗、联系弹窗、后台查看留言和事件记录。最新版本把项目模块整理为工作、学习、内容创作、生活四类，并补齐后台功能模块点击使用率、留存率、智能客服 PRD、福瑞商业 PRD、漫剧工作流 PRD 和个人站工作流/SOP/进度看板入口。",
     "tags": [
       "个人IP",
       "作品集",
       "Vue3",
       "数据驱动",
-      "面试门户"
+      "文档资产"
     ],
     "tech": [
       "Vue 3",
@@ -94,37 +95,45 @@
       "Node HTTP API",
       "JSON 数据驱动",
       "本地日志",
-      "面试演示包"
+      "文档资产"
     ],
     "cover": "/mascot/pixiu-hero.png",
     "links": {
       "demo": "/projects/personal-ip-site/index.html",
-      "demoNote": "打开个人站 PRD 展示页，可用于面试时讲产品定位、范围、工作流和上线风险。"
+      "demoNote": "打开个人站 PRD 网页，可用于讲产品定位、范围、工作流和上线风险。"
     },
     "actions": [
       {
-        "label": "查看 PRD 页面",
+        "label": "查看个人站 PRD",
         "href": "/projects/personal-ip-site/index.html"
       },
       {
-        "label": "打开 PRD 摘要",
-        "href": "/docs/personal-ip-site-prd.md"
+        "label": "工作流文档",
+        "href": "/docs/personal-ip-site-workflow.html"
+      },
+      {
+        "label": "SOP 文档",
+        "href": "/docs/personal-ip-site-sop.html"
+      },
+      {
+        "label": "进度看板",
+        "href": "/docs/personal-ip-site-progress.html"
       }
     ],
     "highlights": [
-      "面试讲法：这是所有作品的总入口，体现信息架构、视觉 IP 和工程落地。",
-      "数据驱动：作品、分类、服务和个人信息都由 JSON 配置。",
+      "总入口：这是所有作品的入口，体现信息架构、视觉 IP、工程落地和运营复盘。",
+      "数据驱动：作品、分类、服务和个人信息都由 JSON 配置，后续新增项目不用改组件。",
+      "四个模块：工作、学习、内容创作、生活，内容创作只保留《娃娃仙》和漫剧生产工作流两个主入口。",
       "产品闭环：作品展示 → 智能客服 → 留言联系 → 后台复盘。",
-      "最新进度：已补齐智能客服、留言、埋点、运营后台、PRD 展示页和面试演示包。",
-      "面试演示包：按定位、主讲项目、闭环演示、边界说明组织 10 分钟讲解路径。",
-      "配套文档：已沉淀 PRD、工作流、SOP、进度看板和面试演示优先级。"
+      "后台指标：已补功能模块点击使用率、会话留存率和近 7 日回访口径。",
+      "配套文档：工作流、SOP、进度看板都可从项目详情直接打开。"
     ],
     "priority": 90
   },
   {
     "id": "personal-site-ai-chat",
     "title": "个人站智能客服",
-    "category": "general",
+    "category": "work",
     "status": "live",
     "shortDesc": "基于个人站资料的 AI 问答浮窗，帮助访客快速了解我是谁、有哪些作品、如何联系。",
     "longDesc": "这是个人站的智能客服 MVP。访客不用自己翻页面，可以直接问个人介绍、作品介绍、服务内容和联系方式。后端读取 content/profile.json、content/projects.json、content/services.json 作为知识来源，调用 qwen-turbo 生成回答；没有配置 API Key 或模型不可用时，会使用兜底回复并引导留言。产品上明确不做自动报价、不做长期聊天记录、不做人工坐席，避免 MVP 失焦。",
@@ -143,23 +152,32 @@
       "接口限流"
     ],
     "cover": "",
-    "links": {},
+    "links": {
+      "demo": "/docs/personal-site-ai-chat-prd.html",
+      "demoNote": "打开个人站智能客服 PRD，说明 MVP 范围、数据来源、兜底策略和验收标准。"
+    },
     "highlights": [
-      "面试讲法：把作品集从“被动浏览”升级成“对话式了解”。",
+      "对话入口：把作品集从“被动浏览”升级成“对话式了解”。",
       "范围克制：只回答站点资料范围内的问题，不自动报价，不编造信息。",
       "安全设计：API Key 只在后端读取，不进入前端代码。",
       "兜底策略：模型不可用时引导留言，不让演示链路完全中断。",
-      "当前状态：前端组件、后端接口、模型联调和 PRD 已完成。"
+      "配套 PRD：项目详情下可直接打开智能客服 MVP PRD。"
     ],
-    "priority": 88
+    "priority": 88,
+    "actions": [
+      {
+        "label": "查看智能客服 PRD",
+        "href": "/docs/personal-site-ai-chat-prd.html"
+      }
+    ]
   },
   {
     "id": "ciwaxian-manju",
     "title": "《娃娃仙》AI 漫剧项目",
     "category": "content",
     "status": "live",
-    "shortDesc": "民俗悬疑 AI 漫剧项目，已从 PRD、剧本、分镜和生图提示词推进到 B 站成片发布；6 月 16 日发布，截至 6 月 22 日获得 44 赞、641 播放。",
-    "longDesc": "《娃娃仙》是我用漫剧生产工作流跑出的真实内容项目。项目定位为民俗悬疑竖屏漫剧，从 PRD、生产 SOP、世界观、角色档案、角色固定提示词、12 集分集大纲、完整剧本、Word 归档、第 1 集分镜表、Excel 分镜和生图提示词，一直推进到第 1 集成片发布。成片已于 2026 年 6 月 16 日发布到 B 站，截至 2026 年 6 月 22 日获得 44 个赞、641 次播放，说明这套 AIGC 内容生产流程已经完成从规划、生产到公开平台反馈的闭环。",
+    "shortDesc": "民俗悬疑 AI 漫剧项目，先跑剪辑先行版测试，已发布到 B 站；截至 2026 年 7 月 3 日获得 54 赞、791 播放。",
+    "longDesc": "《娃娃仙》是我用漫剧生产工作流跑出的真实内容项目。项目定位为民俗悬疑竖屏漫剧，目前不是直接完整做完 12 集，而是先用剪辑先行版测试链路：从 PRD、生产 SOP、世界观、角色档案、角色固定提示词、剧本片段、分镜表、Excel 分镜和生图提示词，推进到一条可公开发布的 B 站测试成片。成片已发布到 B 站，截至 2026 年 7 月 3 日获得 54 个赞、791 次播放，用来验证题材、画风、节奏、封面标题和平台反馈，再决定后续集数如何批量生产。",
     "tags": [
       "AI漫剧",
       "民俗悬疑",
@@ -180,7 +198,7 @@
     "cover": "",
     "links": {
       "demo": "https://www.bilibili.com/video/BV1UCju6QEQ6/?share_source=copy_web&vd_source=d18a68822216878234a3dca384b8c895",
-      "demoNote": "B站成片：2026 年 6 月 16 日发布；截至 2026 年 6 月 22 日，44 赞、641 播放。"
+      "demoNote": "B站成片：截至 2026 年 7 月 3 日，54 赞、791 播放。"
     },
     "actions": [
       {
@@ -189,19 +207,19 @@
       }
     ],
     "highlights": [
-      "成片已发布：第 1 集已于 B 站公开发布，6 月 16 日上线，截至 6 月 22 日获得 44 赞、641 播放。",
-      "面试讲法：这是从 PRD、剧本、分镜、提示词到成片发布的完整 AIGC 内容生产案例。",
-      "完整资产：PRD、SOP、世界观、角色档案、分集大纲、剧本、分镜、提示词和发布复盘齐备。",
+      "剪辑先行版测试：先做一条可发布成片验证题材、画风、节奏和平台反馈，不是直接完整生产 12 集。",
+      "成片已发布：测试成片已在 B 站公开发布，截至 2026 年 7 月 3 日获得 54 赞、791 播放。",
+      "生产链路：PRD、SOP、世界观、角色档案、剧本片段、分镜、提示词到成片发布已跑通。",
       "平台反馈：从 B 站真实播放和点赞数据反向复盘标题、封面、节奏、画风一致性和内容吸引力。",
       "风险控制：不使用明星脸或真实人物肖像，不直接改写外部视频内容，保留版权与素材风险意识。",
-      "下一步清晰：基于首集反馈优化封面标题和前 10 秒节奏，再推进后续集数批量生产。"
+      "下一步清晰：基于测试成片反馈优化封面标题和前 10 秒节奏，再决定后续集数生产节奏。"
     ],
     "priority": 88
   },
   {
     "id": "prd-generator",
     "title": "PRD Writer Skill",
-    "category": "prd",
+    "category": "work",
     "status": "wip",
     "shortDesc": "把想法、MVP、工作流和商业验证整理成标准 PRD，并输出配套网页、SOP 和成本口径。",
     "longDesc": "这是我最近沉淀的核心 Skill。它不是简单生成 PRD，而是先做需求访谈和概念对齐，再维护项目命名的 PRD Markdown，必要时输出皮玺玉风格 PRD 网页，并补充 AI 协作工作流、成本、产出和 ROI 口径。最近已经用它产出了个人站 PRD、B站视频学习助手 PRD、福瑞商业 PRD、漫剧项目 PRD 等多个项目。",
@@ -220,20 +238,22 @@
       "工作流模板"
     ],
     "cover": "",
-    "links": {},
+    "links": {
+      "demo": "/docs/prd-writer-workflow-framework-demo.html",
+      "demoNote": "打开 PRD Writer Skill 模拟生成的工作流框架 PRD 网页，演示需求拆解、范围、流程、验收和风险。"
+    },
     "actions": [
+      {
+        "label": "查看 PRD 网页演示",
+        "href": "/docs/prd-writer-workflow-framework-demo.html"
+      },
       {
         "label": "GitHub 安装下载",
         "href": "https://github.com/pipykarchu/skils"
-      },
-      {
-        "label": "演示页面",
-        "href": "",
-        "disabled": true
       }
     ],
     "highlights": [
-      "面试讲法：把产品经理的需求澄清、范围控制和文档产出变成可复用 Skill。",
+      "演示入口：可打开一份由 PRD Writer Skill 模拟生成的工作流框架 PRD 网页。",
       "已验证产物：个人站、B站视频学习助手、福瑞商业、娃娃仙 PRD 都由它驱动。",
       "不直接硬写完整 PRD，先做概念对齐，避免 AI 把模糊想法写成假确定性。",
       "支持工作流设计：默认带入 Codex + Claude + Tuzi API 的协作分工。",
@@ -243,8 +263,8 @@
   },
   {
     "id": "bilibili-ai-learning-assistant",
-    "title": "B站视频 AI 学习助手",
-    "category": "prd",
+    "title": "视频学习助手",
+    "category": "learning",
     "status": "wip",
     "shortDesc": "把 B 站视频片段转成逐字稿、人物区分、学习纲要、脑图和 PPT 大纲的 Web 学习工具。",
     "longDesc": "这是一个 AI 学习工具 PRD 项目。目标是解决看 B 站课程、访谈、讲座时“线性观看慢、重点难定位、复习成本高”的问题。MVP 支持 B 站链接与时间区间输入、视频上传兜底、原始逐字稿、整理稿、说话人区分、时间戳跳转、Markdown 导出、学习纲要、Mermaid 脑图和 PPT 大纲。面试时适合讲产品范围控制、合规边界、本地历史和 AI 成本风险。",
@@ -264,7 +284,10 @@
       "Mermaid"
     ],
     "cover": "",
-    "links": {},
+    "links": {
+      "demo": "/projects/bilibili-ai-learning-assistant/index.html",
+      "demoNote": "打开 B站视频 AI 学习助手项目页面，展示输入、转写、整理稿、脑图和 PPT 大纲的产品方案。"
+    },
     "highlights": [
       "面试讲法：从学习低效痛点出发，拆出明确 MVP 范围和不做项。",
       "强调合规：不绕过 B 站权限，不读取 Cookie，不处理会员/付费限制。",
@@ -272,57 +295,65 @@
       "本地优先：历史记录和任务结果默认保存在浏览器 IndexedDB。",
       "已产出完整 PRD 和 HTML 页面，可作为后续开发输入。"
     ],
-    "priority": 84
+    "priority": 84,
+    "actions": [
+      {
+        "label": "打开项目页面",
+        "href": "/projects/bilibili-ai-learning-assistant/index.html"
+      }
+    ]
   },
   {
     "id": "manju-production-workflow",
-    "title": "漫剧生产工作流 Skill",
+    "title": "漫剧生产工作流",
     "category": "content",
     "status": "live",
-    "shortDesc": "从 0 到 1 串联漫剧 PRD、SOP、角色档案、剧本、分镜、AI 生图提示词、成片和发布复盘。",
-    "longDesc": "这是漫剧生产的总控 Skill，负责协调 PRD Writer、Screenplay Director 和 Script to Storyboard。它把一个漫剧想法推进成项目文件夹：PRD、生产 SOP、世界观、角色档案、分集大纲、剧本、分镜表、绘图提示词、成片检查和发布复盘。《娃娃仙》已经用这套流程跑到 B 站成片发布，说明它不只是文档方案，而是可落地的 AIGC 内容生产管线。",
+    "shortDesc": "统筹 PRD、剧本、分镜、定妆造、提示词、成片和发布复盘；剧本、分镜、定妆造等 Skill 在这里分工协作。",
+    "longDesc": "这是漫剧生产的总控工作流，不再把剧本、分镜、定妆造拆成零散项目展示，而是作为一条生产线分工协作：PRD Writer 负责项目定位、平台、受众和风险边界；Screenplay Director 负责剧情大纲、角色档案、剧本和人物一致性；Script to Storyboard 负责把剧本拆成镜头级分镜表和 AI 生图提示词；定妆造 Skill 负责角色候选、网页评审、确认造型和三视图资产。它把《娃娃仙》从想法推进到剪辑先行版测试成片和发布复盘，说明这不是单个工具，而是一套可复用的 AIGC 内容生产管线。",
     "tags": [
-      "漫剧",
-      "工作流",
+      "漫剧工作流",
       "PRD",
-      "SOP",
-      "Skill"
+      "剧本",
+      "分镜",
+      "定妆造",
+      "发布复盘"
     ],
     "tech": [
-      "Codex Skill",
-      "AIGC 生产 SOP",
-      "角色档案",
-      "分镜模板",
-      "质检清单"
+      "PRD Writer",
+      "Screenplay Director",
+      "Script to Storyboard",
+      "定妆造 Skill",
+      "AI 生图提示词",
+      "B站发布复盘"
     ],
     "cover": "",
     "links": {
-      "demo": "https://www.bilibili.com/video/BV1UCju6QEQ6/?share_source=copy_web&vd_source=d18a68822216878234a3dca384b8c895",
-      "demoNote": "查看《娃娃仙》B站成片"
+      "demo": "http://127.0.0.1:8790/",
+      "demoNote": "优先打开工作流 PRD；本机 8790 评审网页需要对应本地服务保持运行。"
     },
     "actions": [
       {
+        "label": "查看工作流 PRD",
+        "href": "/docs/manju-production-workflow-prd.html"
+      },
+      {
+        "label": "打开评审网页",
+        "href": "http://127.0.0.1:8790/"
+      },
+      {
         "label": "GitHub 安装下载",
         "href": "https://github.com/pipykarchu/skils"
-      },
-      {
-        "label": "演示页面",
-        "href": "",
-        "disabled": true
-      },
-      {
-        "label": "打开 B 站成片",
-        "href": "https://www.bilibili.com/video/BV1UCju6QEQ6/?share_source=copy_web&vd_source=d18a68822216878234a3dca384b8c895"
       }
     ],
     "highlights": [
-      "面试讲法：不是单次生成图文，而是完整内容生产管线。",
-      "总控分工：PRD 定义方向，剧本 Skill 稳定人物，分镜 Skill 输出镜头表。",
-      "文件结构完整：00_PRD 到 08_成片检查，方便项目交接和复盘。",
-      "成片验证：《娃娃仙》第 1 集已发布到 B 站，截至 2026 年 6 月 22 日获得 44 赞、641 播放。",
+      "工作流分工：PRD 定方向，剧本稳人物，分镜拆镜头，定妆造锁角色视觉，提示词衔接成片生产。",
+      "PRD 入口：评审网页打不开时，也能直接打开工作流 PRD 讲清结构、职责和边界。",
+      "评审网页：本机 8790 可查看角色/时期选择界面，前提是对应本地服务已启动。",
+      "Skill 归并：漫剧剧本、剧本转分镜、定妆造不再单独散列，统一放在漫剧生产工作流里说明职责。",
+      "成片验证：《娃娃仙》先跑剪辑先行版测试，B 站数据截至 2026 年 7 月 3 日为 54 赞、791 播放。",
       "风险意识：不主动调用外部 API，先说明额度、素材泄露和版权风险。"
     ],
-    "priority": 84
+    "priority": 86
   },
   {
     "id": "dingzhuangzao-skill",
@@ -368,7 +399,8 @@
       "生产闭环：确认候选后再生成正面、侧面、背面三视图，避免一开始就做错资产。",
       "风险控制：真实生图会消耗 API 额度并可能上传参考图，演示页默认不联网不调用 API。"
     ],
-    "priority": 83
+    "priority": 83,
+    "hidden": true
   },
   {
     "id": "screenplay-director-skill",
@@ -405,7 +437,8 @@
       "支持 Markdown 和 Word，利于交付给非技术协作者。",
       "已作为漫剧生产工作流的上游环节使用。"
     ],
-    "priority": 78
+    "priority": 78,
+    "hidden": true
   },
   {
     "id": "script-to-storyboard-skill",
@@ -443,12 +476,13 @@
       "支持 dry-run，本地先验证结构，不必每次消耗 API。",
       "已在《瓷娃仙》第 1 集中生成分镜和生图提示词。"
     ],
-    "priority": 76
+    "priority": 76,
+    "hidden": true
   },
   {
     "id": "furry-design-commerce",
     "title": "AI 辅助福瑞设计商业",
-    "category": "commercial",
+    "category": "work",
     "status": "wip",
     "shortDesc": "把 AI 角色设计包装成可咨询、可下单、可授权、可交付的轻量商业服务。",
     "longDesc": "这是一个商业验证型 PRD 项目。目标不是单纯画福瑞，而是把角色创意、视觉产出、授权说明、交付包装和后续制作整理成可成交的商品流程。PRD 中定义了目标用户、MVP 范围、套餐定价、授权风控、交付 SOP、平台布局、成本测算和 7 天验证计划。面试时适合讲“如何把 AI 能力转成可卖服务”。",
@@ -467,20 +501,29 @@
       "小红书 / 闲鱼 / B站"
     ],
     "cover": "",
-    "links": {},
+    "links": {
+      "demo": "/docs/furry-design-commerce-prd.html",
+      "demoNote": "打开 AI 辅助福瑞设计商业 PRD，说明服务包装、套餐、授权边界和验证计划。"
+    },
     "highlights": [
-      "面试讲法：从用户需求、套餐、授权和交付链路讲 AI 商业化。",
+      "商业验证：从角色创意、视觉产出、授权说明、交付包装到后续制作形成服务链路。",
       "套餐设计：头像尝鲜包、表情包小套装、基础兽设包、商用升级包。",
       "风控意识：原创、不模仿知名 IP、商用授权和二次转售边界要写清。",
       "验证计划：7 天看有效咨询、定金支付、交付完成率和复购线索。",
-      "当前产物：完整版 PRD 和 HTML 页面已完成。"
+      "配套 PRD：项目详情下可直接打开商业 PRD。"
     ],
-    "priority": 74
+    "priority": 74,
+    "actions": [
+      {
+        "label": "查看商业 PRD",
+        "href": "/docs/furry-design-commerce-prd.html"
+      }
+    ]
   },
   {
     "id": "skill-library",
     "title": "可复用 Skill 库",
-    "category": "general",
+    "category": "work",
     "status": "wip",
     "shortDesc": "沉淀 PRD、剧本、分镜和漫剧生产等个人 Codex Skills，形成可复用工作方法库。",
     "longDesc": "这是我把近期 AI 工作流沉淀成资产的仓库。当前包含 PRD Writer、Screenplay Director、Script to Storyboard 和 Manju Production Workflow。每个 Skill 都有明确激活场景、输入输出、风险提示和成功标志，能够从一次性聊天变成可重复使用的生产流程。",
@@ -512,7 +555,8 @@
       "可复制到本机 Codex skills 目录直接安装使用。",
       "后续可继续扩展成个人工作流市场。"
     ],
-    "priority": 72
+    "priority": 72,
+    "hidden": true
   },
   {
     "id": "video-fx",
@@ -533,33 +577,58 @@
       "可承接漫剧项目里的关键镜头、转场、氛围特效和宣传素材。",
       "后续需要补样片、模板和质检标准后再升级为 WIP。"
     ],
-    "priority": 30
+    "priority": 30,
+    "hidden": true
   },
   {
     "id": "weight-loss-plan",
-    "title": "AI 减肥规划",
-    "category": "health",
-    "status": "idea",
-    "shortDesc": "结合体感、饮食、作息，生成可执行的周计划，暂作为她健康方向储备。",
+    "title": "AI 减肥记录仪",
+    "category": "life",
+    "status": "live",
+    "shortDesc": "已有单文件 HTML 工具，记录体重、三围、目标体重、饮食、运动和生理期状态，并生成周期友好的减脂建议。",
     "tags": [
       "女性健康",
-      "减肥",
-      "AI规划"
+      "减脂记录",
+      "周期管理",
+      "本地工具",
+      "HTML"
     ],
-    "tech": [],
+    "tech": [
+      "单文件 HTML",
+      "localStorage",
+      "Canvas 趋势图",
+      "JSON 导入导出",
+      "周期状态建议"
+    ],
     "cover": "",
-    "links": {},
+    "links": {
+      "demo": "/projects/weight-loss-tracker/index.html",
+      "demoNote": "打开减肥记录仪本地工具；数据保存在浏览器 localStorage，可导入导出 JSON。"
+    },
     "highlights": [
-      "面试讲法：非当前主讲项目，体现个人长期产品方向。",
-      "需要补数据安全、健康边界和专业建议免责声明。",
-      "后续可与经期健康、运动记录合并成她健康工具。"
+      "已有项目：不是想法储备，已经有可打开的单文件 HTML 工具。",
+      "记录完整：体重、胸围、腰围、臀围、目标体重、饮食模式、运动强度和备注。",
+      "周期合并：经期健康管家已合并进减肥工具，记录生理期状态、经期第几天和身体感受。",
+      "建议分层：经前、经期、经后恢复期、排卵期会调整饮食和运动建议。",
+      "本地优先：数据存在浏览器 localStorage，支持 JSON 导入导出。"
     ],
-    "priority": 20
+    "priority": 82,
+    "longDesc": "这是一个本地优先的减肥记录工具。它已经有可打开的单文件 HTML：记录身高、目标体重、体重、胸围、腰围、臀围、运动强度、饮食模式、生理期状态、经期第几天和身体感受；自动计算 BMI、腰臀比、目标差距和体重变化，并按经前、经期、经后恢复期、排卵期等状态调整饮食和运动建议。经期健康管家不再单独作为项目展示，已合并到这个减肥记录仪里。",
+    "actions": [
+      {
+        "label": "打开减肥记录仪",
+        "href": "/projects/weight-loss-tracker/index.html"
+      },
+      {
+        "label": "查看减肥记录仪 PRD",
+        "href": "/docs/weight-loss-tracker-prd.html"
+      }
+    ]
   },
   {
     "id": "period-care",
     "title": "经期健康管家",
-    "category": "health",
+    "category": "life",
     "status": "idea",
     "shortDesc": "经期周期管理、情绪饮食运动建议，暂作为她健康方向储备。",
     "tags": [
@@ -575,6 +644,7 @@
       "需要优先明确医疗边界、隐私保护和数据本地化策略。",
       "后续可与 AI 减肥规划合并成女性健康产品线。"
     ],
-    "priority": 19
+    "priority": 19,
+    "hidden": true
   }
 ]

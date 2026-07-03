@@ -19,16 +19,16 @@ const handleScroll = (emit) => {
 const heroCopy = computed(() => {
   if (props.mode === 'demo') {
     return {
-      badge: '简历演示入口',
+      badge: '作品集入口',
       title: '皮玺玉 · AI 产品与工作流作品集',
-      slogan: '给面试官看的演示版：项目、方法、Demo 路径一次讲清',
-      intro: '这里保留求职作战中心、采购预警看板、个人站和 AI Skills 的演示链路，适合面试时按“痛点-方案-实现-边界”讲项目。',
-      primary: '查看作品演示',
-      secondary: '切到商业版',
+      slogan: '项目、方法、Demo 路径一次讲清',
+      intro: '这里按工作、学习、内容创作、生活四个模块整理项目，保留可打开的 Demo、PRD 和工作流文档。',
+      primary: '查看作品',
+      secondary: '',
       metrics: [
-        { value: '10min', label: '面试讲解' },
-        { value: '3', label: '主讲项目' },
-        { value: 'Demo', label: '可点击' }
+        { value: '10', label: '项目总数' },
+        { value: '4', label: 'Skill' },
+        { value: '3', label: '工作流' }
       ]
     }
   }
@@ -103,6 +103,7 @@ const handleSecondary = (emit) => {
             {{ heroCopy.primary }} →
           </button>
           <button
+            v-if="heroCopy.secondary"
             @click="handleSecondary($emit)"
             class="px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5"
             :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"

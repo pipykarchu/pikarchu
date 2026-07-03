@@ -26,6 +26,8 @@ const stats = computed(() => summary.value?.stats || {})
 const contacts = computed(() => summary.value?.contacts || [])
 const events = computed(() => summary.value?.recentEvents || [])
 const eventCounts = computed(() => summary.value?.eventCounts || {})
+const moduleUsage = computed(() => summary.value?.moduleUsage || [])
+const retention = computed(() => summary.value?.retention || {})
 const statusCounts = computed(() => summary.value?.statusCounts || {})
 const servicePackages = computed(() => {
   const packages = summary.value?.servicePackages
@@ -352,7 +354,53 @@ onMounted(loadSummary)
               </div>
             </div>
           </div>
+
           <div class="rounded-2xl p-4" :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)' }">
+            <h2 class="mb-3 font-semibold">留存率</h2>
+            <div class="grid grid-cols-2 gap-3 text-sm">
+              <div class="rounded-2xl p-3" :style="{ background: 'var(--color-linear-bg-tertiary)' }">
+                <div class="text-2xl font-bold">{{ retention.retentionRate || 0 }}%</div>
+                <div class="mt-1 text-xs" :style="{ color: 'var(--color-linear-text-tertiary)' }">跨天回访率</div>
+              </div>
+              <div class="rounded-2xl p-3" :style="{ background: 'var(--color-linear-bg-tertiary)' }">
+                <div class="text-2xl font-bold">{{ retention.retainedSessions || 0 }}</div>
+                <div class="mt-1 text-xs" :style="{ color: 'var(--color-linear-text-tertiary)' }">跨天回访会话</div>
+              </div>
+              <div class="rounded-2xl p-3" :style="{ background: 'var(--color-linear-bg-tertiary)' }">
+                <div class="text-2xl font-bold">{{ retention.active7dSessions || 0 }}</div>
+                <div class="mt-1 text-xs" :style="{ color: 'var(--color-linear-text-tertiary)' }">近 7 天会话</div>
+              </div>
+              <div class="rounded-2xl p-3" :style="{ background: 'var(--color-linear-bg-tertiary)' }">
+                <div class="text-2xl font-bold">{{ retention.returning7dRate || 0 }}%</div>
+                <div class="mt-1 text-xs" :style="{ color: 'var(--color-linear-text-tertiary)' }">近 7 天环比活跃</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl p-4 lg:col-span-2" :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)' }">
+            <h2 class="mb-3 font-semibold">功能模块使用率</h2>
+            <div class="space-y-3">
+              <div v-for="item in moduleUsage" :key="item.module">
+                <div class="mb-1 flex items-center justify-between gap-3 text-sm">
+                  <span class="font-medium">{{ item.module }}</span>
+                  <span :style="{ color: 'var(--color-linear-text-secondary)' }">
+                    {{ item.usageRate }}% · {{ item.sessions }} 会话 · {{ item.events }} 次
+                  </span>
+                </div>
+                <div class="h-2 overflow-hidden rounded-full" :style="{ background: 'var(--color-linear-bg-tertiary)' }">
+                  <div
+                    class="h-full rounded-full"
+                    :style="{ width: `${Math.min(item.usageRate || 0, 100)}%`, background: 'linear-gradient(135deg, #A78BFA 0%, #F472B6 100%)' }"
+                  ></div>
+                </div>
+              </div>
+              <p v-if="!moduleUsage.length" class="text-sm" :style="{ color: 'var(--color-linear-text-tertiary)' }">
+                暂无模块点击数据。
+              </p>
+            </div>
+          </div>
+
+          <div class="rounded-2xl p-4 lg:col-span-2" :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)' }">
             <h2 class="mb-3 font-semibold">最近行为</h2>
             <div class="space-y-3">
               <div v-for="event in events" :key="event.id" class="border-b pb-3 last:border-b-0" :style="{ borderColor: 'var(--color-linear-border)' }">

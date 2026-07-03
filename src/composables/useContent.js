@@ -35,7 +35,7 @@ export function useContent() {
   loadContent()
 
   const projectsByCategory = (categoryId) => {
-    return projectsRef.value.filter(p => p.category === categoryId)
+    return projectsRef.value.filter(p => p.category === categoryId && !p.hidden)
   }
 
   return {
