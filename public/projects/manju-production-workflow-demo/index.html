@@ -1,0 +1,1123 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>娃娃仙 AI漫剧生产工作流 · 面试演示看板</title>
+  <style>
+    :root {
+      --bg: #0b0f0e;
+      --grid: rgba(127, 182, 155, .055);
+      --panel: #151c1a;
+      --panel2: #1b2521;
+      --node: #18221f;
+      --line: #334640;
+      --text: #edf4ef;
+      --muted: #a6b3ad;
+      --jade: #80b99c;
+      --gold: #d5b56c;
+      --cyan: #7fb8c6;
+      --red: #cf7765;
+      --violet: #a297d6;
+      --blue: #7da7d9;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", Arial, sans-serif;
+      line-height: 1.55;
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+        radial-gradient(circle at 12% 8%, rgba(127, 184, 198, .14), transparent 24%),
+        radial-gradient(circle at 88% 14%, rgba(207, 119, 101, .12), transparent 22%),
+        #0b0f0e;
+      background-size: 28px 28px, 28px 28px, auto, auto, auto;
+    }
+
+    .page {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 420px;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .hero, .panel, .node, .step, .qa-card {
+      background: linear-gradient(180deg, rgba(27, 37, 33, .96), rgba(16, 22, 20, .96));
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.34);
+    }
+
+    .hero {
+      padding: 24px;
+      min-height: 184px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -120px -160px auto;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(128, 185, 156, .12), transparent 66%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      color: var(--jade);
+      margin: 0 0 6px;
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.12;
+      font-weight: 780;
+    }
+
+    .hero p {
+      margin: 14px 0 0;
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .stat {
+      min-height: 74px;
+      padding: 12px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 8px;
+    }
+
+    .stat b {
+      display: block;
+      color: var(--gold);
+      font-size: 22px;
+      line-height: 1.15;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    h2 {
+      margin: 26px 0 12px;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .caption {
+      color: var(--muted);
+      font-size: 13px;
+      margin: -6px 0 14px;
+    }
+
+    .simple-flow {
+      padding: 18px;
+      background: rgba(7, 10, 9, .46);
+      border: 1px solid rgba(128, 185, 156, .34);
+      border-radius: 12px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.025), 0 16px 40px rgba(0,0,0,.28);
+    }
+
+    .flow-row {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    .flow-row + .flow-row {
+      margin-top: 12px;
+    }
+
+    .flow-node {
+      flex: 1;
+      min-height: 78px;
+      padding: 13px 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-left: 5px solid var(--accent, var(--jade));
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(27, 37, 33, .98), rgba(16, 22, 20, .98));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .flow-node strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1.25;
+    }
+
+    .flow-node span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .flow-node.decision {
+      border-color: rgba(213, 181, 108, .36);
+      border-left-color: var(--gold);
+      background: linear-gradient(180deg, rgba(45, 39, 25, .96), rgba(18, 21, 18, .96));
+    }
+
+    .flow-arrow {
+      width: 34px;
+      min-width: 34px;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .branch-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .branch-card {
+      position: relative;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-top: 4px solid var(--accent, var(--jade));
+      border-radius: 10px;
+      background: rgba(255,255,255,.035);
+    }
+
+    .branch-card b {
+      display: inline-flex;
+      margin-bottom: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent, var(--jade));
+      color: #08100d;
+      font-size: 12px;
+    }
+
+    .branch-card strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .branch-card span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .merge-note {
+      margin: 12px 0;
+      color: var(--gold);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .flowchart-panel {
+      padding: 18px;
+      background: rgba(7, 10, 9, .5);
+      border: 1px solid rgba(128, 185, 156, .34);
+      border-radius: 12px;
+      overflow: auto;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.025), 0 16px 40px rgba(0,0,0,.28);
+    }
+
+    .flowchart-svg {
+      display: block;
+      min-width: 1180px;
+      width: 100%;
+      height: auto;
+    }
+
+    .flow-hit {
+      fill: transparent;
+      cursor: pointer;
+      pointer-events: all;
+    }
+
+    .flow-hit:focus {
+      outline: none;
+    }
+
+    .flow-box {
+      fill: #17231f;
+      stroke: rgba(128, 185, 156, .72);
+      stroke-width: 2;
+      rx: 12;
+    }
+
+    .flow-box.start { stroke: rgba(213, 181, 108, .85); fill: #211e14; }
+    .flow-box.video { stroke: rgba(128, 185, 156, .82); fill: #14231d; }
+    .flow-box.paid { stroke: rgba(207, 119, 101, .9); fill: #261815; }
+    .flow-box.local { stroke: rgba(162, 151, 214, .88); fill: #1d1a28; }
+    .flow-box.export { stroke: rgba(127, 184, 198, .9); fill: #142127; }
+
+    .flow-diamond {
+      fill: #2d2719;
+      stroke: rgba(213, 181, 108, .92);
+      stroke-width: 2;
+    }
+
+    .flow-line {
+      fill: none;
+      stroke: rgba(213, 181, 108, .78);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      marker-end: url(#flowArrow);
+    }
+
+    .flow-line.branch { stroke: rgba(128, 185, 156, .7); }
+    .flow-line.fail { stroke: rgba(207, 119, 101, .78); }
+    .flow-line.local { stroke: rgba(162, 151, 214, .78); }
+
+    .flow-text {
+      fill: var(--text);
+      font-size: 18px;
+      font-weight: 760;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    .flow-small {
+      fill: var(--muted);
+      font-size: 13px;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    .flow-label {
+      fill: #111611;
+      font-size: 13px;
+      font-weight: 800;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    .label-pill {
+      fill: var(--gold);
+      rx: 12;
+    }
+
+    details.detail-graph {
+      display: none;
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(7, 10, 9, .35);
+      overflow: hidden;
+    }
+
+    details.detail-graph > summary {
+      cursor: pointer;
+      padding: 14px 16px;
+      color: var(--gold);
+      font-weight: 780;
+      list-style: none;
+    }
+
+    details.detail-graph > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.detail-graph > summary::after {
+      content: "展开";
+      float: right;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    details.detail-graph[open] > summary::after {
+      content: "收起";
+    }
+
+    .node-detail {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 190px minmax(0, 1fr);
+      gap: 14px;
+      border: 1px solid rgba(128, 185, 156, .28);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(27, 37, 33, .96), rgba(16, 22, 20, .96));
+      box-shadow: 0 16px 40px rgba(0,0,0,.28);
+      overflow: hidden;
+    }
+
+    .detail-aside {
+      padding: 12px;
+      border-right: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+    }
+
+    .detail-aside b {
+      display: block;
+      color: var(--gold);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .detail-aside p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .detail-body {
+      padding: 16px 18px;
+    }
+
+    .detail-body h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .detail-body p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .detail-body ol {
+      margin: 0;
+      padding-left: 22px;
+      color: var(--text);
+    }
+
+    .detail-body li {
+      margin: 0 0 7px;
+      font-size: 13px;
+    }
+
+    .detail-output {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .detail-output span {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(128, 185, 156, .12);
+      border: 1px solid rgba(128, 185, 156, .22);
+      color: var(--jade);
+      font-size: 12px;
+    }
+
+    .graph-wrap {
+      position: relative;
+      min-height: 760px;
+      overflow: auto;
+      padding: 18px;
+      background: rgba(7, 10, 9, .42);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.025);
+    }
+
+    .graph {
+      position: relative;
+      width: 1380px;
+      height: 720px;
+    }
+
+    svg.links {
+      position: absolute;
+      inset: 0;
+      width: 1380px;
+      height: 720px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .link {
+      fill: none;
+      stroke: rgba(128, 185, 156, .45);
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .link.hot { stroke: rgba(207, 119, 101, .62); }
+    .link.gold { stroke: rgba(213, 181, 108, .62); }
+    .link.blue { stroke: rgba(127, 184, 198, .58); }
+
+    .node {
+      position: absolute;
+      width: 210px;
+      min-height: 116px;
+      padding: 12px;
+      z-index: 2;
+    }
+
+    .node.core {
+      width: 246px;
+      min-height: 150px;
+      background: linear-gradient(180deg, rgba(43, 54, 48, .98), rgba(19, 28, 25, .98));
+      border-color: rgba(213, 181, 108, .62);
+      box-shadow: 0 0 0 1px rgba(213,181,108,.16), 0 20px 50px rgba(0,0,0,.42);
+    }
+
+    .node::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--accent, var(--jade));
+      border-radius: 10px 0 0 10px;
+    }
+
+    .node .type {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: var(--accent, var(--jade));
+      color: #09100d;
+      font-size: 12px;
+      font-weight: 760;
+      margin-bottom: 8px;
+    }
+
+    .node h3 {
+      margin: 0 0 6px;
+      font-size: 15px;
+      line-height: 1.28;
+    }
+
+    .node p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .node code {
+      color: var(--cyan);
+      font-family: Consolas, "Cascadia Mono", monospace;
+      font-size: 11px;
+      word-break: break-all;
+    }
+
+    .x1 { left: 20px; }
+    .x2 { left: 300px; }
+    .x3 { left: 570px; }
+    .x4 { left: 840px; }
+    .x5 { left: 1110px; }
+    .y1 { top: 26px; }
+    .y2 { top: 190px; }
+    .y3 { top: 354px; }
+    .y4 { top: 522px; }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+
+    .panel p, .panel li, .panel td {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    ul, ol {
+      margin: 8px 0 0;
+      padding-left: 20px;
+    }
+
+    li + li { margin-top: 6px; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .step {
+      padding: 14px;
+      min-height: 148px;
+      position: relative;
+    }
+
+    .step b {
+      color: var(--gold);
+      font-size: 12px;
+    }
+
+    .step h3 {
+      margin: 6px 0 8px;
+      font-size: 15px;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: rgba(13,17,16,.72);
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      text-align: left;
+      vertical-align: top;
+      font-size: 13px;
+    }
+
+    th {
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--jade);
+      color: #08100d;
+      font-weight: 760;
+      font-size: 12px;
+    }
+
+    .pill.s { background: var(--red); }
+    .pill.a { background: var(--gold); }
+    .pill.b { background: var(--cyan); }
+    .pill.c { background: var(--violet); }
+
+    .qa-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .qa-card {
+      padding: 14px;
+      min-height: 132px;
+    }
+
+    .qa-card h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    .qa-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer {
+      margin-top: 28px;
+      padding: 16px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    @media (max-width: 1180px) {
+      .topbar, .section-grid, .steps, .qa-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .page { padding: 16px; }
+      .topbar, .section-grid, .steps, .qa-grid, .stats { grid-template-columns: 1fr; }
+      .flow-row { flex-direction: column; }
+      .flow-arrow { width: 100%; min-width: 0; min-height: 24px; transform: rotate(90deg); }
+      .branch-row { grid-template-columns: 1fr; }
+      .node-detail { grid-template-columns: 1fr; }
+      .detail-aside { border-right: none; border-bottom: 1px solid rgba(255,255,255,.08); }
+      h1 { font-size: 26px; }
+      .graph-wrap { min-height: 620px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="topbar">
+      <div class="hero">
+        <p class="eyebrow">面试演示版 · ComfyUI式节点脑图 · 皮玺玉风格</p>
+        <h1>《娃娃仙》AI 漫剧生产工作流</h1>
+        <p>这张看板用于面试演示：把一个民俗恐怖志怪漫剧项目，从剧本导入、分镜拆解、AI 出图、图生视频、FFmpeg/剪映合成，到 B 站横版发布和竖版裁切，完整呈现为可讲解、可落地、可验收的节点化工作流。</p>
+      </div>
+      <div class="panel stats">
+        <div class="stat"><b>12 集</b><span>正片剧本、分镜、提示词已完成</span></div>
+        <div class="stat"><b>88 秒</b><span>横版预告剪辑版</span></div>
+        <div class="stat"><b>24 镜</b><span>预告静帧主图</span></div>
+        <div class="stat"><b>6 条</b><span>S/A 级图生视频镜头</span></div>
+      </div>
+    </section>
+
+    <h2>01 · 一眼看懂的主流程</h2>
+    <p class="caption">面试先讲这条主线：90秒横版预告怎么从分镜变成静帧，再按镜头等级走不同平台，最后合成横版并裁竖版。</p>
+    <section class="flowchart-panel" aria-label="90秒横版预告主流程图">
+      <svg class="flowchart-svg" viewBox="0 0 1320 560" role="img" aria-label="90秒横版预告到横竖版发布流程">
+        <defs>
+          <marker id="flowArrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 Z" fill="rgba(213,181,108,.9)"></path>
+          </marker>
+        </defs>
+
+        <rect class="flow-box start" x="20" y="220" width="150" height="82"></rect>
+        <text class="flow-text" x="95" y="250">90秒横版</text>
+        <text class="flow-text" x="95" y="276">预告分镜</text>
+
+        <path class="flow-line" d="M170 261 H235"></path>
+        <rect class="flow-box" x="245" y="220" width="150" height="82"></rect>
+        <text class="flow-text" x="320" y="250">24张横版</text>
+        <text class="flow-text" x="320" y="276">静帧</text>
+
+        <path class="flow-line" d="M395 261 H465"></path>
+        <polygon class="flow-diamond" points="545,194 625,261 545,328 465,261"></polygon>
+        <text class="flow-text" x="545" y="250">镜头</text>
+        <text class="flow-text" x="545" y="276">分级</text>
+
+        <path class="flow-line branch" d="M625 261 C675 261 670 92 730 92"></path>
+        <rect class="label-pill" x="645" y="116" width="44" height="24"></rect>
+        <text class="flow-label" x="667" y="128">S级</text>
+        <rect class="flow-box video" x="730" y="52" width="170" height="82"></rect>
+        <text class="flow-text" x="815" y="82">可灵 / 即梦</text>
+        <text class="flow-text" x="815" y="108">图生视频</text>
+
+        <path class="flow-line fail" d="M625 261 H730"></path>
+        <rect class="label-pill" x="648" y="232" width="72" height="24"></rect>
+        <text class="flow-label" x="684" y="244">失败兜底</text>
+        <rect class="flow-box paid" x="730" y="220" width="170" height="82"></rect>
+        <text class="flow-text" x="815" y="261">Seedance 2</text>
+
+        <path class="flow-line local" d="M625 261 C675 261 670 430 730 430"></path>
+        <rect class="label-pill" x="642" y="384" width="54" height="24"></rect>
+        <text class="flow-label" x="669" y="396">B/C级</text>
+        <rect class="flow-box local" x="730" y="390" width="170" height="82"></rect>
+        <text class="flow-text" x="815" y="420">剪映 / FFmpeg</text>
+        <text class="flow-text" x="815" y="446">静帧动效</text>
+
+        <path class="flow-line branch" d="M900 93 C960 93 950 261 1000 261"></path>
+        <path class="flow-line fail" d="M900 261 H1000"></path>
+        <path class="flow-line local" d="M900 431 C960 431 950 261 1000 261"></path>
+        <rect class="flow-box start" x="1000" y="220" width="130" height="82"></rect>
+        <text class="flow-text" x="1065" y="250">粗剪</text>
+        <text class="flow-text" x="1065" y="276">合成</text>
+
+        <path class="flow-line" d="M1130 261 C1148 261 1148 211 1160 211"></path>
+        <rect class="flow-box export" x="1160" y="170" width="140" height="82"></rect>
+        <text class="flow-text" x="1230" y="200">B站横版</text>
+        <text class="flow-text" x="1230" y="226">预告</text>
+
+        <path class="flow-line" d="M1230 252 V320"></path>
+        <rect class="flow-box export" x="1160" y="320" width="140" height="82"></rect>
+        <text class="flow-text" x="1230" y="350">裁抖音 / 红果</text>
+        <text class="flow-text" x="1230" y="376">竖版</text>
+
+        <text class="flow-small" x="95" y="324">输入</text>
+        <text class="flow-small" x="320" y="324">统一画面资产</text>
+        <text class="flow-small" x="815" y="150">核心动态</text>
+        <text class="flow-small" x="815" y="318">付费只兜底</text>
+        <text class="flow-small" x="815" y="488">低成本补运动</text>
+        <text class="flow-small" x="1065" y="324">三路汇总</text>
+
+        <rect class="flow-hit" data-detail="teaser" x="20" y="220" width="150" height="82" tabindex="0"><title>查看90秒横版预告分镜流程</title></rect>
+        <rect class="flow-hit" data-detail="stills" x="245" y="220" width="150" height="82" tabindex="0"><title>查看24张横版静帧流程</title></rect>
+        <polygon class="flow-hit" data-detail="grade" points="545,194 625,261 545,328 465,261" tabindex="0"><title>查看镜头分级流程</title></polygon>
+        <rect class="flow-hit" data-detail="video" x="730" y="52" width="170" height="82" tabindex="0"><title>查看可灵/即梦图生视频流程</title></rect>
+        <rect class="flow-hit" data-detail="seedance" x="730" y="220" width="170" height="82" tabindex="0"><title>查看Seedance 2兜底流程</title></rect>
+        <rect class="flow-hit" data-detail="static" x="730" y="390" width="170" height="82" tabindex="0"><title>查看剪映/FFmpeg静帧动效流程</title></rect>
+        <rect class="flow-hit" data-detail="edit" x="1000" y="220" width="130" height="82" tabindex="0"><title>查看粗剪合成流程</title></rect>
+        <rect class="flow-hit" data-detail="bili" x="1160" y="170" width="140" height="82" tabindex="0"><title>查看B站横版预告流程</title></rect>
+        <rect class="flow-hit" data-detail="vertical" x="1160" y="320" width="140" height="82" tabindex="0"><title>查看裁抖音/红果竖版流程</title></rect>
+      </svg>
+    </section>
+
+    <h2>02 · 点击节点查看详细流程</h2>
+    <p class="caption">点击上方任一模块，下面会展开该节点的具体动作、产物和下一步。面试时不用再打开复杂脑图。</p>
+    <section class="node-detail" id="nodeDetail" aria-live="polite">
+      <aside class="detail-aside">
+        <b>点击流程图模块查看细节</b>
+        <p>面试时先讲主流程，再按对方追问点击展开对应节点。默认展示第一个节点。</p>
+      </aside>
+      <div class="detail-body">
+        <h3 id="detailTitle">90秒横版预告分镜</h3>
+        <p id="detailSummary">从完整故事资产里拆出最低成本的先行验证版本。</p>
+        <ol id="detailSteps"></ol>
+        <div class="detail-output" id="detailOutputs"></div>
+      </div>
+    </section>
+
+    <details class="detail-graph">
+      <summary>02 · 详细节点脑图</summary>
+      <p class="caption" style="padding: 0 16px;">这部分用于展开细讲：每个节点有输入、工具、输出、确认点，呈现方式接近 ComfyUI 的生产节点。</p>
+      <section class="graph-wrap">
+      <div class="graph">
+        <svg class="links" viewBox="0 0 1380 720" preserveAspectRatio="none">
+          <path class="link gold" d="M230 86 C280 86 300 86 350 86"/>
+          <path class="link gold" d="M510 86 C545 86 550 224 610 224"/>
+          <path class="link blue" d="M510 244 C545 244 550 224 610 224"/>
+          <path class="link" d="M780 224 C825 224 830 86 890 86"/>
+          <path class="link" d="M780 224 C825 224 830 244 890 244"/>
+          <path class="link hot" d="M780 224 C825 224 830 408 890 408"/>
+          <path class="link hot" d="M1050 408 C1085 408 1105 408 1165 408"/>
+          <path class="link blue" d="M1050 244 C1085 244 1105 244 1165 244"/>
+          <path class="link" d="M1050 86 C1085 86 1105 244 1165 244"/>
+          <path class="link gold" d="M350 408 C470 408 500 408 610 408"/>
+          <path class="link" d="M780 408 C825 408 830 572 890 572"/>
+          <path class="link blue" d="M1050 572 C1085 572 1105 572 1165 572"/>
+          <path class="link gold" d="M1280 408 C1325 408 1325 572 1320 572"/>
+        </svg>
+
+        <article class="node x1 y1" style="--accent: var(--gold)">
+          <span class="type">INPUT</span>
+          <h3>剧本导入</h3>
+          <p><code>05_剧本</code> 12 集剧本、旁白、台词、关键道具。</p>
+        </article>
+
+        <article class="node x2 y1" style="--accent: var(--gold)">
+          <span class="type">STRUCTURE</span>
+          <h3>分镜拆解</h3>
+          <p><code>06_分镜表</code> 镜号、时长、画面、音效、对白。</p>
+        </article>
+
+        <article class="node x2 y2" style="--accent: var(--cyan)">
+          <span class="type">BIBLE</span>
+          <h3>角色/道具定版</h3>
+          <p>小妮儿、娃娃仙姐姐、道士、破娃娃、干姜。</p>
+        </article>
+
+        <article class="node core x3 y2" style="--accent: var(--jade)">
+          <span class="type">CORE</span>
+          <h3>AI 视觉生产中枢</h3>
+          <p>把剧本和分镜转换成横版 16:9 的静帧、动态图、字幕和合成素材。</p>
+        </article>
+
+        <article class="node x4 y1" style="--accent: var(--cyan)">
+          <span class="type">IMAGE</span>
+          <h3>MJ / Image2 / 即梦</h3>
+          <p>生成 24 张横版静帧：角色、旧村、竹林、旱魃、干姜。</p>
+        </article>
+
+        <article class="node x4 y2" style="--accent: var(--gold)">
+          <span class="type">MOTION</span>
+          <h3>可灵 / 即梦视频</h3>
+          <p>先跑 S/A 级图生视频草稿，确认脸、动作、道具。</p>
+        </article>
+
+        <article class="node x4 y3" style="--accent: var(--red)">
+          <span class="type">PAID</span>
+          <h3>Seedance 2 兜底</h3>
+          <p>只补镜头 19“辫子化剑跃火”，最多再补开棺红毛。</p>
+        </article>
+
+        <article class="node x1 y3" style="--accent: var(--violet)">
+          <span class="type">STYLE</span>
+          <h3>皮玺玉光影</h3>
+          <p>暗玉、墨黑、青黑雾霭、国风水墨、电影侧后光。</p>
+        </article>
+
+        <article class="node x3 y3" style="--accent: var(--violet)">
+          <span class="type">PROMPTS</span>
+          <h3>提示词任务清单</h3>
+          <p><code>image_generation_tasks.md</code> 与 <code>video_generation_tasks.md</code></p>
+        </article>
+
+        <article class="node x4 y4" style="--accent: var(--jade)">
+          <span class="type">LOCAL</span>
+          <h3>FFmpeg 静帧动效</h3>
+          <p>慢推、横移、快切、切黑，生成本地粗剪素材。</p>
+        </article>
+
+        <article class="node x5 y2" style="--accent: var(--jade)">
+          <span class="type">EDIT</span>
+          <h3>剪映 / CapCut 合成</h3>
+          <p>配音、字幕、音效、节奏微调，完成横版母版。</p>
+        </article>
+
+        <article class="node x5 y3" style="--accent: var(--gold)">
+          <span class="type">EXPORT</span>
+          <h3>B 站横版</h3>
+          <p>1920×1080，88 秒预告，保留故事概要和情绪落点。</p>
+        </article>
+
+        <article class="node x5 y4" style="--accent: var(--cyan)">
+          <span class="type">CROP</span>
+          <h3>抖音 / 红果竖版</h3>
+          <p>从中轴安全区裁 9:16，压到 60-70 秒。</p>
+        </article>
+      </div>
+      </section>
+    </details>
+
+    <h2>03 · 故事到成片完整流程</h2>
+    <p class="caption">这条线展示从一个故事素材，如何一步步变成可发布的横版预告和竖版短视频。</p>
+    <section class="steps">
+      <article class="step"><b>Step 1</b><h3>故事导入</h3><p>从原始纪要、口述故事、参考链接中提取主线、人物、年代、关键道具和结尾情绪。</p></article>
+      <article class="step"><b>Step 2</b><h3>PRD定方向</h3><p>确认平台、横竖版策略、集数、时长、现实线和故事线，先把项目边界定清。</p></article>
+      <article class="step"><b>Step 3</b><h3>12集剧本</h3><p>把完整故事拆成12集，每集1分钟，保证主角、称呼、因果和悬念连续。</p></article>
+      <article class="step"><b>Step 4</b><h3>12集分镜</h3><p>每集拆成可画镜头，标清景别、画面、台词、音效、运镜和生成难度。</p></article>
+      <article class="step"><b>Step 5</b><h3>成本核算</h3><p>估算图生视频付费秒数，判断全片先做太贵，所以改为预告剪辑先行。</p></article>
+      <article class="step"><b>Step 6</b><h3>剪辑版剧本</h3><p>从正片里抽取高光镜头，重新生成90秒横版预告剪辑剧本和24镜分镜。</p></article>
+      <article class="step"><b>Step 7</b><h3>角色道具定版</h3><p>固定小妮儿、娃娃仙、道士、旱魃、红布姜、密码盒等视觉母版。</p></article>
+      <article class="step"><b>Step 8</b><h3>横版静帧</h3><p>用MJ/Image2/即梦生成24张16:9静帧，先保证画面资产统一可看。</p></article>
+      <article class="step"><b>Step 9</b><h3>镜头分级</h3><p>S/A镜头试可灵/即梦图生视频，B/C镜头走FFmpeg和剪映静帧动效。</p></article>
+      <article class="step"><b>Step 10</b><h3>付费兜底</h3><p>Seedance只补低成本平台失败的核心爆点，不把普通镜头纳入付费范围。</p></article>
+      <article class="step"><b>Step 11</b><h3>粗剪合成</h3><p>合并视频、静帧动效、字幕、旁白、音效，形成B站横版预告母版。</p></article>
+      <article class="step"><b>Step 12</b><h3>验收交付</h3><p>检查剧情、角色、道具、字幕、安全区和预算，再导出B站横版与抖音/红果竖版。</p></article>
+    </section>
+
+    <h2>04 · 平台确认表</h2>
+    <table>
+      <thead>
+        <tr><th>阶段</th><th>平台/工具</th><th>确认方式</th><th>失败后怎么办</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>角色定版</td><td>MJ / Image2</td><td>同一角色 3 张图脸型、年龄、服装稳定</td><td>回到角色档案，减少风格词，固定参考图</td></tr>
+        <tr><td>中文场景</td><td>即梦</td><td>太行山旧村、堂屋、竹林、坟地符合年代</td><td>加入年代限制和负面词，避免现代化</td></tr>
+        <tr><td>S/A 动态</td><td>可灵 / 即梦视频</td><td>不换脸、不多手、动作可读、道具不乱</td><td>换平台或降级成静帧动效</td></tr>
+        <tr><td>高潮兜底</td><td>Seedance 2</td><td>只看镜头 19 是否成立：辫子化剑、跃火、悲壮</td><td>只重跑 S 级，不扩大到全片</td></tr>
+        <tr><td>静帧动效</td><td>FFmpeg</td><td>24 张静帧能自动生成推拉摇移粗剪</td><td>降低运动幅度，避免眩晕</td></tr>
+        <tr><td>成片剪辑</td><td>剪映 / CapCut</td><td>字幕不遮脸，音效不盖人声，前 3 秒有钩子</td><td>重新排节奏，保留情绪落点</td></tr>
+      </tbody>
+    </table>
+
+    <h2>05 · 动态镜头分级</h2>
+    <table>
+      <thead>
+        <tr><th>镜头</th><th>等级</th><th>内容</th><th>推荐策略</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>10</td><td><span class="pill s">S</span></td><td>深坑长辫垂下</td><td>可灵/即梦先试，失败再 Seedance</td></tr>
+        <tr><td>14</td><td><span class="pill a">A</span></td><td>拦路鬼探头</td><td>免费额度足再动态化</td></tr>
+        <tr><td>17</td><td><span class="pill s">S</span></td><td>开棺红毛旱魃</td><td>恐怖爆点，值得保质量</td></tr>
+        <tr><td>18</td><td><span class="pill a">A</span></td><td>火烧不化</td><td>可用火焰静帧动效替代</td></tr>
+        <tr><td>19</td><td><span class="pill s">S</span></td><td>辫子化剑跃火</td><td>全片最大记忆点，Seedance 兜底</td></tr>
+        <tr><td>21</td><td><span class="pill a">A</span></td><td>年轻道士推门</td><td>静帧 + 门响也能成立</td></tr>
+      </tbody>
+    </table>
+
+    <h2>06 · 验收审核与自检</h2>
+    <section class="qa-grid">
+      <article class="qa-card"><h3>剧情清晰</h3><p>关掉画面只听旁白，也能明白“娃娃护主、牺牲、留下姜”。</p></article>
+      <article class="qa-card"><h3>角色一致</h3><p>小妮儿、青年妮儿、娃娃仙姐姐、道士不能换脸或换年代。</p></article>
+      <article class="qa-card"><h3>道具正确</h3><p>五根辫子、少辫、无辫、干姜、红布盒子必须前后对应。</p></article>
+      <article class="qa-card"><h3>平台合规</h3><p>无水印、无侵权音乐、字幕安全区正确，横版可裁竖版。</p></article>
+      <article class="qa-card"><h3>预算可控</h3><p>Seedance 只补 S 级镜头，记录付费秒数和重跑次数。</p></article>
+      <article class="qa-card"><h3>技术可复现</h3><p>图片、视频、字幕、脚本都有固定目录和命名规则。</p></article>
+      <article class="qa-card"><h3>视觉统一</h3><p>皮玺玉风格：暗玉、墨黑、青黑雾霭、国风水墨、电影侧光。</p></article>
+      <article class="qa-card"><h3>演示可讲</h3><p>面试时可按节点从左到右讲，突出产品化、成本控制和质检闭环。</p></article>
+    </section>
+
+    <h2>07 · 个人站演示入口</h2>
+    <section class="section-grid">
+      <article class="panel">
+        <h3>核心工作流文件</h3>
+        <ul>
+          <li><a href="/docs/ciwaxian-prd.html">《娃娃仙》项目 PRD</a></li>
+          <li><a href="/docs/manju-production-workflow-prd.html">漫剧生产工作流 PRD</a></li>
+          <li><a href="https://www.bilibili.com/video/BV1UCju6QEQ6/?share_source=copy_web&vd_source=d18a68822216878234a3dca384b8c895">B 站剪辑版成片</a></li>
+        </ul>
+      </article>
+      <article class="panel">
+        <h3>面试演示说明</h3>
+        <ul>
+          <li>此页是《娃娃仙》项目制作时使用的统一工作流看板。</li>
+          <li>适合按节点讲清：故事输入、PRD、分镜、静帧、动态化、合成和发布复盘。</li>
+          <li>原项目的本地任务清单保留在制作目录，个人站只展示可公开演示路径。</li>
+        </ul>
+      </article>
+      <article class="panel">
+        <h3>自动化命令</h3>
+        <p>放好图片后，在预告素材目录运行：</p>
+        <p><code>powershell -ExecutionPolicy Bypass -File .\ffmpeg\make_static_clips.ps1</code></p>
+        <p><code>powershell -ExecutionPolicy Bypass -File .\ffmpeg\concat_preview.ps1</code></p>
+      </article>
+    </section>
+
+    <div class="footer">
+      《娃娃仙》面试演示工作流看板 · ComfyUI式节点脑图 · 皮玺玉风格 · 本地离线 HTML
+    </div>
+  </main>
+  <script>
+    const flowDetails = {
+      teaser: {
+        title: "90秒横版预告分镜",
+        summary: "不是直接做正片，而是先用完整故事资产核算成本，拆出最适合面试和平台测试的剪辑先行版。",
+        steps: [
+          "导入原始故事和PRD，确认现实线、故事线、人物称呼和结尾扫墓逻辑。",
+          "生成12集分集剧本，保证完整故事能连续讲完。",
+          "把12集剧本转成12集分镜脚本，确认每集可画、可剪、可生产。",
+          "核算Seedance等付费视频成本，判断先做全片不划算。",
+          "改为剪辑先行版：重新生成90秒横版预告剪辑剧本和24镜分镜。"
+        ],
+        outputs: ["12集剧本", "12集分镜", "90秒剪辑剧本", "24镜预告分镜"]
+      },
+      stills: {
+        title: "24张横版静帧",
+        summary: "先把视频生产变成可控的图片资产，解决人物、场景、道具和构图统一问题。",
+        steps: [
+          "按24镜分镜提取每镜画面主体、景别、动作和字幕重点。",
+          "统一皮玺玉光影风格：暗玉、墨黑、青黑雾霭、国风水墨、电影侧光。",
+          "用MJ/Image2/即梦生成16:9横版静帧。",
+          "检查小妮儿、娃娃仙姐姐、道士、旱魃、干姜等角色道具是否一致。",
+          "能用静帧讲清楚故事后，再决定哪些镜头值得动态化。"
+        ],
+        outputs: ["shot_01.png - shot_24.png", "角色母版", "道具母版"]
+      },
+      grade: {
+        title: "镜头分级",
+        summary: "核心是省钱：不是所有镜头都跑图生视频，而是按价值分配平台和预算。",
+        steps: [
+          "S级：剧情爆点或记忆点，优先动态图，比如长辫救人、开棺旱魃、辫子化剑。",
+          "A级：有动态会加分，但静帧动效也能讲清楚。",
+          "B/C级：信息交代、环境、道具、字卡，默认用静帧动效。",
+          "失败兜底：低成本平台跑不出来，再考虑Seedance 2。",
+          "记录每个镜头的尝试平台、失败原因和是否值得继续花钱。"
+        ],
+        outputs: ["S/A/B/C镜头表", "付费兜底清单", "返工优先级"]
+      },
+      video: {
+        title: "可灵 / 即梦图生视频",
+        summary: "低成本优先处理S/A级镜头，先验证动作成立，再决定是否升质量。",
+        steps: [
+          "用已审核通过的静帧作为首帧或参考图。",
+          "提示词只写关键动作，避免模型自由发挥导致换脸、换服装、乱道具。",
+          "先跑低清或免费额度版本，看动作是否成立。",
+          "通过标准是不换脸、不多手、道具不乱、动作能被观众看懂。",
+          "通过后进入粗剪，不通过则降级静帧动效或转Seedance兜底。"
+        ],
+        outputs: ["S/A级动态草稿", "可用动态图", "失败原因记录"]
+      },
+      seedance: {
+        title: "Seedance 2 兜底",
+        summary: "付费平台只服务最值得花钱的失败镜头，避免预算失控。",
+        steps: [
+          "只接收低成本平台失败、但剧情价值很高的镜头。",
+          "《娃娃仙》优先兜底镜头19：辫子化剑、跃入火中、悲壮牺牲。",
+          "必要时再补开棺红毛旱魃，不扩大到普通镜头。",
+          "先跑短时长低成本测试，确认动作和氛围再升质量。",
+          "每次重跑记录成本、失败点和最终是否采用。"
+        ],
+        outputs: ["S级兜底视频", "付费秒数记录", "重跑记录"]
+      },
+      static: {
+        title: "剪映 / FFmpeg静帧动效",
+        summary: "B/C级镜头不用烧钱，用推拉摇移、切黑、字幕和音效形成运动感。",
+        steps: [
+          "把静帧按镜头顺序放入素材目录。",
+          "FFmpeg自动生成慢推、横移、轻缩放等基础动效。",
+          "剪映补字幕、音效、环境声、黑场和节奏点。",
+          "对恐怖镜头用短促切换和音效制造惊悚，不强求复杂运动。",
+          "如果静帧停留太久，就缩短时长或加音效转场。"
+        ],
+        outputs: ["videos_static", "粗剪素材", "字幕音效节奏点"]
+      },
+      edit: {
+        title: "粗剪合成",
+        summary: "把三路素材统一成一个可看的横版母版，先验证故事是否成立。",
+        steps: [
+          "合并图生视频、静帧动效、字卡、字幕、旁白和音效。",
+          "按90秒节奏检查前3秒钩子、中段信息、结尾情绪落点。",
+          "关掉画面只听声音，确认故事仍然听得懂。",
+          "关掉声音只看画面，确认娃娃、姜、旱魃、火堆等关键道具看得清。",
+          "发现问题回到对应节点，不整条链路重做。"
+        ],
+        outputs: ["横版粗剪", "问题清单", "返工节点"]
+      },
+      bili: {
+        title: "B站横版预告",
+        summary: "横版是主母版，负责完整情绪、画面质感和面试展示效果。",
+        steps: [
+          "导出1920×1080横版母版。",
+          "检查封面、标题、前三秒钩子和结尾记忆点。",
+          "确保字幕不遮脸、不遮娃娃和姜等关键道具。",
+          "保留恐怖志怪氛围，但情绪落点要回到感人护主。",
+          "横版通过后再进入竖版裁切。"
+        ],
+        outputs: ["B站横版MP4", "封面", "标题文案"]
+      },
+      vertical: {
+        title: "裁抖音 / 红果竖版",
+        summary: "竖版不是重新做一遍，而是从横版母版裁切，并检查安全区。",
+        steps: [
+          "从横版母版裁9:16，优先保人物脸、娃娃、干姜和关键动作。",
+          "必要时重排字幕位置，避免遮脸或遮道具。",
+          "把节奏压得更短，强化开头钩子。",
+          "检查红果/抖音竖版安全区和封面可读性。",
+          "导出竖版后与横版一起归档。"
+        ],
+        outputs: ["抖音竖版", "红果竖版", "安全区检查"]
+      }
+    };
+
+    function renderFlowDetail(key) {
+      const detail = flowDetails[key] || flowDetails.teaser;
+      document.getElementById("detailTitle").textContent = detail.title;
+      document.getElementById("detailSummary").textContent = detail.summary;
+      document.getElementById("detailSteps").innerHTML = detail.steps.map(step => `<li>${step}</li>`).join("");
+      document.getElementById("detailOutputs").innerHTML = detail.outputs.map(item => `<span>${item}</span>`).join("");
+    }
+
+    document.querySelectorAll(".flow-hit").forEach(hit => {
+      hit.addEventListener("click", () => renderFlowDetail(hit.dataset.detail));
+      hit.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          renderFlowDetail(hit.dataset.detail);
+        }
+      });
+    });
+
+    renderFlowDetail("teaser");
+  </script>
+</body>
+</html>
