@@ -268,7 +268,7 @@ flowchart TD
 | --- | --- | --- | --- | --- | --- | --- |
 | D0 事实盘点 | 已完成 | 已完成 | 项目定位、模块、演示入口 | 皮玺玉 / Codex | 已完成 | 真实隐私需隔离。 |
 | D1 PRD 演示页 | 2026-07-08 | 2026-07-08 | PRD Markdown + HTML | Codex | 进行中 | 需同步个人站入口。 |
-| D2 演示链路复核 | 待确认 | 待确认 | 首页项目卡片、Demo、PRD 可打开 | 皮玺玉 | 待开始 | 线上缓存和链接失效。 |
+| D2 演示链路复核 | 2026-07-08 | 2026-07-08 | 首页项目卡片、Demo、PRD 可打开 | 皮玺玉 / Codex | 已完成 | Vercel 外链受网络影响，主入口改为 GitHub Pages 站内演示。 |
 | D3 求职材料迭代 | 待确认 | 待确认 | 最新作品集讲法、简历材料 | 皮玺玉 | 待开始 | 不同岗位口径差异。 |
 
 ## 10. 工作流设计
@@ -306,7 +306,7 @@ flowchart TD
 | --- | --- | --- | --- | --- | --- | --- |
 | 文档 | PRD Markdown + HTML | 2 个文件 | 可打开、可讲、可维护 | 减少讲解准备时间 | 待估算 | 本次已交付 |
 | 功能 | 个人站项目入口 | 1 个 action | 项目弹窗可打开 PRD | 提升面试演示完整度 | 待估算 | 本次已交付 |
-| 演示资产 | 虚拟档案 Demo 链路 | 1 条链路 | 不暴露真实隐私 | 降低公开演示风险 | 待估算 | 已有基础 |
+| 演示资产 | GitHub Pages 站内虚拟档案 Demo 链路 | 1 条链路 | 不暴露真实隐私，面试官可直接打开 | 降低公开演示风险 | 待估算 | 已设为主入口 |
 
 ### 10.3 产品运行工作流
 
@@ -351,12 +351,13 @@ flowchart TD
 | Q1 | 求职材料包含个人隐私 | 公开演示泄露真实经历、联系方式或求职方向 | 所有公开 Demo 使用虚拟档案 | 已处理 |
 | Q2 | AI 生成不真实公司事实 | 简历或面试话术失真 | 公司事实必须有来源或标记待确认 | 已处理 |
 | Q3 | 模型能力和价格变化 | 成本估算失准，功能不可用 | 模型、价格和 tools 支持按发布前实时核验 | 待确认 |
-| Q4 | 面试现场网络不稳定 | Demo 打不开影响展示 | 准备截图/录屏和 PRD 静态页兜底 | 待确认 |
+| Q4 | 面试现场网络不稳定或 Vercel 外链被重置 | Demo 打不开影响展示 | 主入口使用 GitHub Pages 站内演示，Vercel 仅保留为备用外链 | 已处理 |
 | Q5 | 入口过多导致讲解分散 | 面试时间被稀释 | 主讲求职作战 + 采购看板，其他项目作为补充 | 待确认 |
 
 ## 12. 附录
 
-- 线上 Demo: `https://ai-job-war-room-studio.vercel.app/?profile=demo&profile_lock=demo`
+- 站内 Demo: `/projects/job-war-room-demo/index.html`
+- Vercel 备用完整应用: `https://ai-job-war-room-studio.vercel.app/?profile=demo&profile_lock=demo`
 - 个人站项目入口: `content/projects.json` 中 `job-war-room`
 - 本 PRD 网页: `/docs/job-war-room-prd.html`
 - 本 PRD Markdown: `/docs/job-war-room-prd.md`
