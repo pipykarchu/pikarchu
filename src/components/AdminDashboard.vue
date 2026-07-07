@@ -4,6 +4,9 @@ import defaultServicePackages from '../../content/servicePackages.json'
 import { withBase } from '../composables/useAssetPath'
 
 const tokenKey = 'pixiyu_admin_token'
+const staticDemoToken = 'static-demo-admin'
+const routeParams = new URLSearchParams(window.location.search)
+const isStaticAdminDemo = window.location.hostname.endsWith('github.io') || routeParams.has('staticAdminDemo')
 const token = ref(localStorage.getItem(tokenKey) || '')
 const username = ref('admin')
 const password = ref('')
@@ -37,7 +40,132 @@ const servicePackages = computed(() => {
 
 const statusLabel = (value) => statusOptions.find(item => item.value === value)?.label || value || '未读'
 
+const createStaticDemoSummary = () => ({
+  ok: true,
+  stats: {
+    contacts: 3,
+    unreadContacts: 1,
+    readContacts: 1,
+    repliedContacts: 1,
+    archivedContacts: 0,
+    pageViews: 186,
+    sessions: 42,
+    eventsToday: 18,
+    contacts7d: 2
+  },
+  contacts: [
+    {
+      id: 'demo-contact-001',
+      name: '面试官演示',
+      contact: 'demo@example.com',
+      message: '想了解个人站如何把作品展示、智能客服、留言和后台复盘串成一个闭环。',
+      status: 'unread',
+      reminderStatus: 'demo',
+      createdAt: '2026-07-08T10:20:00+08:00'
+    },
+    {
+      id: 'demo-contact-002',
+      name: '内容合作方',
+      contact: 'wechat-demo',
+      message: '关注漫剧工作流、娃娃仙成片验证和定妆造 Skill 的复用方式。',
+      status: 'read',
+      reminderStatus: 'demo',
+      createdAt: '2026-07-07T17:40:00+08:00'
+    },
+    {
+      id: 'demo-contact-003',
+      name: '业务工具咨询',
+      contact: 'ops-demo@example.com',
+      message: '想看采购履行预警看板、视频学习助手和减肥记录仪的演示路径。',
+      status: 'replied',
+      reminderStatus: 'demo',
+      createdAt: '2026-07-06T09:15:00+08:00'
+    }
+  ],
+  recentEvents: [
+    { id: 'demo-event-001', type: 'page_view', label: 'site_home_demo', path: '/', createdAt: '2026-07-08T10:18:00+08:00' },
+    { id: 'demo-event-002', type: 'project_detail_open', label: '漫剧生产工作流', path: '/', createdAt: '2026-07-08T10:19:00+08:00' },
+    { id: 'demo-event-003', type: 'chat_open', label: 'ai_chat', path: '/', createdAt: '2026-07-08T10:19:20+08:00' },
+    { id: 'demo-event-004', type: 'contact_submit', label: 'contact_modal', path: '/', createdAt: '2026-07-08T10:20:00+08:00' }
+  ],
+  eventCounts: {
+    page_view: 86,
+    project_detail_open: 38,
+    project_action_click: 21,
+    chat_open: 18,
+    chat_send: 9,
+    contact_submit: 3
+  },
+  moduleUsage: [
+    { module: '作品区', events: 59, sessions: 31, clicks: 21, opens: 38, actions: 21, usageRate: 73.8 },
+    { module: '智能客服', events: 27, sessions: 18, clicks: 0, opens: 18, actions: 9, usageRate: 42.9 },
+    { module: '联系转化', events: 11, sessions: 7, clicks: 4, opens: 4, actions: 3, usageRate: 16.7 },
+    { module: '资料文档', events: 14, sessions: 9, clicks: 14, opens: 0, actions: 14, usageRate: 21.4 }
+  ],
+  retention: {
+    totalSessions: 42,
+    retainedSessions: 9,
+    retentionRate: 21.4,
+    active7dSessions: 26,
+    previous7dSessions: 18,
+    returning7dRate: 144.4
+  },
+  statusCounts: {
+    unread: 1,
+    read: 1,
+    replied: 1,
+    archived: 0
+  },
+  servicePackages: defaultServicePackages,
+  reminder: {
+    email: 'demo@example.com',
+    enabled: false,
+    provider: 'static-demo',
+    note: 'GitHub Pages 静态演示版：展示后台能力，不发送真实邮件。'
+  },
+  security: {
+    customAdminSecret: true,
+    customAdminPassword: true,
+    https: 'GitHub Pages 已提供 HTTPS；当前为静态演示后台。',
+    rateLimit: true
+  }
+})
+
+const refreshStaticStatusStats = () => {
+  if (!summary.value?.contacts) return
+  const counts = summary.value.contacts.reduce((acc, contact) => {
+    acc[contact.status] = (acc[contact.status] || 0) + 1
+    return acc
+  }, {})
+  summary.value.statusCounts = counts
+  summary.value.stats = {
+    ...summary.value.stats,
+    unreadContacts: counts.unread || 0,
+    readContacts: counts.read || 0,
+    repliedContacts: counts.replied || 0,
+    archivedContacts: counts.archived || 0
+  }
+}
+
+const readJsonResponse = async (response) => {
+  const contentType = response.headers.get('content-type') || ''
+  if (!contentType.includes('application/json')) {
+    throw new Error(isStaticAdminDemo
+      ? '线上静态演示后台没有连接真实 API，已切换为演示数据模式。'
+      : '后台接口返回格式异常，请确认 API 服务已启动。')
+  }
+  return response.json()
+}
+
 const requestAdmin = async (path, options = {}) => {
+  if (isStaticAdminDemo) {
+    if (path === '/api/admin/summary') return createStaticDemoSummary()
+    if (path.includes('/api/admin/contacts/')) return { ok: true }
+    if (path === '/api/admin/service-packages') {
+      return { ok: true, servicePackages: JSON.parse(options.body || '{}').packages || defaultServicePackages }
+    }
+  }
+
   const response = await fetch(path, {
     ...options,
     headers: {
@@ -46,7 +174,7 @@ const requestAdmin = async (path, options = {}) => {
       ...(options.headers || {})
     }
   })
-  const data = await response.json()
+  const data = await readJsonResponse(response)
   if (!response.ok || data.ok === false) throw new Error(data.error || '请求失败')
   return data
 }
@@ -80,12 +208,25 @@ const login = async () => {
   loading.value = true
   error.value = ''
   try {
+    if (isStaticAdminDemo) {
+      if (username.value !== 'admin' || password.value !== '1111') {
+        throw new Error('演示账号或密码不正确')
+      }
+      token.value = staticDemoToken
+      localStorage.setItem(tokenKey, staticDemoToken)
+      password.value = ''
+      summary.value = createStaticDemoSummary()
+      servicePackageDrafts.value = servicePackages.value.map(cloneServicePackage)
+      saveStatus.value = '当前为 GitHub Pages 静态演示后台，数据为虚拟样例，不写入服务器。'
+      return
+    }
+
     const response = await fetch('/api/admin/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: username.value, password: password.value })
     })
-    const data = await response.json()
+    const data = await readJsonResponse(response)
     if (!response.ok || !data.ok) throw new Error(data.error || '登录失败')
     token.value = data.token
     localStorage.setItem(tokenKey, data.token)
@@ -108,6 +249,16 @@ const updateStatus = async (contact, status) => {
   loading.value = true
   error.value = ''
   try {
+    if (isStaticAdminDemo) {
+      if (summary.value?.contacts) {
+        summary.value.contacts = summary.value.contacts.map(item => (
+          item.id === contact.id ? { ...item, status, statusUpdatedAt: new Date().toISOString() } : item
+        ))
+        refreshStaticStatusStats()
+      }
+      return
+    }
+
     await requestAdmin(`/api/admin/contacts/${encodeURIComponent(contact.id)}/status`, {
       method: 'PATCH',
       body: JSON.stringify({ status })
@@ -151,6 +302,16 @@ const saveServicePackages = async () => {
       delivery: item.deliveryText.split('\n').map(point => point.trim()).filter(Boolean),
       cycle: item.cycle
     }))
+
+    if (isStaticAdminDemo) {
+      summary.value = {
+        ...summary.value,
+        servicePackages: packages
+      }
+      servicePackageDrafts.value = packages.map(cloneServicePackage)
+      saveStatus.value = '静态演示版已在当前页面模拟保存，刷新后会恢复默认演示数据。'
+      return
+    }
 
     const data = await requestAdmin('/api/admin/service-packages', {
       method: 'PATCH',
