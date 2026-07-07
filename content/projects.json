@@ -26,7 +26,7 @@
     "cover": "/mascot/pixiu-secondary.png",
     "links": {
       "local": "http://127.0.0.1:5185/?profile=demo&profile_lock=demo",
-      "demo": "/projects/job-war-room-demo/index.html",
+      "demo": "projects/job-war-room-demo/index.html",
       "demoNote": "优先打开个人站内静态演示，避免外部部署不可用；演示数据为虚拟档案，只读预览。"
     },
     "highlights": [
@@ -40,11 +40,11 @@
     "actions": [
       {
         "label": "打开求职作战演示",
-        "href": "/projects/job-war-room-demo/index.html"
+        "href": "projects/job-war-room-demo/index.html"
       },
       {
         "label": "查看求职作战 PRD",
-        "href": "/docs/job-war-room-prd.html"
+        "href": "docs/job-war-room-prd.html"
       }
     ],
     "priority": 100
