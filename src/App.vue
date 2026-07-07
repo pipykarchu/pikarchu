@@ -13,7 +13,17 @@ import { useTracker } from './composables/useTracker'
 
 const APP_VERSION = '0.1.0'
 const contactOpen = ref(false)
-const isAdminRoute = window.location.pathname.startsWith('/admin')
+const basePath = import.meta.env.BASE_URL || '/'
+const normalizedPath = (() => {
+  const base = basePath.endsWith('/') ? basePath : `${basePath}/`
+  if (base !== '/' && window.location.pathname.startsWith(base)) {
+    return `/${window.location.pathname.slice(base.length)}`
+  }
+  return window.location.pathname
+})()
+const routeParams = new URLSearchParams(window.location.search)
+const routeHash = window.location.hash.replace(/^#\/?/, '')
+const isAdminRoute = normalizedPath.startsWith('/admin') || routeParams.get('view') === 'admin' || routeParams.has('admin') || routeHash.startsWith('admin')
 const { track } = useTracker()
 const allowedModes = new Set(['business', 'demo'])
 const initialMode = new URLSearchParams(window.location.search).get('mode')

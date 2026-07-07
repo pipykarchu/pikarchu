@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import defaultServicePackages from '../../content/servicePackages.json'
+import { withBase } from '../composables/useAssetPath'
 
 const tokenKey = 'pixiyu_admin_token'
 const token = ref(localStorage.getItem(tokenKey) || '')
@@ -185,7 +186,7 @@ onMounted(loadSummary)
           <h1 class="text-2xl font-bold leading-tight sm:text-3xl">留言与数据管理</h1>
         </div>
         <a
-          href="/"
+          :href="withBase('/')"
           class="rounded-full px-4 py-2 text-sm"
           :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)', color: 'var(--color-linear-text)' }"
         >

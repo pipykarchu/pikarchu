@@ -29,7 +29,7 @@ defineEmits(['open-contact', 'set-mode'])
         <a href="#projects" class="hover:opacity-100 opacity-70 transition-opacity">作品</a>
         <a href="#services" class="hover:opacity-100 opacity-70 transition-opacity">合作</a>
         <a href="#about" class="hover:opacity-100 opacity-70 transition-opacity">关于</a>
-        <a href="/admin" class="hover:opacity-100 opacity-70 transition-opacity">后台</a>
+        <a :href="withBase('/?admin=1')" class="hover:opacity-100 opacity-70 transition-opacity">后台</a>
       </nav>
 
       <div class="flex items-center gap-1.5 sm:gap-2">
