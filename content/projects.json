@@ -26,8 +26,8 @@
     "cover": "/mascot/pixiu-secondary.png",
     "links": {
       "local": "http://127.0.0.1:5185/?profile=demo&profile_lock=demo",
-      "demo": "https://ai-job-war-room-studio.vercel.app/?profile=demo&profile_lock=demo",
-      "demoNote": "打开线上李明演示档案，只读预览，不进入真实档案。"
+      "demo": "/projects/job-war-room-demo/index.html",
+      "demoNote": "优先打开个人站内静态演示，避免外部部署不可用；演示数据为虚拟档案，只读预览。"
     },
     "highlights": [
       "项目讲法：这是一个从真实痛点出发的 AI Agent 产品，不是单点 prompt demo。",
@@ -36,6 +36,16 @@
       "完整闭环：路径推演 → JD 解析 → 决策建议 → 简历定制 → 面试演练 → 学习计划 → 作品集展示。",
       "演示模式：虚拟档案、预录响应和只读数据隔离，适合公开演示且不泄露真实隐私。",
       "最近补强：路径推演里已预置虚拟公司岗位推荐，Demo 打开即可展示面试友好结果。"
+    ],
+    "actions": [
+      {
+        "label": "打开求职作战演示",
+        "href": "/projects/job-war-room-demo/index.html"
+      },
+      {
+        "label": "查看求职作战 PRD",
+        "href": "/docs/job-war-room-prd.html"
+      }
     ],
     "priority": 100
   },

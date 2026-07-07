@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Studio · 求职作战中心演示</title>
+  <style>
+    :root {
+      --bg: #09090b;
+      --panel: #141419;
+      --panel-soft: #1d1d24;
+      --text: #f6f6f7;
+      --muted: #a9a9b3;
+      --line: rgba(255,255,255,.11);
+      --purple: #a78bfa;
+      --pink: #f472b6;
+      --teal: #14b8a6;
+      --green: #34d399;
+      --amber: #fbbf24;
+      --red: #fb7185;
+      --brand: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(167,139,250,.22), transparent 34%),
+        radial-gradient(circle at 84% 12%, rgba(20,184,166,.14), transparent 34%),
+        var(--bg);
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    .shell { max-width: 1240px; margin: 0 auto; padding: 22px 16px 40px; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(20,20,25,.76);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 10px;
+      z-index: 5;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .brand img { width: 34px; height: 34px; object-fit: contain; }
+    .brand strong { display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .brand span { display: block; color: var(--muted); font-size: 12px; }
+    .top-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn.primary { border: 0; background: var(--brand); color: white; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(320px, .75fr);
+      gap: 16px;
+      margin-top: 18px;
+      align-items: stretch;
+    }
+    .hero-card, .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(20,20,25,.82);
+      box-shadow: 0 24px 70px rgba(0,0,0,.28);
+    }
+    .hero-card { padding: 26px; }
+    .eyebrow { color: var(--teal); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { margin: 8px 0 12px; font-size: 38px; line-height: 1.16; letter-spacing: 0; }
+    .lead { margin: 0; color: var(--muted); font-size: 16px; max-width: 760px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(167,139,250,.24);
+      background: rgba(167,139,250,.12);
+      color: #ddd6fe;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 16px; }
+    .metric { padding: 14px; border-radius: 8px; background: var(--panel-soft); border: 1px solid var(--line); }
+    .metric strong { display: block; font-size: 25px; line-height: 1.1; }
+    .metric span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .workspace {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .sidebar { padding: 12px; align-self: start; position: sticky; top: 86px; }
+    .side-title { margin: 4px 6px 10px; color: var(--muted); font-size: 12px; font-weight: 800; }
+    .tab {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+    }
+    .tab.active { color: white; background: rgba(167,139,250,.16); border-color: rgba(167,139,250,.38); }
+    .tab b { font-size: 13px; }
+    .tab span { font-size: 11px; color: var(--muted); }
+    .content { display: grid; gap: 16px; }
+    .panel { padding: 18px; }
+    .panel h2 { margin: 0 0 6px; font-size: 24px; letter-spacing: 0; }
+    .panel p { margin: 0 0 12px; color: var(--muted); }
+    .grid { display: grid; gap: 12px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card {
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+    }
+    .card h3 { margin: 0 0 8px; font-size: 16px; }
+    .card p, .card li { color: var(--muted); font-size: 14px; }
+    ul { margin: 0; padding-left: 18px; }
+    li + li { margin-top: 6px; }
+    .flow { display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+    .step {
+      min-height: 104px;
+      padding: 12px;
+      border: 1px solid rgba(167,139,250,.25);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(167,139,250,.16), rgba(29,29,36,.9));
+    }
+    .step small { color: var(--purple); font-weight: 900; }
+    .step b { display: block; margin-top: 4px; }
+    .step span { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; font-size: 14px; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: white; background: rgba(255,255,255,.06); }
+    tr:last-child td { border-bottom: 0; }
+    .status { color: var(--green); font-weight: 800; }
+    .warn { color: var(--amber); font-weight: 800; }
+    .danger { color: var(--red); font-weight: 800; }
+    .hidden { display: none; }
+    @media (max-width: 920px) {
+      .hero, .workspace { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .grid.two, .grid.three { grid-template-columns: 1fr; }
+      h1 { font-size: 30px; }
+      .topbar { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <img src="../../mascot/pixiu-hero.png" alt="">
+        <div><strong>Studio · 求职作战中心</strong><span>站内静态演示 · 虚拟档案 · 面试可打开</span></div>
+      </div>
+      <div class="top-actions">
+        <a class="btn" href="../../docs/job-war-room-prd.html">查看 PRD</a>
+        <a class="btn" href="https://ai-job-war-room-studio.vercel.app/?profile=demo&amp;profile_lock=demo" target="_blank" rel="noreferrer">线上完整应用</a>
+        <a class="btn primary" href="../../">返回个人站</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">AI Agent Job War Room</div>
+        <h1>把求职流程拆成可复盘的 AI 作战台</h1>
+        <p class="lead">这个演示页复刻求职作战中心的核心产品链路：先用虚拟档案建立事实边界，再围绕 JD 做解析、决策、简历定制、面试演练、学习计划和作品集展示。页面不依赖后端，适合面试官直接打开。</p>
+        <div class="chips">
+          <span class="chip">虚拟档案：李明</span>
+          <span class="chip">只读演示</span>
+          <span class="chip">不暴露真实隐私</span>
+          <span class="chip">PRD Skill 产物</span>
+        </div>
+      </div>
+      <aside class="panel metrics">
+        <div class="metric"><strong>7</strong><span>核心模块闭环</span></div>
+        <div class="metric"><strong>0</strong><span>真实隐私字段</span></div>
+        <div class="metric"><strong>6</strong><span>面试讲解节点</span></div>
+        <div class="metric"><strong>1</strong><span>站内兜底 Demo</span></div>
+      </aside>
+    </section>
+
+    <section class="workspace">
+      <aside class="panel sidebar">
+        <div class="side-title">演示模块</div>
+        <button class="tab active" data-tab="profile"><b>主角档案</b><span>事实源</span></button>
+        <button class="tab" data-tab="path"><b>路径推演</b><span>方向判断</span></button>
+        <button class="tab" data-tab="jd"><b>JD 决策</b><span>不编事实</span></button>
+        <button class="tab" data-tab="resume"><b>简历定制</b><span>证据改写</span></button>
+        <button class="tab" data-tab="interview"><b>面试演练</b><span>追问准备</span></button>
+        <button class="tab" data-tab="portfolio"><b>作品集展示</b><span>公开讲法</span></button>
+      </aside>
+
+      <div class="content">
+        <section class="panel" id="overview">
+          <h2>产品运行主线</h2>
+          <p>从“我是谁”到“这个岗位值不值得投”，再到“我该怎么讲项目”，每一步都有输入、输出和风险边界。</p>
+          <div class="flow">
+            <div class="step"><small>01</small><b>个人档案</b><span>经历、项目、技能、限制</span></div>
+            <div class="step"><small>02</small><b>路径推演</b><span>岗位方向与能力缺口</span></div>
+            <div class="step"><small>03</small><b>JD 解析</b><span>职责、要求、风险</span></div>
+            <div class="step"><small>04</small><b>决策建议</b><span>匹配证据与投入判断</span></div>
+            <div class="step"><small>05</small><b>简历定制</b><span>改写建议与版本说明</span></div>
+            <div class="step"><small>06</small><b>面试演练</b><span>STAR、追问、反问</span></div>
+            <div class="step"><small>07</small><b>作品集</b><span>公开 Demo 与 PRD 入口</span></div>
+          </div>
+        </section>
+
+        <section class="panel demo-section" data-panel="profile">
+          <h2>主角档案：李明 Demo</h2>
+          <p>演示档案是虚拟用户，不是作者真实档案。真实版本会本地保存，不进入公开页面。</p>
+          <div class="grid three">
+            <div class="card"><h3>目标方向</h3><p>AI 产品经理 / B 端数字化产品 / 供应链效率工具。</p></div>
+            <div class="card"><h3>可讲项目</h3><p>求职作战中心、采购履行预警看板、视频学习助手、个人站智能客服。</p></div>
+            <div class="card"><h3>限制条件</h3><p>不公开真实联系方式、真实投递公司、未确认薪资和公司事实。</p></div>
+          </div>
+        </section>
+
+        <section class="panel demo-section hidden" data-panel="path">
+          <h2>路径推演：从目标岗位倒推学习与作品</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>方向</th><th>推荐理由</th><th>缺口</th><th>下一步动作</th></tr></thead>
+              <tbody>
+                <tr><td>AI 产品经理</td><td>有 AI 工作流、PRD、Demo 和工程协作经验</td><td>补齐模型评估和成本口径</td><td>准备 2 个 AI 项目案例</td></tr>
+                <tr><td>B 端产品经理</td><td>采购看板体现业务规则产品化能力</td><td>补真实业务指标表达</td><td>用预警看板讲需求到验收</td></tr>
+                <tr><td>内容生产工作流 PM</td><td>漫剧工作流、定妆造和 PRD Skill 可形成方法论</td><td>补制作成本和质量门禁</td><td>用娃娃仙讲生产管线</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel demo-section hidden" data-panel="jd">
+          <h2>JD 决策：信息分级铁律</h2>
+          <p>系统只把“已确认事实”写进结论；公司信息、薪资、未来发展这类易变内容必须标记来源或待确认。</p>
+          <div class="grid two">
+            <div class="card">
+              <h3>匹配证据</h3>
+              <ul>
+                <li>有 Vue + Node 本地工具和线上演示经验。</li>
+                <li>能把真实业务 Excel 规则产品化成看板。</li>
+                <li>能用 PRD Skill 把模糊需求整理成演示文档。</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>风险边界</h3>
+              <ul>
+                <li><span class="warn">待确认</span> 公司最新组织、业务方向和岗位真实优先级。</li>
+                <li><span class="danger">禁止</span> 编造量化收益、录取概率、薪资预测。</li>
+                <li><span class="status">可用</span> 已完成项目和可打开 Demo 作为证据。</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel demo-section hidden" data-panel="resume">
+          <h2>简历定制：把项目改成岗位语言</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>原始素材</th><th>岗位化表达</th><th>修改理由</th></tr></thead>
+              <tbody>
+                <tr><td>做了个人站</td><td>搭建内容驱动的 AI 作品集门户，支持项目展示、智能客服、留言后台和埋点复盘。</td><td>突出产品闭环和工程落地。</td></tr>
+                <tr><td>做了采购看板</td><td>将订单表和监控台账规则产品化，输出履行预警、清理建议和责任人排名。</td><td>对应 B 端业务规则抽象能力。</td></tr>
+                <tr><td>做了漫剧工作流</td><td>拆解 PRD、SOP、角色、剧本、分镜、生图、成片和发布复盘的 AIGC 内容生产管线。</td><td>证明 AI 工作流方法可复用。</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel demo-section hidden" data-panel="interview">
+          <h2>面试演练：追问提前准备</h2>
+          <div class="grid two">
+            <div class="card"><h3>高频追问</h3><ul><li>为什么要做求职作战中心？</li><li>AI 编造事实怎么控制？</li><li>这个项目和普通简历工具有什么区别？</li><li>如果线上模型不可用，如何兜底？</li></ul></div>
+            <div class="card"><h3>回答框架</h3><ul><li>先讲真实痛点：材料散、判断散、复盘难。</li><li>再讲产品拆解：档案、JD、决策、材料、演练。</li><li>最后讲边界：本地优先、演示隔离、事实分级。</li></ul></div>
+          </div>
+        </section>
+
+        <section class="panel demo-section hidden" data-panel="portfolio">
+          <h2>作品集展示：给面试官的可打开证据链</h2>
+          <p>这个模块把项目本身、Demo、PRD、风险边界和讲法串起来，避免只给截图或口头描述。</p>
+          <div class="grid three">
+            <div class="card"><h3>Demo</h3><p>当前页面作为站内兜底演示；外部完整应用可作为备用链接。</p></div>
+            <div class="card"><h3>PRD</h3><p>用 PRD Writer Skill 输出项目定义、范围、流程和验收标准。</p></div>
+            <div class="card"><h3>讲法</h3><p>定位为真实求职流程产品化，不是单点 prompt demo。</p></div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const tabs = [...document.querySelectorAll('.tab')];
+    const panels = [...document.querySelectorAll('.demo-section')];
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const key = tab.dataset.tab;
+        tabs.forEach((item) => item.classList.toggle('active', item === tab));
+        panels.forEach((panel) => panel.classList.toggle('hidden', panel.dataset.panel !== key));
+      });
+    });
+  </script>
+</body>
+</html>
