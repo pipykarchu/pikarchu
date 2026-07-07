@@ -26,8 +26,8 @@
     "cover": "/mascot/pixiu-secondary.png",
     "links": {
       "local": "http://127.0.0.1:5185/?profile=demo&profile_lock=demo",
-      "demo": "projects/job-war-room-demo/index.html",
-      "demoNote": "优先打开个人站内静态演示，避免外部部署不可用；演示数据为虚拟档案，只读预览。"
+      "demo": "https://ai-job-war-room-studio.vercel.app/?profile=demo&profile_lock=demo",
+      "demoNote": "打开线上完整应用的李明演示档案；演示数据为虚拟档案，只读预览，不进入真实档案。"
     },
     "highlights": [
       "项目讲法：这是一个从真实痛点出发的 AI Agent 产品，不是单点 prompt demo。",
@@ -39,7 +39,11 @@
     ],
     "actions": [
       {
-        "label": "打开求职作战演示",
+        "label": "线上完整应用",
+        "href": "https://ai-job-war-room-studio.vercel.app/?profile=demo&profile_lock=demo"
+      },
+      {
+        "label": "站内兜底演示",
         "href": "projects/job-war-room-demo/index.html"
       },
       {
