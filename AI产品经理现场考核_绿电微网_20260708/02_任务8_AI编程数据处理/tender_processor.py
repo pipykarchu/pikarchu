@@ -7,6 +7,8 @@ import csv
 import os
 import sys
 import io
+import re
+from datetime import datetime
 from collections import defaultdict
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
@@ -14,6 +16,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 # ─── 分类规则配置 ───────────────────────────────────────────────
 
 CATEGORY_RULES = {
+    "光储充一体化": ["光储充", "光储充一体化"],
     "直流微网": ["直流", "微网", "微电网", "柔性直流", "直流母线"],
     "充电桩": ["充电桩", "充换电", "充电站", "有序充电"],
     "储能": ["储能", "电池", "削峰填谷", "储能系统"],
@@ -23,15 +26,49 @@ CATEGORY_RULES = {
 }
 
 HIGH_PRIORITY_KEYWORDS = ["数据中心", "直流微网", "光储充", "零碳园区", "柔性直流"]
+REQUIRED_FIELDS = ["project_name", "buyer", "publish_date", "notice_type", "link", "description"]
+PROJECT_TYPE_PRIORITY = ["数据中心供电", "直流微网", "光储充一体化", "充电桩", "储能", "光伏", "园区电力改造"]
+
+
+def normalize_text(value):
+    """统一中英文大小写、空白和常见分隔符，提升匹配稳定性"""
+    text = str(value or "").strip().lower()
+    text = re.sub(r"\s+", "", text)
+    text = re.sub(r"[，。；;、,.\-_/|（）()【】\\[\\]：:]", "", text)
+    return text
+
+
+def format_date(value):
+    """把常见日期格式统一为 YYYY-MM-DD，无法识别时保留原值"""
+    raw = str(value or "").strip()
+    if not raw:
+        return ""
+
+    for pattern in ("%Y-%m-%d", "%Y/%m/%d", "%Y.%m.%d", "%Y年%m月%d日"):
+        try:
+            return datetime.strptime(raw, pattern).strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+    return raw
+
+
+def validate_fields(rows):
+    """检查输入 CSV 是否包含必要字段"""
+    if not rows:
+        raise ValueError("输入文件为空，请先准备招标样例数据")
+    missing = [field for field in REQUIRED_FIELDS if field not in rows[0]]
+    if missing:
+        raise ValueError(f"输入文件缺少必要字段：{', '.join(missing)}")
 
 
 def load_csv(filepath):
     """读取 CSV 文件，返回字典列表"""
     rows = []
-    with open(filepath, "r", encoding="utf-8") as f:
+    with open(filepath, "r", encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         for row in reader:
             rows.append(row)
+    validate_fields(rows)
     return rows
 
 
@@ -41,7 +78,11 @@ def deduplicate(rows):
     unique_rows = []
     duplicates_removed = 0
     for row in rows:
-        key = (row["project_name"].strip(), row["buyer"].strip(), row["link"].strip())
+        key = (
+            normalize_text(row["project_name"]),
+            normalize_text(row["buyer"]),
+            normalize_text(row["link"]),
+        )
         if key not in seen:
             seen.add(key)
             unique_rows.append(row)
@@ -50,29 +91,34 @@ def deduplicate(rows):
     return unique_rows, duplicates_removed
 
 
+def pick_project_type(matched_categories):
+    """按绿电微网业务优先级选择主分类"""
+    for category in PROJECT_TYPE_PRIORITY:
+        if category in matched_categories:
+            return category
+    return matched_categories[0] if matched_categories else "其他/待人工分类"
+
+
 def classify_project(row):
     """对单条记录进行分类、打标签、定优先级"""
-    text = (row["project_name"] + " " + row["description"]).lower()
+    text = normalize_text(row["project_name"] + " " + row["description"])
 
     # 匹配标签
     matched_tags = []
     matched_categories = []
     for category, keywords in CATEGORY_RULES.items():
         for kw in keywords:
-            if kw in text:
+            if normalize_text(kw) in text:
                 if category not in matched_categories:
                     matched_categories.append(category)
                 if kw not in matched_tags:
                     matched_tags.append(kw)
 
     # 确定主分类
-    if matched_categories:
-        project_type = matched_categories[0]
-    else:
-        project_type = "其他/待人工分类"
+    project_type = pick_project_type(matched_categories)
 
     # 优先级判定
-    high_hit = any(kw in text for kw in HIGH_PRIORITY_KEYWORDS)
+    high_hit = any(normalize_text(kw) in text for kw in HIGH_PRIORITY_KEYWORDS)
     if len(matched_categories) >= 2 or high_hit:
         priority = "高"
         reason = f"命中 {len(matched_categories)} 个核心标签：{'、'.join(matched_categories)}"
@@ -111,6 +157,7 @@ def save_csv(rows, filepath):
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for row in rows:
+            row["publish_date"] = format_date(row.get("publish_date"))
             writer.writerow(row)
 
 
