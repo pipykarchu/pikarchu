@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>绿电微网 AI 工作流图集 — 截图用</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, "Microsoft YaHei", sans-serif;
+  background: #f8f9fa;
+  padding: 40px;
+}
+h1 {
+  text-align: center;
+  color: #1a1a2e;
+  margin-bottom: 40px;
+  font-size: 24px;
+}
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 40px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border: 1px solid #e8e8e8;
+}
+.card h2 {
+  color: #2d3748;
+  font-size: 18px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #a78bfa;
+}
+.card h3 {
+  color: #4a5568;
+  font-size: 14px;
+  margin-bottom: 12px;
+  font-weight: normal;
+}
+.mermaid {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+.footer {
+  text-align: center;
+  color: #718096;
+  font-size: 12px;
+  margin-top: 20px;
+}
+</style>
+</head>
+<body>
+
+<h1>绿电微网 AI 产品经理考核 — 工作流图集</h1>
+
+<!-- 图1：全链路AI工作流 -->
+<div class="card">
+  <h2>图1：全链路 AI 业务协同工作流（任务10）</h2>
+  <h3>获客 → 分析 → 售前 → 交付 → 运维 → 数据回流闭环</h3>
+  <div class="mermaid">
+flowchart LR
+    subgraph 获客
+        A1[招投标公告<br/>自动采集] --> A2[AI清洗<br/>去重+分类]
+        A2 --> A3[高价值线索<br/>评分排序]
+    end
+
+    subgraph 分析
+        A3 --> B1[AI生成<br/>投标亮点]
+        B1 --> B2[初步技术方案<br/>自动生成]
+    end
+
+    subgraph 交付
+        B2 --> C1[售前智能体<br/>客户问答]
+        C1 --> C2[方案书+<br/>宣传素材生成]
+        C2 --> C3[项目配置<br/>标准化交付]
+    end
+
+    subgraph 运维
+        C3 --> D1[场站数据<br/>自动采集]
+        D1 --> D2[AI能耗分析<br/>碳资产统计]
+    end
+
+    subgraph 数据资产
+        D2 --> E1[知识库沉淀<br/>案例+参数]
+        E1 --> B1
+    end
+  </div>
+</div>
+
+<!-- 图2：AI产品架构 -->
+<div class="card">
+  <h2>图2：AI 产品架构分层图（任务11）</h2>
+  <h3>数据资产层 → 数据治理层 → AI能力层 → 产品应用层 → 商业价值层</h3>
+  <div class="mermaid">
+flowchart TB
+  subgraph 数据资产层
+    A1[外部市场数据<br/>招投标公告/政策/竞品]
+    A2[内部知识资产<br/>产品资料/方案/案例]
+    A3[项目运行数据<br/>光伏/储能/充电/能耗]
+    A4[客户商机数据<br/>CRM/需求/沟通记录]
+  end
+
+  subgraph 数据治理层
+    B[清洗去重 · 脱敏 · 标签体系 · 知识切片 · 权限隔离]
+  end
+
+  subgraph AI能力层
+    C1[RAG行业知识库]
+    C2[NLP分类与实体抽取]
+    C3[负荷预测模型]
+    C4[AI智能调度引擎]
+    C5[碳资产核算模型]
+    C6[方案/标书生成]
+  end
+
+  subgraph 产品应用层
+    D1[招投标线索雷达]
+    D2[售前方案智能体]
+    D3[绿电运营管理平台]
+    D4[碳资产数据看板]
+  end
+
+  subgraph 商业价值层
+    E1[获客提效 · 人力成本↓]
+    E2[售前提效 · 方案周期↓50%]
+    E3[运维增收 · SaaS年费]
+    E4[数据服务 · 碳交易分成]
+  end
+
+  A1 & A2 & A3 & A4 --> B --> C1 & C2 & C3 & C4 & C5 & C6
+  C1 & C2 --> D1 & D2
+  C3 & C4 --> D3
+  C5 & C6 --> D4
+  D1 & D2 --> E1 & E2
+  D3 --> E3
+  D4 --> E4
+  </div>
+</div>
+
+<!-- 图3：招标数据处理流程 -->
+<div class="card">
+  <h2>图3：招标数据处理流程（任务8）</h2>
+  <h3>原始数据 → 去重 → 分类 → 标签 → 优先级 → 输出</h3>
+  <div class="mermaid">
+flowchart LR
+    A[原始招标数据<br/>CSV 6条] --> B[去重<br/>name+buyer+link]
+    B --> C[关键词分类<br/>6大业务类别]
+    C --> D[标签提取<br/>命中关键词列表]
+    D --> E[优先级判定<br/>高/中/低]
+    E --> F[排序输出<br/>CSV 5条]
+
+    B -->|移除1条重复| G[重复记录丢弃]
+    E -->|高优3条| H[推送企微<br/>销售跟进]
+    E -->|低优1条| I[自动过滤<br/>非主营业务]
+  </div>
+</div>
+
+<!-- 图4：运营管理平台业务流程 -->
+<div class="card">
+  <h2>图4：绿电运营管理平台业务流程（任务4）</h2>
+  <h3>数据采集 → 清洗 → AI分析 → 人工确认 → 执行 → 复盘</h3>
+  <div class="mermaid">
+flowchart LR
+    A[数据采集<br/>光伏/储能/充电桩<br/>电表/天气/电价] --> B[数据清洗<br/>异常值处理<br/>缺失值补全]
+    B --> C[AI分析<br/>预测/调度<br/>归因/建议]
+    C --> D[人工确认<br/>运维审核<br/>调度建议]
+    D --> E[执行联动<br/>下发策略<br/>运营建议]
+    E --> F[结果复盘<br/>节能收益<br/>绿电消纳<br/>碳减排统计]
+    F -->|数据回流| A
+  </div>
+</div>
+
+<!-- 图5：数据资产增值路径 -->
+<div class="card">
+  <h2>图5：数据资产五级增值模型（任务11）</h2>
+  <h3>数据可见 → 数据可用 → 数据可问 → 数据可算 → 数据可卖</h3>
+  <div class="mermaid">
+flowchart LR
+    L1[L1 数据可见<br/>知道有什么数据<br/>统一归档] --> L2[L2 数据可用<br/>清洗/标签化<br/>内部效率↑]
+    L2 --> L3[L3 数据可问<br/>RAG知识库<br/>自然语言查询]
+    L3 --> L4[L4 数据可算<br/>预测/调度<br/>收益测算]
+    L4 --> L5[L5 数据可卖<br/>SaaS平台<br/>第二增长曲线]
+
+    style L1 fill:#e8f5e9
+    style L2 fill:#e3f2fd
+    style L3 fill:#fff3e0
+    style L4 fill:#fce4ec
+    style L5 fill:#f3e5f5
+  </div>
+</div>
+
+<div class="footer">
+  深圳市绿电微网新技术有限公司 · AI产品经理考核 · 2026-07-08 · 皮玺玉
+</div>
+
+<script>
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'default',
+  flowchart: {
+    curve: 'basis',
+    padding: 20
+  }
+});
+</script>
+</body>
+</html>
