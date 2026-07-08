@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>绿电微网全链路AI业务协同工作流</title>
+  <style>
+    :root {
+      --ink: #211b2d;
+      --muted: #6e667c;
+      --bg: #f7f3ff;
+      --paper: #ffffff;
+      --purple: #6c35d4;
+      --purple-dark: #37106f;
+      --gold: #ffd84d;
+      --gold-soft: #fff2ad;
+      --green: #19a85b;
+      --cyan: #12a4b7;
+      --red: #d84a4a;
+      --orange: #f2992e;
+      --blue: #2f6edb;
+      --line: rgba(43, 28, 79, 0.14);
+      --shadow: 0 18px 48px rgba(52, 29, 102, 0.14);
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      background: linear-gradient(180deg, rgba(255, 216, 77, 0.18), transparent 340px), var(--bg);
+      line-height: 1.62;
+    }
+    .topbar { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+    .topbar-inner { max-width: 1280px; margin: 0 auto; padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; font-weight: 800; color: var(--purple-dark); }
+    .brand-mark { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg, var(--purple), var(--gold)); box-shadow: 0 8px 20px rgba(108, 53, 212, .28); flex: 0 0 auto; }
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .nav a { color: var(--muted); text-decoration: none; font-size: 13px; padding: 5px 9px; border-radius: 8px; }
+    .nav a:hover { color: var(--purple-dark); background: rgba(108, 53, 212, .08); }
+    .hero { position: relative; overflow: hidden; color: #fff; background: radial-gradient(circle at 88% 18%, rgba(255,216,77,.44), transparent 30%), linear-gradient(135deg, #351078 0%, #6c35d4 48%, #136c78 100%); }
+    .hero::after { content: "AI WORKFLOW"; position: absolute; right: -18px; bottom: -38px; color: rgba(255,255,255,.09); font-size: 84px; font-weight: 900; letter-spacing: 0; white-space: nowrap; pointer-events: none; }
+    .hero-inner { max-width: 1280px; margin: 0 auto; padding: 46px 24px 34px; position: relative; z-index: 1; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); color: var(--gold-soft); font-size: 13px; font-weight: 700; }
+    h1 { margin: 18px 0 10px; max-width: 920px; font-size: clamp(30px, 5vw, 54px); line-height: 1.1; letter-spacing: 0; }
+    .hero p { max-width: 920px; margin: 0; font-size: 17px; color: rgba(255,255,255,.88); }
+    .hero-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 28px; max-width: 1040px; }
+    .metric { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); border-radius: var(--radius); padding: 14px; min-height: 92px; }
+    .metric strong { display: block; color: var(--gold); font-size: 26px; line-height: 1.2; }
+    .metric span { display: block; margin-top: 5px; color: rgba(255,255,255,.82); font-size: 13px; }
+    main { max-width: 1280px; margin: 0 auto; padding: 28px 24px 56px; }
+    section { margin-top: 28px; }
+    .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 14px; }
+    h2 { margin: 0; font-size: 24px; color: var(--purple-dark); letter-spacing: 0; }
+    .section-note { margin: 0; color: var(--muted); font-size: 14px; max-width: 620px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .panel, .workflow-step, .risk, .phase { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .panel { padding: 18px; }
+    .panel h3, .workflow-step h3, .risk h3, .phase h3 { margin: 0 0 8px; font-size: 17px; color: var(--purple-dark); }
+    .panel p, .workflow-step p, .risk p, .phase p { margin: 0; color: var(--muted); font-size: 14px; }
+    .workflow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+    .workflow-step { position: relative; padding: 18px 16px; min-height: 188px; overflow: hidden; }
+    .workflow-step::before { content: attr(data-index); position: absolute; right: 12px; top: 8px; color: rgba(108,53,212,.12); font-size: 42px; font-weight: 900; }
+    .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+    .tag { display: inline-flex; align-items: center; min-height: 24px; padding: 3px 8px; border-radius: 999px; background: rgba(108,53,212,.08); color: var(--purple-dark); font-size: 12px; font-weight: 700; }
+    .tag.gold { background: rgba(255,216,77,.28); color: #765600; }
+    .tag.green { background: rgba(25,168,91,.12); color: #0c7e40; }
+    .tag.cyan { background: rgba(18,164,183,.12); color: #087384; }
+    .flow-band { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    .flow-node { padding: 16px; background: #fff; border: 1px solid var(--line); border-left: 5px solid var(--purple); border-radius: var(--radius); min-height: 142px; }
+    .flow-node:nth-child(2n) { border-left-color: var(--cyan); }
+    .flow-node:nth-child(3n) { border-left-color: var(--gold); }
+    .flow-node b { display: block; color: var(--purple-dark); margin-bottom: 6px; }
+    .flow-node span { color: var(--muted); font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    th, td { padding: 11px 12px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 14px; }
+    th { color: #fff; background: linear-gradient(135deg, var(--purple-dark), var(--purple)); font-weight: 800; }
+    tr:last-child td { border-bottom: 0; }
+    .status { display: inline-flex; align-items: center; gap: 6px; font-weight: 800; white-space: nowrap; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    .dot.green { background: var(--green); } .dot.orange { background: var(--orange); } .dot.red { background: var(--red); } .dot.blue { background: var(--blue); }
+    .phase { padding: 16px; border-top: 5px solid var(--purple); }
+    .phase:nth-child(2) { border-top-color: var(--cyan); } .phase:nth-child(3) { border-top-color: var(--gold); } .phase:nth-child(4) { border-top-color: var(--green); }
+    .risk { padding: 16px; border-left: 5px solid var(--orange); }
+    .risk.high { border-left-color: var(--red); } .risk.mid { border-left-color: var(--orange); } .risk.low { border-left-color: var(--green); }
+    .asset-map { display: grid; grid-template-columns: 1.05fr 1.2fr 1.05fr; gap: 14px; align-items: stretch; }
+    .asset-source, .asset-core, .asset-output { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; }
+    .asset-core { background: linear-gradient(135deg, rgba(108,53,212,.1), rgba(255,216,77,.18)), #fff; border-color: rgba(108,53,212,.22); }
+    .asset-list { display: grid; gap: 8px; margin-top: 10px; }
+    .asset-item { padding: 9px 10px; border-radius: 8px; background: rgba(108,53,212,.06); color: var(--purple-dark); font-size: 14px; font-weight: 700; }
+    .quote { margin-top: 28px; padding: 18px; color: #fff; border-radius: var(--radius); background: linear-gradient(135deg, var(--purple-dark), var(--purple)); box-shadow: var(--shadow); }
+    .quote b { color: var(--gold); }
+    @media (max-width: 1000px) { .hero-metrics, .grid-4, .workflow { grid-template-columns: repeat(2, minmax(0, 1fr)); } .grid-3, .flow-band, .asset-map { grid-template-columns: 1fr; } }
+    @media (max-width: 680px) { .topbar-inner, .section-head { align-items: flex-start; flex-direction: column; } .nav { justify-content: flex-start; } .hero-inner, main { padding-left: 16px; padding-right: 16px; } .hero-metrics, .grid-4, .grid-3, .workflow { grid-template-columns: 1fr; } table { display: block; overflow-x: auto; white-space: nowrap; } }
+  </style>
+</head>
+<body>
+  <header class="topbar"><div class="topbar-inner"><div class="brand"><span class="brand-mark"></span><span>绿电微网 AI 工作流</span></div><nav class="nav" aria-label="页面导航"><a href="#pain">痛点</a><a href="#workflow">流程</a><a href="#tools">工具</a><a href="#asset">数据资产</a><a href="#roadmap">落地</a><a href="#risk">风险</a></nav></div></header>
+  <section class="hero"><div class="hero-inner"><span class="eyebrow">任务10｜获客 - 分析 - 交付 - 运维</span><h1>绿电微网全链路 AI 业务协同工作流</h1><p>把招投标线索、客户咨询、技术方案、交付参数和运维数据沉淀为可复用数据资产，用 AI 提升获客响应、售前方案、项目交付和运营决策效率。</p><div class="hero-metrics"><div class="metric"><strong>5+</strong><span>AI 工具能力整合：分类、生成、RAG、图像、数据分析、摘要</span></div><div class="metric"><strong>90%</strong><span>招标线索筛选时间目标节省</span></div><div class="metric"><strong>30min</strong><span>投标方案初稿目标生成时间</span></div><div class="metric"><strong>闭环</strong><span>项目数据回流知识库，形成业务飞轮</span></div></div></div></section>
+  <main>
+    <section id="pain"><div class="section-head"><h2>业务痛点总览</h2><p class="section-note">当前问题不是单点工具缺失，而是业务数据没有贯通，导致获客、售前、交付、运维都在重复劳动。</p></div><div class="grid-4"><article class="panel"><h3>获客慢</h3><p>招投标信息分散在多个平台，人工筛选耗时长，高价值新能源项目容易漏掉。</p><div class="tag-row"><span class="tag">线索采集</span><span class="tag gold">高价值评分</span></div></article><article class="panel"><h3>售前散</h3><p>投标亮点、技术方案、案例材料口径不统一，方案初稿依赖个人经验。</p><div class="tag-row"><span class="tag">RAG</span><span class="tag cyan">方案生成</span></div></article><article class="panel"><h3>交付乱</h3><p>项目参数、配置、验收标准散落在文档和人员经验里，复用难、返工多。</p><div class="tag-row"><span class="tag">标准模板</span><span class="tag green">知识沉淀</span></div></article><article class="panel"><h3>运维滞后</h3><p>场站能耗、绿电消纳、碳资产多靠人工统计，决策从实时变成月报。</p><div class="tag-row"><span class="tag">自动报告</span><span class="tag gold">实时告警</span></div></article></div></section>
+    <section id="workflow"><div class="section-head"><h2>全链路 AI 工作流</h2><p class="section-note">每个环节都有明确输入、AI处理、人工复核和业务输出，避免“AI工具堆砌”。</p></div><div class="workflow"><article class="workflow-step" data-index="01"><h3>获客</h3><p>自动采集新能源、储能、充电桩、直流微网、数据中心供电相关公告，去重、分类并评分。</p><div class="tag-row"><span class="tag">爬虫</span><span class="tag">分类评分</span><span class="tag gold">每日推送</span></div></article><article class="workflow-step" data-index="02"><h3>分析</h3><p>基于线索详情、公司产品库、历史案例，生成投标亮点和初步技术方案框架。</p><div class="tag-row"><span class="tag">长文理解</span><span class="tag cyan">RAG检索</span><span class="tag">方案初稿</span></div></article><article class="workflow-step" data-index="03"><h3>售前</h3><p>通过行业知识库智能体回答客户问题，涉及报价、承诺、超出知识库内容时转人工。</p><div class="tag-row"><span class="tag">智能体</span><span class="tag green">转人工</span><span class="tag">企微/飞书</span></div></article><article class="workflow-step" data-index="04"><h3>交付</h3><p>把方案书、系统架构、宣传素材、交付配置和验收标准沉淀为标准化交付资产。</p><div class="tag-row"><span class="tag">图文生成</span><span class="tag gold">模板化</span><span class="tag">交付配置</span></div></article><article class="workflow-step" data-index="05"><h3>运维</h3><p>自动处理场站数据、能耗统计、碳资产核算、异常检测和日周月报告。</p><div class="tag-row"><span class="tag">数据分析</span><span class="tag cyan">异常检测</span><span class="tag green">报告生成</span></div></article></div></section>
+    <section><div class="section-head"><h2>流程节点拆解</h2><p class="section-note">从线索到运维数据，所有输出都回流知识库，下一次项目不再从零开始。</p></div><div class="flow-band"><div class="flow-node"><b>1. 招标线索自动采集</b><span>定时抓取公告，按直流微网、储能、光伏、充电桩、数据中心供电等标签筛选。</span></div><div class="flow-node"><b>2. 线索价值评分</b><span>结合预算、区域、客户类型、截止时间、能力匹配度，输出跟进优先级。</span></div><div class="flow-node"><b>3. 投标亮点生成</b><span>从公司技术优势、历史案例、招标需求中提炼 3-5 条差异化亮点。</span></div><div class="flow-node"><b>4. 售前智能体问答</b><span>回答客户关于方案、参数、案例、交付周期的常见问题，关键承诺转人工。</span></div><div class="flow-node"><b>5. 项目素材与配置交付</b><span>生成方案书、PPT素材、架构图、配置清单、验收模板，统一交付口径。</span></div><div class="flow-node"><b>6. 运维数据分析回流</b><span>沉淀实际能耗、消纳率、碳减排、告警和复盘，反哺后续线索评分与方案生成。</span></div></div></section>
+    <section id="tools"><div class="section-head"><h2>工具搭配清单</h2><p class="section-note">工具可替换，核心是“输入 - 处理 - 输出 - 复核”的业务闭环。</p></div><table><thead><tr><th>环节</th><th>AI工具能力</th><th>非AI工具</th><th>协同方式</th><th>人工复核点</th></tr></thead><tbody><tr><td>线索采集</td><td>文本分类、匹配度评分</td><td>Python爬虫、定时任务、飞书/企微</td><td>爬虫定时采集，AI分类打分，每日推送</td><td>销售确认是否跟进</td></tr><tr><td>方案生成</td><td>长文本理解、RAG检索、结构化生成</td><td>知识库、Markdown模板、案例库</td><td>检索公司能力，生成投标亮点和方案初稿</td><td>售前工程师校验参数</td></tr><tr><td>售前问答</td><td>智能体、多轮对话、意图识别</td><td>Dify/Coze、企业微信、飞书</td><td>客户提问后先检索知识库，再生成回答</td><td>报价、承诺、超范围问题转人工</td></tr><tr><td>素材设计</td><td>图像生成、文案生成、提示词优化</td><td>Canva、即时设计、PPT模板</td><td>AI生成配图与文案，设计工具完成排版</td><td>设计师审核品牌一致性</td></tr><tr><td>数据统计</td><td>异常检测、报告生成、趋势分析</td><td>Python pandas、运营看板、PDF导出</td><td>清洗场站数据，生成日报、月报、告警</td><td>运维确认异常和处理闭环</td></tr><tr><td>知识沉淀</td><td>摘要、标签、向量化检索</td><td>文档库、向量数据库、权限系统</td><td>项目结项后自动提炼案例、参数、复盘</td><td>产品/售前确认可复用范围</td></tr></tbody></table></section>
+    <section id="asset"><div class="section-head"><h2>数据资产闭环</h2><p class="section-note">工作流的核心价值不是单次生成，而是把每个项目变成下一次获客和交付的训练材料。</p></div><div class="asset-map"><div class="asset-source"><h3>数据来源</h3><div class="asset-list"><div class="asset-item">招投标公告与中标复盘</div><div class="asset-item">客户咨询与售前问答</div><div class="asset-item">方案参数与交付配置</div><div class="asset-item">场站能耗与碳资产数据</div><div class="asset-item">运维告警与处理记录</div></div></div><div class="asset-core"><h3>知识库中台</h3><p>统一做脱敏、标签、版本、权限和向量化检索。工具可以替换，但业务知识、项目案例、技术参数和复盘数据必须沉淀在公司侧。</p><div class="tag-row"><span class="tag">脱敏</span><span class="tag gold">版本管理</span><span class="tag cyan">向量检索</span><span class="tag green">权限控制</span></div></div><div class="asset-output"><h3>业务复用</h3><div class="asset-list"><div class="asset-item">线索评分更准</div><div class="asset-item">投标亮点更贴业务</div><div class="asset-item">智能体回答有依据</div><div class="asset-item">交付模板持续优化</div><div class="asset-item">运维报告可追溯</div></div></div></div></section>
+    <section id="roadmap"><div class="section-head"><h2>落地节奏</h2><p class="section-note">先从最容易验证 ROI 的“线索采集 + 方案生成”开始，再扩展到智能体和运维数据。</p></div><div class="grid-4"><article class="phase"><h3>Phase 1｜2周</h3><p>线索采集、去重分类、AI评分、每日推送跑通。</p><div class="tag-row"><span class="tag gold">爬虫脚本</span><span class="tag">评分表</span></div></article><article class="phase"><h3>Phase 2｜3周</h3><p>投标亮点和技术方案初稿生成，接入公司知识库。</p><div class="tag-row"><span class="tag cyan">RAG</span><span class="tag">方案模板</span></div></article><article class="phase"><h3>Phase 3｜4周</h3><p>售前智能体上线，常见问题自动回答，关键承诺转人工。</p><div class="tag-row"><span class="tag green">智能体</span><span class="tag">转人工</span></div></article><article class="phase"><h3>Phase 4｜持续</h3><p>运维数据、碳资产、项目复盘回流知识库，形成数据飞轮。</p><div class="tag-row"><span class="tag gold">数据资产</span><span class="tag">复利</span></div></article></div></section>
+    <section id="risk"><div class="section-head"><h2>风险与控制</h2><p class="section-note">AI工作流必须保留人工复核、权限控制和数据版本，否则越自动越容易放大错误。</p></div><div class="grid-3"><article class="risk high"><h3><span class="status"><span class="dot red"></span>AI幻觉</span></h3><p>技术参数、报价、交付承诺不能由 AI 直接定稿。关键数值必须来自公司知识库并保留来源。</p></article><article class="risk mid"><h3><span class="status"><span class="dot orange"></span>平台反爬</span></h3><p>招标数据采集优先使用公开合规来源，保留多源冗余和人工兜底，避免单平台中断。</p></article><article class="risk high"><h3><span class="status"><span class="dot red"></span>客户隐私</span></h3><p>客户项目数据入库前必须脱敏，并按销售、售前、交付、运维角色控制访问权限。</p></article><article class="risk mid"><h3><span class="status"><span class="dot orange"></span>知识过期</span></h3><p>产品参数、案例、政策、碳核算口径需要版本管理和有效期提醒，避免旧材料误用。</p></article><article class="risk low"><h3><span class="status"><span class="dot green"></span>工具替换</span></h3><p>工具不绑定单一平台，核心资产是公司知识库、提示词模板、处理脚本和业务流程。</p></article><article class="risk mid"><h3><span class="status"><span class="dot blue"></span>投标专业度</span></h3><p>AI初稿只能作为底稿，最终投标文件必须由售前和产品统一口径、格式和专业表达。</p></article></div></section>
+    <section><div class="section-head"><h2>提效价值</h2><p class="section-note">最终目标是把业务响应速度、方案质量和数据复用能力同时提升。</p></div><table><thead><tr><th>角色</th><th>提效点</th><th>量化收益</th><th>成功标志</th></tr></thead><tbody><tr><td>销售</td><td>线索筛选自动化</td><td>2h/天 → 5min/天确认</td><td>每日高价值线索清单可用</td></tr><tr><td>售前</td><td>方案初稿自动生成</td><td>3天 → 30分钟</td><td>投标亮点和方案框架可复核</td></tr><tr><td>客服/售前</td><td>智能体7×24响应</td><td>80%常见问题秒回</td><td>超范围问题能转人工</td></tr><tr><td>设计/市场</td><td>素材生成与模板排版</td><td>2天 → 2小时</td><td>投标PPT、架构图、宣传图可复用</td></tr><tr><td>运维</td><td>自动报告与实时告警</td><td>月报3天 → 自动生成</td><td>能耗、消纳、碳资产指标可追溯</td></tr></tbody></table><div class="quote"><b>现场总结口径：</b>这套工作流不是为了展示会用很多 AI 工具，而是把绿电微网公司的业务数据从“散落在个人和文档里”，变成“可检索、可复用、可持续增值的数据资产”。</div></section>
+  </main>
+</body>
+</html>
