@@ -90,7 +90,7 @@
     .actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
     .grid {
       display: grid;
-      grid-template-columns: minmax(320px, .88fr) minmax(420px, 1.12fr) minmax(380px, .95fr);
+      grid-template-columns: minmax(320px, .85fr) minmax(480px, 1.15fr);
       gap: 16px;
       margin-top: 16px;
       align-items: start;
@@ -142,9 +142,25 @@
       padding: 10px 12px;
       background: var(--paper-soft);
       white-space: pre-wrap;
+      cursor: pointer;
     }
     .msg.user { background: rgba(167,139,250,.10); border-color: rgba(167,139,250,.30); }
+    .msg.active { border-color: var(--purple); box-shadow: 0 0 0 2px rgba(167,139,250,.16); }
+    .reply-tag { display: inline-flex; margin-top: 8px; color: var(--muted); font-size: 12px; }
     .msg strong { display: block; margin-bottom: 4px; font-size: 12px; color: var(--muted); }
+    .chat-edit-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border: 1px solid rgba(167,139,250,.24);
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: rgba(167,139,250,.08);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .chat-edit-bar.active { display: flex; }
     .question-list { display: grid; gap: 8px; }
     .question-btn { text-align: left; min-height: 0; padding: 8px 10px; }
     .tabs { display: flex; gap: 6px; padding: 8px; border-bottom: 1px solid var(--line); overflow-x: auto; }
@@ -171,6 +187,14 @@
     .doc-preview h3 { margin: 16px 0 8px; }
     .doc-preview p { margin: 8px 0; }
     .doc-preview table { margin: 10px 0 18px; }
+    .doc-preview [contenteditable="true"] {
+      outline: none;
+      border-radius: 6px;
+      box-shadow: inset 0 0 0 1px rgba(167,139,250,.28);
+      background: rgba(167,139,250,.06);
+    }
+    .doc-preview [contenteditable="true"]:focus { box-shadow: inset 0 0 0 2px rgba(167,139,250,.45); }
+    .preview-table-actions { margin: -8px 0 18px; }
     .meta-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
     .metric { border: 1px solid var(--line); border-radius: 8px; padding: 10px; background: var(--paper-soft); }
     .metric b { display: block; font-size: 12px; color: var(--muted); }
@@ -214,8 +238,10 @@
         <div class="panel-body stack">
           <div class="chat-box" id="chatBox"></div>
           <textarea id="chatInput" placeholder="把想法、痛点、竞品、截图文字或临时修改写在这里..."></textarea>
+          <div class="chat-edit-bar" id="chatEditBar"></div>
           <div class="actions">
             <button id="askNextBtn">下一问题</button>
+            <button class="ghost" id="cancelChatEditBtn" style="display:none">取消</button>
             <button class="primary" id="sendBtn">记录到需求</button>
           </div>
           <div class="divider"></div>
@@ -262,20 +288,13 @@
         </div>
       </section>
 
-      <section class="panel">
-        <div class="panel-head">
-          <h2>3. 修改 PRD</h2>
-          <span class="chip">表格可直接改字</span>
-        </div>
-        <div class="tabs" id="tabs"></div>
-        <div class="panel-body" id="editors"></div>
-      </section>
     </main>
 
     <section class="panel" style="margin-top:16px">
       <div class="panel-head">
-        <h2>4. PRD 网页预览</h2>
+        <h2>3. PRD 网页预览</h2>
         <div class="chips">
+          <button id="previewEditBtn">编辑预览</button>
           <span class="chip" id="versionChip">v0.1</span>
           <span class="chip" id="dateChip">2026-07-10</span>
         </div>
@@ -305,6 +324,9 @@
       { id: "plan", name: "项目计划", type: "table", columns: ["阶段", "开始时间", "结束时间", "交付物", "负责人", "状态", "风险"] }
     ];
     const state = loadState();
+    let activeQuestionIndex = null;
+    let chatEditIndex = null;
+    let previewEditing = false;
 
     function defaultState() {
       return {
@@ -358,14 +380,73 @@
     }
     function renderChat() {
       const box = document.getElementById("chatBox");
-      box.innerHTML = state.chat.map(item => `<div class="msg ${item.role === "user" ? "user" : ""}"><strong>${item.role === "user" ? "我" : "PRD 访谈"}</strong>${escapeHtml(item.text)}</div>`).join("");
-      box.scrollTop = box.scrollHeight;
+      box.innerHTML = state.chat.map((item, index) => {
+        const active = index === activeQuestionIndex || index === chatEditIndex;
+        const replyTag = Number.isInteger(item.replyTo) && state.chat[item.replyTo]
+          ? `<span class="reply-tag">补充：${escapeHtml(state.chat[item.replyTo].text.slice(0, 28))}</span>`
+          : "";
+        return `<div class="msg ${item.role === "user" ? "user" : ""} ${active ? "active" : ""}" data-chat-index="${index}" title="点击可回到这条访谈内容继续补充或修改"><strong>${item.role === "user" ? "我" : "PRD 访谈"}</strong>${escapeHtml(item.text)}${replyTag}</div>`;
+      }).join("");
+      box.querySelectorAll("[data-chat-index]").forEach(node => node.addEventListener("click", () => selectChatItem(Number(node.dataset.chatIndex))));
+      const activeNode = box.querySelector(".msg.active");
+      if (activeNode) activeNode.scrollIntoView({ block: "nearest" });
+      else box.scrollTop = box.scrollHeight;
+      updateChatEditBar();
+    }
+    function selectChatItem(index) {
+      const item = state.chat[index];
+      if (!item) return;
+      const input = document.getElementById("chatInput");
+      if (item.role === "agent") {
+        activeQuestionIndex = index;
+        chatEditIndex = null;
+        input.value = "";
+        input.placeholder = "正在补充这个问题：" + item.text;
+      } else {
+        chatEditIndex = index;
+        activeQuestionIndex = Number.isInteger(item.replyTo) ? item.replyTo : null;
+        input.value = item.text;
+        input.placeholder = "正在修改这条回答";
+        input.focus();
+      }
+      renderChat();
+    }
+    function updateChatEditBar() {
+      const bar = document.getElementById("chatEditBar");
+      const cancel = document.getElementById("cancelChatEditBtn");
+      const send = document.getElementById("sendBtn");
+      if (chatEditIndex !== null) {
+        bar.className = "chat-edit-bar active";
+        bar.innerHTML = `<span>正在修改第 ${chatEditIndex + 1} 条回答，保存后会同步到需求摘要。</span>`;
+        cancel.style.display = "";
+        send.textContent = "保存修改";
+      } else if (activeQuestionIndex !== null) {
+        bar.className = "chat-edit-bar active";
+        bar.innerHTML = `<span>正在补充第 ${activeQuestionIndex + 1} 个问题。点击“取消”回到最新问题。</span>`;
+        cancel.style.display = "";
+        send.textContent = "补充回答";
+      } else {
+        bar.className = "chat-edit-bar";
+        bar.innerHTML = "";
+        cancel.style.display = "none";
+        send.textContent = "记录到需求";
+      }
+    }
+    function clearChatEdit() {
+      activeQuestionIndex = null;
+      chatEditIndex = null;
+      const input = document.getElementById("chatInput");
+      input.value = "";
+      input.placeholder = "把想法、痛点、竞品、截图文字或临时修改写在这里...";
+      renderChat();
     }
     function renderQuestions() {
       const list = document.getElementById("questionList");
       list.innerHTML = questions.map(q => `<button class="question-btn" data-q="${escapeAttr(q)}">${escapeHtml(q)}</button>`).join("");
       list.querySelectorAll("button").forEach(btn => btn.addEventListener("click", () => {
         state.chat.push({ role: "agent", text: btn.dataset.q });
+        activeQuestionIndex = state.chat.length - 1;
+        chatEditIndex = null;
         renderChat();
         saveState();
       }));
@@ -374,9 +455,17 @@
       const input = document.getElementById("chatInput");
       const text = input.value.trim();
       if (!text) return;
-      state.chat.push({ role: "user", text });
-      appendNotesFromText(text);
+      if (chatEditIndex !== null && state.chat[chatEditIndex]) {
+        state.chat[chatEditIndex].text = text;
+        appendNotesFromText("修改：" + text);
+      } else {
+        state.chat.push({ role: "user", text, replyTo: activeQuestionIndex });
+        appendNotesFromText(text);
+      }
       input.value = "";
+      chatEditIndex = null;
+      activeQuestionIndex = null;
+      input.placeholder = "把想法、痛点、竞品、截图文字或临时修改写在这里...";
       renderChat();
       saveState();
     }
@@ -389,6 +478,8 @@
     function askNext() {
       const used = state.chat.filter(x => x.role === "agent").length;
       state.chat.push({ role: "agent", text: questions[used % questions.length] });
+      activeQuestionIndex = state.chat.length - 1;
+      chatEditIndex = null;
       renderChat();
       saveState();
     }
@@ -401,6 +492,7 @@
     function renderEditors() {
       const tabs = document.getElementById("tabs");
       const editors = document.getElementById("editors");
+      if (!tabs || !editors) return;
       tabs.innerHTML = baseSections.map((section, index) => `<button class="tab ${index === 0 ? "active" : ""}" data-tab="${section.id}">${section.name}</button>`).join("");
       editors.innerHTML = baseSections.map((section, index) => {
         if (section.type === "meta") {
@@ -489,7 +581,9 @@
       document.getElementById("pageTitle").textContent = state.projectName + " PRD 工作台";
       document.getElementById("versionChip").textContent = "v0.1";
       document.getElementById("dateChip").textContent = today;
+      document.getElementById("previewEditBtn").textContent = previewEditing ? "完成预览编辑" : "编辑预览";
       document.getElementById("preview").innerHTML = buildPrdHtml();
+      bindPreviewEdits();
     }
     function buildPrdHtml() {
       return `
@@ -508,27 +602,69 @@
           {"项目": "优先级口径", "内容": state.priorityMode}
         ])}
         <h2>1. 背景与目标</h2>
-        <h3>1.1 一句话产品定义</h3><p>${escapeHtml(state.oneLine || "待确认")}</p>
-        <h3>1.2 目标用户</h3><p>${nl2br(state.targetUsers || "待确认")}</p>
-        <h3>1.3 核心问题</h3><p>${nl2br(state.problems || "待确认")}</p>
-        <h3>1.4 成功标志</h3><p>${nl2br(state.successMetrics || "待确认")}</p>
+        <h3>1.1 一句话产品定义</h3>${editableBlock("oneLine", state.oneLine || "待确认")}
+        <h3>1.2 目标用户</h3>${editableBlock("targetUsers", state.targetUsers || "待确认")}
+        <h3>1.3 核心问题</h3>${editableBlock("problems", state.problems || "待确认")}
+        <h3>1.4 成功标志</h3>${editableBlock("successMetrics", state.successMetrics || "待确认")}
         <h2>2. 范围定义</h2>
-        <h3>2.1 MVP 范围</h3>${tableHtml(baseSections.find(x => x.id === "scope").columns, state.sections.scope)}
-        <h3>2.2 本版不做</h3><p>${nl2br(state.outOfScope || "待确认")}</p>
-        <h2>3. 需求列表</h2>${tableHtml(baseSections.find(x => x.id === "requirements").columns, state.sections.requirements)}
-        <h2>4. 字段与数据</h2>${tableHtml(baseSections.find(x => x.id === "fields").columns, state.sections.fields)}
-        <h2>5. 验收标准</h2>${tableHtml(baseSections.find(x => x.id === "acceptance").columns, state.sections.acceptance)}
-        <h2>6. 项目计划</h2>${tableHtml(baseSections.find(x => x.id === "plan").columns, state.sections.plan)}
+        <h3>2.1 MVP 范围</h3>${tableHtml(baseSections.find(x => x.id === "scope").columns, state.sections.scope, "scope")}
+        <h3>2.2 本版不做</h3>${editableBlock("outOfScope", state.outOfScope || "待确认")}
+        <h2>3. 需求列表</h2>${tableHtml(baseSections.find(x => x.id === "requirements").columns, state.sections.requirements, "requirements")}
+        <h2>4. 字段与数据</h2>${tableHtml(baseSections.find(x => x.id === "fields").columns, state.sections.fields, "fields")}
+        <h2>5. 验收标准</h2>${tableHtml(baseSections.find(x => x.id === "acceptance").columns, state.sections.acceptance, "acceptance")}
+        <h2>6. 项目计划</h2>${tableHtml(baseSections.find(x => x.id === "plan").columns, state.sections.plan, "plan")}
         <h2>7. 工作流设计</h2>
-        <p>${escapeHtml(state.aiWorkflow || "待确认")}</p>
+        ${editableBlock("aiWorkflow", state.aiWorkflow || "待确认")}
         <h2>8. 风险与待确认</h2>
-        <p>${nl2br(state.risks || "待确认")}</p>
+        ${editableBlock("risks", state.risks || "待确认")}
         <h2>9. 对话记录摘要</h2>
-        <p>${nl2br(state.notes || "待补充")}</p>`;
+        ${editableBlock("notes", state.notes || "待补充")}`;
     }
-    function tableHtml(columns, rows) {
-      const body = (rows || []).map(row => `<tr>${columns.map(col => `<td>${nl2br(row[col] || "")}</td>`).join("")}</tr>`).join("");
-      return `<div class="table-wrap"><table><thead><tr>${columns.map(col => `<th>${escapeHtml(col)}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table></div>`;
+    function editableBlock(field, value) {
+      const attr = previewEditing ? ` contenteditable="true" data-preview-field="${escapeAttr(field)}"` : "";
+      return `<p${attr}>${nl2br(value)}</p>`;
+    }
+    function tableHtml(columns, rows, sectionId = "") {
+      const editable = previewEditing && sectionId;
+      const head = columns.map(col => `<th>${escapeHtml(col)}</th>`).join("") + (editable ? "<th>操作</th>" : "");
+      const body = (rows || []).map((row, rowIndex) => {
+        const cells = columns.map(col => {
+          const attr = editable ? ` contenteditable="true" data-preview-section="${escapeAttr(sectionId)}" data-row="${rowIndex}" data-col="${escapeAttr(col)}"` : "";
+          return `<td${attr}>${nl2br(row[col] || "")}</td>`;
+        }).join("");
+        const actions = editable ? `<td><button class="danger" data-preview-delete="${escapeAttr(sectionId)}" data-row="${rowIndex}">删除</button></td>` : "";
+        return `<tr>${cells}${actions}</tr>`;
+      }).join("");
+      const add = editable ? `<div class="actions preview-table-actions"><button data-preview-add-row="${escapeAttr(sectionId)}">增加行</button></div>` : "";
+      return `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>${add}`;
+    }
+    function bindPreviewEdits() {
+      const preview = document.getElementById("preview");
+      preview.querySelectorAll("[data-preview-field]").forEach(node => {
+        node.addEventListener("input", () => {
+          state[node.dataset.previewField] = node.textContent.trim();
+          hydrateForm();
+        });
+        node.addEventListener("blur", saveState);
+      });
+      preview.querySelectorAll("[data-preview-section]").forEach(cell => {
+        cell.addEventListener("input", () => {
+          const section = cell.dataset.previewSection;
+          const row = Number(cell.dataset.row);
+          const col = cell.dataset.col;
+          if (state.sections[section]?.[row]) state.sections[section][row][col] = cell.textContent.trim();
+        });
+        cell.addEventListener("blur", () => {
+          renderEditors();
+          saveState();
+        });
+      });
+      preview.querySelectorAll("[data-preview-add-row]").forEach(btn => btn.addEventListener("click", () => addRow(btn.dataset.previewAddRow)));
+      preview.querySelectorAll("[data-preview-delete]").forEach(btn => btn.addEventListener("click", () => {
+        state.sections[btn.dataset.previewDelete].splice(Number(btn.dataset.row), 1);
+        renderEditors();
+        saveState();
+      }));
     }
     function buildMarkdown() {
       syncFormToState();
@@ -561,7 +697,11 @@
     }
     function exportHtml() {
       saveState();
-      const doc = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHtml(state.projectName)} PRD</title><style>${document.querySelector("style").textContent}</style></head><body><div class="shell"><section class="panel"><article class="doc-preview">${buildPrdHtml()}</article></section></div></body></html>`;
+      const wasEditing = previewEditing;
+      previewEditing = false;
+      const cleanPrd = buildPrdHtml();
+      previewEditing = wasEditing;
+      const doc = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHtml(state.projectName)} PRD</title><style>${document.querySelector("style").textContent}</style></head><body><div class="shell"><section class="panel"><article class="doc-preview">${cleanPrd}</article></section></div></body></html>`;
       download(`${fileName(state.projectName)}_PRD.html`, doc, "text/html;charset=utf-8");
     }
     function exportMarkdown() { download(`${fileName(state.projectName)}_PRD.md`, buildMarkdown(), "text/markdown;charset=utf-8"); }
@@ -595,6 +735,11 @@
         if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) addChat();
       });
       document.getElementById("askNextBtn").addEventListener("click", askNext);
+      document.getElementById("cancelChatEditBtn").addEventListener("click", clearChatEdit);
+      document.getElementById("previewEditBtn").addEventListener("click", () => {
+        previewEditing = !previewEditing;
+        renderPreview();
+      });
       document.getElementById("saveBtn").addEventListener("click", saveState);
       document.getElementById("generateBtn").addEventListener("click", generateFromForm);
       document.getElementById("fillSampleBtn").addEventListener("click", fillSample);
