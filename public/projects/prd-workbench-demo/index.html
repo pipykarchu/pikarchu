@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PRD 工作台面试演示</title>
+  <title>PRD 工作台面试演示 PRD 工作台</title>
   <style>
     :root {
       --bg: #fafaf7;
@@ -19,6 +19,21 @@
       --danger: #ef4444;
       --shadow: 0 18px 50px rgba(26, 24, 31, .08);
       --gradient: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
+    }
+    [data-theme="dark"] {
+      --bg: #101114;
+      --paper: #17191f;
+      --paper-soft: #20232b;
+      --text: #f4f1ea;
+      --muted: #b8b2a7;
+      --line: #323640;
+      --purple: #c4b5fd;
+      --pink: #f9a8d4;
+      --teal: #5eead4;
+      --amber: #fbbf24;
+      --danger: #f87171;
+      --shadow: 0 18px 50px rgba(0, 0, 0, .28);
+      --gradient: linear-gradient(135deg, #c4b5fd 0%, #f9a8d4 100%);
     }
     * { box-sizing: border-box; }
     body {
@@ -195,6 +210,22 @@
     }
     .doc-preview [contenteditable="true"]:focus { box-shadow: inset 0 0 0 2px rgba(167,139,250,.45); }
     .preview-table-actions { margin: -8px 0 18px; }
+    .status-help {
+      border: 1px solid rgba(20,184,166,.22);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: rgba(20,184,166,.08);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .review-box {
+      border: 1px solid rgba(245,158,11,.25);
+      border-radius: 8px;
+      padding: 12px;
+      background: rgba(245,158,11,.08);
+    }
+    .review-box h3 { margin-bottom: 8px; }
+    .review-box ul { margin: 8px 0 0; padding-left: 20px; color: var(--muted); }
     .meta-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
     .metric { border: 1px solid var(--line); border-radius: 8px; padding: 10px; background: var(--paper-soft); }
     .metric b { display: block; font-size: 12px; color: var(--muted); }
@@ -223,6 +254,7 @@
       </div>
       <div class="actions">
         <button id="saveBtn">保存草稿</button>
+        <button id="themeBtn">夜间模式</button>
         <button id="exportMdBtn">导出 Markdown</button>
         <button id="exportJsonBtn">导出 JSON</button>
         <button class="primary" id="exportHtmlBtn">导出网页</button>
@@ -262,6 +294,7 @@
               <option>需求诊断中</option><option>概念待确认</option><option>PRD 草稿</option><option>待评审</option><option>已确认</option>
             </select></label>
           </div>
+          <div class="status-help" id="statusHelp"></div>
           <div class="row">
             <label><span>项目类型</span><select id="projectType">
               <option>软件产品</option><option>内部工具</option><option>AI 应用</option><option>内容/漫剧项目</option><option>运营活动</option><option>其他</option>
@@ -281,6 +314,14 @@
           <label><span>本版不做</span><textarea id="outOfScope"></textarea></label>
           <label><span>成功标志/验收口径</span><textarea id="successMetrics"></textarea></label>
           <label><span>风险与待确认</span><textarea id="risks"></textarea></label>
+          <div class="review-box" id="reviewBox">
+            <h3>AI/Claude 诊断审核</h3>
+            <p class="hint">先用本地规则生成审核清单；如果要真实调用 Claude/API，需要你另外确认账号、费用和内容上传风险。</p>
+            <div class="actions" style="margin-top:8px">
+              <button id="diagnosisReviewBtn" type="button">审核诊断合理性</button>
+            </div>
+            <div id="reviewResult"></div>
+          </div>
           <div class="actions">
             <button id="fillSampleBtn">填入示例结构</button>
             <button class="primary" id="generateBtn">生成/刷新 PRD</button>
@@ -321,8 +362,31 @@
       { id: "requirements", name: "需求列表", type: "table", columns: ["编号", "模块", "需求", "类型", "优先级", "迭代", "说明"] },
       { id: "fields", name: "字段与数据", type: "table", columns: ["字段", "类型", "是否必填", "默认值", "校验规则", "说明"] },
       { id: "acceptance", name: "验收标准", type: "table", columns: ["场景", "前置条件", "操作", "预期结果", "异常处理"] },
-      { id: "plan", name: "项目计划", type: "table", columns: ["阶段", "开始时间", "结束时间", "交付物", "负责人", "状态", "风险"] }
+      { id: "plan", name: "项目计划", type: "table", columns: ["阶段", "开始时间", "结束时间", "交付物", "负责人", "状态", "风险"] },
+      { id: "costs", name: "成本统计", type: "table", columns: ["日期/阶段", "平台/工具", "模型", "输入 tokens", "输出 tokens", "其他 tokens", "总 tokens", "单价/计费口径", "金额", "币种", "数据来源", "实际/估算", "备注"] }
     ];
+    const statusGuide = {
+      "需求诊断中": {
+        meaning: "还在判断需求是否成立：谁遇到什么问题、为什么现在要做、哪些信息缺失。",
+        next: "适合让 AI/Claude 审核诊断是否合理，先补用户、场景、痛点、业务价值和技术约束。"
+      },
+      "概念待确认": {
+        meaning: "方向已经收敛成概念版，但还没确认：一句话定义、目标用户、核心场景、MVP 功能和本版不做。",
+        next: "让需求方先确认概念。确认前不要展开太细的需求表，避免把错误方向写成完整 PRD。"
+      },
+      "PRD 草稿": {
+        meaning: "已经开始写完整 PRD：需求列表、字段、流程、验收标准和风险都可以继续补。",
+        next: "重点检查功能是否可落地、边界是否清晰、验收标准是否能测试。"
+      },
+      "待评审": {
+        meaning: "PRD 草稿已成型，等 Claude、同事或自己从产品、技术、风险角度审查。",
+        next: "适合做一致性、缺口、风险、成本、排期和验收标准审查。"
+      },
+      "已确认": {
+        meaning: "当前版本已经确认，可以交给开发、设计、内容生产或归档。",
+        next: "后续只做迭代变更；新增需求要记录修订原因和影响范围。"
+      }
+    };
     const state = loadState();
     let activeQuestionIndex = null;
     let chatEditIndex = null;
@@ -340,6 +404,7 @@
         mvp: "",
         priorityMode: "MoSCoW",
         aiWorkflow: "是，默认 Codex + Claude + Tuzi API",
+        theme: "light",
         outOfScope: "",
         successMetrics: "",
         risks: "",
@@ -351,13 +416,24 @@
           requirements: [{ "编号": "R1", "模块": "核心模块", "需求": "待确认", "类型": "功能", "优先级": "P0", "迭代": "MVP", "说明": "待确认" }],
           fields: [{ "字段": "待确认", "类型": "文本", "是否必填": "待确认", "默认值": "-", "校验规则": "待确认", "说明": "待确认" }],
           acceptance: [{ "场景": "正常流程", "前置条件": "待确认", "操作": "待确认", "预期结果": "待确认", "异常处理": "待确认" }],
-          plan: [{ "阶段": "需求评审", "开始时间": "待确认", "结束时间": "待确认", "交付物": "PRD", "负责人": "待确认", "状态": "待开始", "风险": "待确认" }]
+          plan: [{ "阶段": "需求评审", "开始时间": "待确认", "结束时间": "待确认", "交付物": "PRD", "负责人": "待确认", "状态": "待开始", "风险": "待确认" }],
+          costs: [
+            { "日期/阶段": "需求生成", "平台/工具": "Codex", "模型": "待确认", "输入 tokens": "待统计", "输出 tokens": "待统计", "其他 tokens": "待统计", "总 tokens": "待统计", "单价/计费口径": "待确认", "金额": "待统计", "币种": "USD/CNY 待确认", "数据来源": "平台 usage / 账单 / 手工记录", "实际/估算": "待统计", "备注": "不编造数据，生成后回填" },
+            { "日期/阶段": "评审优化", "平台/工具": "Claude", "模型": "待确认", "输入 tokens": "待统计", "输出 tokens": "待统计", "其他 tokens": "待统计", "总 tokens": "待统计", "单价/计费口径": "待确认", "金额": "待统计", "币种": "USD/CNY 待确认", "数据来源": "平台 usage / 账单 / 手工记录", "实际/估算": "待统计", "备注": "按实际使用平台回填" },
+            { "日期/阶段": "运行调用", "平台/工具": "Tuzi API", "模型": "待确认", "输入 tokens": "待统计", "输出 tokens": "待统计", "其他 tokens": "待统计", "总 tokens": "待统计", "单价/计费口径": "待确认", "金额": "待统计", "币种": "CNY 待确认", "数据来源": "接口 usage / Tuzi 账单", "实际/估算": "待统计", "备注": "价格以最新平台页面为准" }
+          ]
         },
         notes: ""
       };
     }
     function loadState() {
-      try { return Object.assign(defaultState(), JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")); }
+      try {
+        const defaults = defaultState();
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        return Object.assign(defaults, saved, {
+          sections: Object.assign({}, defaults.sections, saved.sections || {})
+        });
+      }
       catch (err) { return defaultState(); }
     }
     function saveState() {
@@ -366,10 +442,23 @@
       document.getElementById("saveStatus").textContent = "已保存 " + new Date().toLocaleTimeString();
       renderPreview();
     }
+    function applyTheme() {
+      document.documentElement.dataset.theme = state.theme === "dark" ? "dark" : "light";
+      document.getElementById("themeBtn").textContent = state.theme === "dark" ? "日间模式" : "夜间模式";
+    }
+    function toggleTheme() {
+      state.theme = state.theme === "dark" ? "light" : "dark";
+      applyTheme();
+      saveState();
+    }
     function bindField(id) {
       const el = document.getElementById(id);
       el.value = state[id] || "";
-      el.addEventListener("input", () => { state[id] = el.value; renderPreview(); });
+      el.addEventListener("input", () => {
+        state[id] = el.value;
+        if (id === "status") updateStatusHelp();
+        renderPreview();
+      });
       el.addEventListener("change", saveState);
     }
     function syncFormToState() {
@@ -377,6 +466,48 @@
         const el = document.getElementById(id);
         if (el) state[id] = el.value;
       });
+    }
+    function updateStatusHelp() {
+      const help = document.getElementById("statusHelp");
+      if (!help) return;
+      const info = statusGuide[state.status] || statusGuide["需求诊断中"];
+      help.innerHTML = `<strong>${escapeHtml(state.status)}：</strong>${escapeHtml(info.meaning)}<br><span>${escapeHtml(info.next)}</span>`;
+    }
+    function runDiagnosisReview() {
+      syncFormToState();
+      const issues = [];
+      const suggestions = [];
+      const mvpItems = splitLines(state.mvp);
+
+      if (!state.targetUsers.trim()) issues.push("目标用户还没写清：现在不知道这个需求到底服务谁。");
+      if (!state.problems.trim()) issues.push("核心问题/痛点还没写清：需要说明用户现在卡在哪里、频率和严重程度。");
+      if (!state.oneLine.trim()) issues.push("一句话定义缺失：需要用一句话说明为谁、在什么场景、解决什么问题。");
+      if (!state.successMetrics.trim()) issues.push("成功标志缺失：后续无法判断需求是否做对。");
+      if (!state.outOfScope.trim()) suggestions.push("建议补“本版不做”，否则 MVP 容易膨胀。");
+      if (!state.risks.trim()) suggestions.push("建议补风险与待确认项，尤其是账号、隐私、API、成本、版权和上线依赖。");
+      if (!mvpItems.length) issues.push("MVP 核心功能还没列出来：建议先控制在 1-3 个。");
+      if (mvpItems.length > 3) suggestions.push("MVP 功能超过 3 个，建议先砍到最能验证价值的 1-3 个。");
+      if (state.platform === "待确认") suggestions.push("平台形态还没定，会影响页面、权限、数据和开发排期。");
+      if (/AI|Claude|Tuzi|API/.test(state.aiWorkflow || "")) suggestions.push("涉及 AI/Claude/API 时，真实调用前要确认账号授权、费用、输入内容是否可上传。");
+
+      if (state.status === "需求诊断中") {
+        suggestions.push("当前适合做 Claude 审核：让它从用户视角、商业视角、技术视角检查需求是否成立。");
+      } else if (state.status === "概念待确认") {
+        suggestions.push("当前重点不是继续写细节，而是确认概念版：一句话定义、目标用户、核心场景、MVP、本版不做、成功指标。");
+      } else if (state.status === "PRD 草稿") {
+        suggestions.push("当前重点检查需求列表、字段、流程、验收标准是否能被开发和测试理解。");
+      } else if (state.status === "待评审") {
+        suggestions.push("当前可以请 Claude/评审人检查冲突、遗漏、边界、风险、成本和排期。");
+      }
+
+      const result = document.getElementById("reviewResult");
+      const issueHtml = issues.length
+        ? `<h3>需要先补的问题</h3><ul>${issues.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`
+        : `<h3>基础诊断完整度不错</h3><p class="hint">可以进入下一阶段，但仍建议做一次评审。</p>`;
+      const suggestionHtml = suggestions.length
+        ? `<h3 style="margin-top:10px">审核建议</h3><ul>${suggestions.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`
+        : "";
+      result.innerHTML = `${issueHtml}${suggestionHtml}<p class="hint" style="margin-top:10px">说明：这是本地规则版审核，不会联网。真实 Claude 审核需要你确认 API/账号、费用和内容上传风险。</p>`;
     }
     function renderChat() {
       const box = document.getElementById("chatBox");
@@ -615,6 +746,9 @@
         <h2>6. 项目计划</h2>${tableHtml(baseSections.find(x => x.id === "plan").columns, state.sections.plan, "plan")}
         <h2>7. 工作流设计</h2>
         ${editableBlock("aiWorkflow", state.aiWorkflow || "待确认")}
+        <h3>7.1 生成过程 token 与费用统计</h3>
+        ${costSummaryHtml()}
+        ${tableHtml(baseSections.find(x => x.id === "costs").columns, state.sections.costs, "costs")}
         <h2>8. 风险与待确认</h2>
         ${editableBlock("risks", state.risks || "待确认")}
         <h2>9. 对话记录摘要</h2>
@@ -637,6 +771,32 @@
       }).join("");
       const add = editable ? `<div class="actions preview-table-actions"><button data-preview-add-row="${escapeAttr(sectionId)}">增加行</button></div>` : "";
       return `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>${add}`;
+    }
+    function costSummary() {
+      const rows = state.sections.costs || [];
+      return rows.reduce((summary, row) => {
+        summary.input += parseNumber(row["输入 tokens"]);
+        summary.output += parseNumber(row["输出 tokens"]);
+        summary.other += parseNumber(row["其他 tokens"]);
+        summary.total += parseNumber(row["总 tokens"]) || parseNumber(row["输入 tokens"]) + parseNumber(row["输出 tokens"]) + parseNumber(row["其他 tokens"]);
+        const currency = String(row["币种"] || "待确认").trim() || "待确认";
+        summary.amounts[currency] = (summary.amounts[currency] || 0) + parseNumber(row["金额"]);
+        return summary;
+      }, { input: 0, output: 0, other: 0, total: 0, amounts: {} });
+    }
+    function costSummaryHtml() {
+      const summary = costSummary();
+      const amountText = Object.entries(summary.amounts)
+        .filter(([, value]) => value > 0)
+        .map(([currency, value]) => `${currency} ${formatNumber(value)}`)
+        .join(" / ") || "待统计";
+      return `<div class="meta-grid">
+        <div class="metric"><b>输入 tokens</b><span>${formatNumber(summary.input) || "待统计"}</span></div>
+        <div class="metric"><b>输出 tokens</b><span>${formatNumber(summary.output) || "待统计"}</span></div>
+        <div class="metric"><b>总 tokens</b><span>${formatNumber(summary.total) || "待统计"}</span></div>
+        <div class="metric"><b>总费用</b><span>${escapeHtml(amountText)}</span></div>
+      </div>
+      <p class="hint">这里统计的是已填入的数据。没有平台 usage、账单或接口返回值时，必须标为“待统计/待确认”。</p>`;
     }
     function bindPreviewEdits() {
       const preview = document.getElementById("preview");
@@ -685,6 +845,7 @@
         "## 5. 验收标准", markdownTable(baseSections.find(x => x.id === "acceptance").columns, state.sections.acceptance), "",
         "## 6. 项目计划", markdownTable(baseSections.find(x => x.id === "plan").columns, state.sections.plan), "",
         "## 7. 工作流设计", state.aiWorkflow || "待确认", "",
+        "### 7.1 生成过程 token 与费用统计", costSummaryMarkdown(), markdownTable(baseSections.find(x => x.id === "costs").columns, state.sections.costs), "",
         "## 8. 风险与待确认", state.risks || "待确认", "",
         "## 9. 对话记录摘要", state.notes || "待补充", ""
       ];
@@ -694,6 +855,23 @@
       const clean = value => String(value || "").replace(/\|/g, "\\|").replace(/\n/g, "<br>");
       return ["| " + columns.join(" | ") + " |", "| " + columns.map(() => "---").join(" | ") + " |"]
         .concat((rows || []).map(row => "| " + columns.map(col => clean(row[col])).join(" | ") + " |")).join("\n");
+    }
+    function costSummaryMarkdown() {
+      const summary = costSummary();
+      const amountText = Object.entries(summary.amounts)
+        .filter(([, value]) => value > 0)
+        .map(([currency, value]) => `${currency} ${formatNumber(value)}`)
+        .join(" / ") || "待统计";
+      return [
+        "| 指标 | 数值 |",
+        "| --- | --- |",
+        `| 输入 tokens | ${formatNumber(summary.input) || "待统计"} |`,
+        `| 输出 tokens | ${formatNumber(summary.output) || "待统计"} |`,
+        `| 总 tokens | ${formatNumber(summary.total) || "待统计"} |`,
+        `| 总费用 | ${amountText} |`,
+        "",
+        "> 没有平台 usage、账单或接口返回值时，必须标为“待统计/待确认”。"
+      ].join("\n");
     }
     function exportHtml() {
       saveState();
@@ -719,6 +897,14 @@
     }
     function splitLines(value) { return String(value || "").split(/\n|；|;/).map(x => x.trim()).filter(Boolean); }
     function fileName(value) { return String(value || "PRD").replace(/[\\/:*?"<>|]+/g, "_").trim() || "PRD"; }
+    function parseNumber(value) {
+      const text = String(value || "").replace(/,/g, "");
+      const match = text.match(/-?\d+(\.\d+)?/);
+      return match ? Number(match[0]) : 0;
+    }
+    function formatNumber(value) {
+      return value ? Number(value.toFixed(6)).toLocaleString("zh-CN") : "";
+    }
     function escapeHtml(value) {
       return String(value || "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
     }
@@ -729,6 +915,8 @@
       renderChat();
       renderQuestions();
       renderEditors();
+      applyTheme();
+      updateStatusHelp();
       renderPreview();
       document.getElementById("sendBtn").addEventListener("click", addChat);
       document.getElementById("chatInput").addEventListener("keydown", event => {
@@ -741,6 +929,8 @@
         renderPreview();
       });
       document.getElementById("saveBtn").addEventListener("click", saveState);
+      document.getElementById("themeBtn").addEventListener("click", toggleTheme);
+      document.getElementById("diagnosisReviewBtn").addEventListener("click", runDiagnosisReview);
       document.getElementById("generateBtn").addEventListener("click", generateFromForm);
       document.getElementById("fillSampleBtn").addEventListener("click", fillSample);
       document.getElementById("exportHtmlBtn").addEventListener("click", exportHtml);
