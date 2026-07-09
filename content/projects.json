@@ -273,8 +273,8 @@
     "title": "视频学习助手",
     "category": "learning",
     "status": "live",
-    "shortDesc": "把 B 站视频片段转成逐字稿、人物区分、学习纲要、脑图和 PPT 大纲的 Web 学习工具。",
-    "longDesc": "这是一个 AI 学习工具 PRD 项目。目标是解决看 B 站课程、访谈、讲座时“线性观看慢、重点难定位、复习成本高”的问题。MVP 支持 B 站链接与时间区间输入、视频上传兜底、原始逐字稿、整理稿、说话人区分、时间戳跳转、Markdown 导出、学习纲要、Mermaid 脑图和 PPT 大纲。面试时适合讲产品范围控制、合规边界、本地历史和 AI 成本风险。",
+    "shortDesc": "把 B 站、网课网页和上传视频转成逐字稿、学习纲要、脑图、PPT 大纲，并支持独立网页查看的 Web 学习工具。",
+    "longDesc": "这是一个本地优先的 AI 视频学习工具。目标是解决看 B 站课程、网课回放、访谈和讲座时“线性观看慢、重点难定位、复习成本高”的问题。当前版本支持 B 站链接、通用网页视频、EasyClass/乐学云回放解析、视频上传拖拽兜底、原始逐字稿、整理稿、说话人区分、时间戳跳转、Markdown 导出、学习纲要、Mermaid 脑图、PPT 大纲、独立网页查看和样式化 HTML 导出。后端增加 ffmpeg 压缩/切片，解决 ASR 网关 413 大文件限制；LLM 和 ASR 可复用 OpenAI 兼容 API 配置，并显示 Token 与预估成本。面试时适合讲产品范围控制、合规边界、本地历史、长视频降本和 AI 成本风险。",
     "tags": [
       "视频学习",
       "AI学习工具",
@@ -283,24 +283,29 @@
       "知识整理"
     ],
     "tech": [
-      "PRD",
-      "ASR",
-      "Diarization",
+      "Vue 3 + Vite",
+      "Express",
+      "yt-dlp",
+      "ffmpeg",
+      "Whisper-compatible ASR",
+      "OpenAI-compatible API",
       "IndexedDB",
       "Markdown 导出",
-      "Mermaid"
+      "Mermaid",
+      "HTML 导出"
     ],
     "cover": "",
     "links": {
       "demo": "/projects/bilibili-ai-learning-assistant/demo/index.html",
-      "demoNote": "打开从 D:/AI/AI训练演示/视频学习/B站视频AI学习助手 构建产物复制来的前端演示页；需要真实转写时再连接后端服务。"
+      "demoNote": "打开从 D:/AI/AI训练演示/视频学习/B站视频AI学习助手 最新构建产物复制来的前端演示页；静态站可看界面和本地历史，真实转写、网页视频解析、ASR 和 LLM 整理需要启动原项目后端 npm run dev:all。"
     },
     "highlights": [
-      "真实项目演示：已把视频学习项目 dist 前端搬进个人站，面试官可直接打开界面。",
-      "强调合规：不绕过 B 站权限，不读取 Cookie，不处理会员/付费限制。",
-      "学习闭环：视频 → 文字稿 → 整理稿 → 纲要 → 脑图 → PPT 大纲。",
-      "本地优先：历史记录和任务结果默认保存在浏览器 IndexedDB。",
-      "开发边界：静态演示可看界面；真实转写需要连接原项目后端服务。"
+      "真实项目演示：已把视频学习项目最新 dist 前端搬进个人站，面试官可直接打开界面。",
+      "输入方式更完整：支持 B 站链接、通用网页视频、EasyClass/乐学云回放解析，以及拖拽上传视频兜底。",
+      "学习闭环：视频 → 原始逐字稿 → 整理稿 → 学习纲要 → 脑图 → PPT 大纲 → 独立网页查看/导出。",
+      "本地优先：历史记录和任务结果默认保存在浏览器 IndexedDB，任务可改名，Markdown 和样式化 HTML 可导出。",
+      "工程兜底：后端用 ffmpeg 压缩/切片规避 ASR 413，大模型不可用时可基于真实转写片段生成本地纲要和脑图。",
+      "合规边界：默认不读取 Cookie；登录网页视频需用户主动提供浏览器 Cookie 或 cookies.txt，会员/付费权限不做绕过。"
     ],
     "priority": 84,
     "actions": [
