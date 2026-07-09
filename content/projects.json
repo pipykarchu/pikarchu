@@ -227,31 +227,37 @@
     "id": "prd-generator",
     "title": "PRD Writer Skill",
     "category": "work",
-    "status": "wip",
-    "shortDesc": "把想法、MVP、工作流和商业验证整理成标准 PRD，并输出配套网页、SOP 和成本口径。",
-    "longDesc": "这是我最近沉淀的核心 Skill。它不是简单生成 PRD，而是先做需求访谈和概念对齐，再维护项目命名的 PRD Markdown，必要时输出皮玺玉风格 PRD 网页，并补充 AI 协作工作流、成本、产出和 ROI 口径。最近已经用它产出了个人站 PRD、B站视频学习助手 PRD、福瑞商业 PRD、漫剧项目 PRD 等多个项目。",
+    "status": "live",
+    "shortDesc": "把想法、MVP、工作流和商业验证整理成标准 PRD；新增交互式网页工作台，可对话收集需求、填表补充、编辑表格、增加行并导出网页。",
+    "longDesc": "这是我最近沉淀的核心 Skill。它不是简单生成 PRD，而是先做需求访谈和概念对齐，再维护项目命名的 PRD Markdown。最新版本在项目名确定后会先生成一个本地交互式 PRD 工作台网页，支持对话记录需求、填表/选择题补充、编辑 PRD 表格、增加行、保存本地草稿，并导出 Markdown、JSON 和 standalone HTML。面试时可以直接打开演示页，说明我如何把一次性 prompt 沉淀成可复用的产品化工作流。",
     "tags": [
       "PRD",
       "产品经理",
       "Skill",
       "需求分析",
-      "AI协作"
+      "AI协作",
+      "交互式工作台"
     ],
     "tech": [
       "Codex Skill",
-      "结构化 Prompt",
+      "Python 静态页生成",
       "Markdown",
       "HTML PRD",
+      "localStorage",
       "工作流模板"
     ],
     "cover": "",
     "links": {
-      "demo": "/docs/prd-writer-workflow-framework-demo.html",
-      "demoNote": "打开 PRD Writer Skill 模拟生成的工作流框架 PRD 网页，演示需求拆解、范围、流程、验收和风险。"
+      "demo": "/projects/prd-workbench-demo/index.html",
+      "demoNote": "打开交互式 PRD 工作台演示页；页面为静态单文件，不联网、不调用 API，草稿只保存在当前浏览器 localStorage。"
     },
     "actions": [
       {
-        "label": "查看 PRD 网页演示",
+        "label": "打开 PRD 工作台演示",
+        "href": "/projects/prd-workbench-demo/index.html"
+      },
+      {
+        "label": "查看旧版 PRD 网页演示",
         "href": "/docs/prd-writer-workflow-framework-demo.html"
       },
       {
@@ -260,13 +266,14 @@
       }
     ],
     "highlights": [
-      "演示入口：可打开一份由 PRD Writer Skill 模拟生成的工作流框架 PRD 网页。",
-      "已验证产物：个人站、B站视频学习助手、福瑞商业、娃娃仙 PRD 都由它驱动。",
-      "不直接硬写完整 PRD，先做概念对齐，避免 AI 把模糊想法写成假确定性。",
-      "支持工作流设计：默认带入 Codex + Claude + Tuzi API 的协作分工。",
-      "适合讲 Prompt 工程：把“会写提示词”升级成“会设计可复用工作流”。"
+      "面试演示入口：打开网页即可看到对话需求、填表补充、PRD 表格编辑和导出按钮。",
+      "产品化思路：把“帮我写 PRD”拆成需求访谈、概念对齐、结构化补充、可编辑 PRD 和可导出交付物。",
+      "交互能力：支持选择项目类型、平台形态、AI 工作流，表格可直接改字并增加/删除行。",
+      "本地优先：演示页不联网、不调用外部 API，草稿保存在浏览器 localStorage，适合公开面试。",
+      "输出闭环：同一页面可导出 Markdown、JSON 和 standalone HTML，方便后续交给 Codex 继续迭代。",
+      "工作流意识：默认带入 Codex + Claude + Tuzi API 的协作分工，同时把价格、模型能力和 ROI 标为待确认。"
     ],
-    "priority": 86
+    "priority": 92
   },
   {
     "id": "bilibili-ai-learning-assistant",
