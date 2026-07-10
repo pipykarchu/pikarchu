@@ -5,141 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Studio · 求职作战中心 PRD</title>
   <style>
-    :root {
-      --bg: #fafaf7;
-      --paper: #ffffff;
-      --paper-soft: #f5f3ee;
-      --text: #1c1c1e;
-      --text-secondary: #666872;
-      --text-tertiary: #9698a3;
-      --line: #e8e6e0;
-      --purple: #a78bfa;
-      --pink: #f472b6;
-      --teal: #14b8a6;
-      --green: #34d399;
-      --amber: #fbbf24;
-      --red: #ef4444;
-      --brand: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
-      --shadow: 0 8px 24px rgba(167,139,250,.18);
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.8), rgba(250,250,247,.96) 42%, var(--bg)),
-        linear-gradient(135deg, rgba(167,139,250,.13), transparent 40%),
-        linear-gradient(225deg, rgba(20,184,166,.11), transparent 42%);
-      line-height: 1.68;
-    }
-    a { color: inherit; }
-    .shell { max-width: 1200px; margin: 0 auto; padding: 28px 18px 56px; }
-    .hero {
-      display: grid;
-      gap: 18px;
-      padding: 26px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: color-mix(in srgb, var(--paper) 92%, transparent);
-      box-shadow: var(--shadow);
-      margin-bottom: 18px;
-    }
-    .eyebrow { color: var(--text-tertiary); font-size: 12px; font-weight: 800; text-transform: uppercase; }
-    h1 { margin: 0; font-size: 34px; line-height: 1.18; letter-spacing: 0; }
-    h2 { margin: 0 0 12px; font-size: 22px; letter-spacing: 0; }
-    h3 { margin: 18px 0 8px; font-size: 17px; }
-    p { margin: 0 0 12px; color: var(--text-secondary); }
-    ul { margin: 0; padding-left: 20px; color: var(--text-secondary); }
-    li + li { margin-top: 6px; }
-    .brand-text { background: var(--brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .subtitle { max-width: 820px; font-size: 16px; }
-    .chips, .metrics, .actions { display: flex; flex-wrap: wrap; gap: 10px; }
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      min-height: 28px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(167,139,250,.12);
-      color: #6d4cc2;
-      border: 1px solid rgba(167,139,250,.18);
-      font-size: 13px;
-      font-weight: 700;
-    }
-    .metric {
-      min-width: 132px;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--paper);
-    }
-    .metric strong { display: block; font-size: 21px; line-height: 1.2; }
-    .metric span { color: var(--text-tertiary); font-size: 12px; }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 38px;
-      padding: 9px 13px;
-      border-radius: 8px;
-      background: var(--brand);
-      color: white;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-    }
-    .layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 18px; align-items: start; }
-    .toc {
-      position: sticky;
-      top: 16px;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: color-mix(in srgb, var(--paper) 92%, transparent);
-    }
-    .toc strong { display: block; margin-bottom: 8px; font-size: 14px; }
-    .toc a { display: block; padding: 7px 0; color: var(--text-secondary); text-decoration: none; font-size: 13px; }
-    .content { display: grid; gap: 14px; }
-    section {
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--paper);
-    }
-    .callout {
-      padding: 12px 14px;
-      border-radius: 8px;
-      background: rgba(20,184,166,.08);
-      border: 1px solid rgba(20,184,166,.16);
-      color: var(--text-secondary);
-      margin-bottom: 12px;
-    }
-    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; margin: 10px 0 14px; }
-    table { width: 100%; border-collapse: collapse; min-width: 760px; font-size: 14px; }
-    th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-    th { background: var(--paper-soft); color: var(--text); font-weight: 800; }
-    tr:last-child td { border-bottom: 0; }
-    pre {
-      margin: 10px 0 0;
-      overflow-x: auto;
-      padding: 14px;
-      border-radius: 8px;
-      border: 1px solid var(--line);
-      background: #111116;
-      color: #e7e7ef;
-      font-size: 13px;
-      line-height: 1.7;
-    }
-    @media (max-width: 860px) {
-      .shell { padding: 18px 14px 42px; }
-      .layout { grid-template-columns: 1fr; }
-      .toc { position: static; }
-      h1 { font-size: 28px; }
-      section, .hero { padding: 18px; }
-      .metric { flex: 1 1 130px; }
-    }
+    :root { --bg:#fafaf7; --paper:#fff; --paper-soft:#f5f3ee; --text:#1c1c1e; --text-secondary:#666872; --text-tertiary:#9698a3; --line:#e8e6e0; --purple:#a78bfa; --pink:#f472b6; --teal:#14b8a6; --brand:linear-gradient(135deg,#a78bfa 0%,#f472b6 100%); --shadow:0 8px 24px rgba(167,139,250,.18); }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;color:var(--text);background:linear-gradient(180deg,rgba(255,255,255,.82),rgba(250,250,247,.96) 42%,var(--bg)),linear-gradient(135deg,rgba(167,139,250,.13),transparent 40%),linear-gradient(225deg,rgba(20,184,166,.11),transparent 42%);line-height:1.68} a{color:inherit}.shell{max-width:1220px;margin:0 auto;padding:28px 18px 56px}.hero{display:grid;gap:18px;padding:26px;border:1px solid var(--line);border-radius:8px;background:color-mix(in srgb,var(--paper) 92%,transparent);box-shadow:var(--shadow);margin-bottom:18px}.eyebrow{color:var(--text-tertiary);font-size:12px;font-weight:800;text-transform:uppercase} h1{margin:0;font-size:34px;line-height:1.18;letter-spacing:0} h2{margin:0 0 12px;font-size:22px;letter-spacing:0} h3{margin:18px 0 8px;font-size:17px} p{margin:0 0 12px;color:var(--text-secondary)} ul{margin:0 0 14px;padding-left:20px;color:var(--text-secondary)} li+li{margin-top:6px}.brand-text{background:var(--brand);-webkit-background-clip:text;background-clip:text;color:transparent}.subtitle{max-width:860px;font-size:16px}.chips,.metrics,.actions{display:flex;flex-wrap:wrap;gap:10px}.chip{display:inline-flex;align-items:center;min-height:28px;padding:4px 10px;border-radius:999px;background:rgba(167,139,250,.12);color:#6d4cc2;border:1px solid rgba(167,139,250,.18);font-size:13px;font-weight:700}.metric{min-width:132px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--paper)}.metric strong{display:block;font-size:21px;line-height:1.2}.metric span{color:var(--text-tertiary);font-size:12px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:9px 13px;border-radius:8px;background:var(--brand);color:white;text-decoration:none;font-weight:700;font-size:14px}.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px;align-items:start}.toc{position:sticky;top:16px;padding:14px;border:1px solid var(--line);border-radius:8px;background:color-mix(in srgb,var(--paper) 92%,transparent);max-height:calc(100vh - 32px);overflow:auto}.toc strong{display:block;margin-bottom:8px;font-size:14px}.toc a{display:block;padding:7px 0;color:var(--text-secondary);text-decoration:none;font-size:13px}.content{display:grid;gap:14px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding-bottom:20px}.content>h2{padding:20px 20px 0;border-top:1px solid var(--line)}.content>h2:first-child{border-top:0}.content>h3,.content>p,.content>ul{padding-left:20px;padding-right:20px}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:10px 20px 14px;background:var(--paper)} table{width:100%;border-collapse:collapse;min-width:760px;font-size:14px} th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top} th{background:var(--paper-soft);color:var(--text);font-weight:800} tr:last-child td{border-bottom:0} pre{margin:10px 20px 14px;overflow-x:auto;padding:14px;border-radius:8px;border:1px solid var(--line);background:#111116;color:#e7e7ef;font-size:13px;line-height:1.7} code{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+    @media (max-width:860px){.shell{padding:18px 14px 42px}.layout{grid-template-columns:1fr}.toc{position:static;max-height:none}h1{font-size:28px}.hero{padding:18px}.metric{flex:1 1 130px}.content>h2,.content>h3,.content>p,.content>ul{padding-left:14px;padding-right:14px}.table-wrap,pre{margin-left:14px;margin-right:14px}table{min-width:680px}}
   </style>
 </head>
 <body>
@@ -147,157 +15,170 @@
     <header class="hero">
       <div class="eyebrow">PRD Writer Skill Output</div>
       <h1><span class="brand-text">Studio · 求职作战中心 PRD</span></h1>
-      <p class="subtitle">面向求职流程的 AI Agent 工作台 PRD：把个人档案、路径推演、JD 决策、简历定制、面试演练、学习作战和作品集展示整理成可复盘、可演示、可维护的产品闭环。</p>
-      <div class="chips">
-        <span class="chip">v0.1</span>
-        <span class="chip">状态：待评审</span>
-        <span class="chip">虚拟档案演示</span>
-        <span class="chip">PRD Writer Skill</span>
-      </div>
-      <div class="metrics">
-        <div class="metric"><strong>8</strong><span>核心需求</span></div>
-        <div class="metric"><strong>7</strong><span>运行节点</span></div>
-        <div class="metric"><strong>6</strong><span>埋点事件</span></div>
-        <div class="metric"><strong>0</strong><span>公开真实隐私</span></div>
-      </div>
-      <div class="actions">
-        <a class="btn" href="../projects/job-war-room-demo/index.html">打开求职作战演示</a>
-        <a class="btn" href="../">返回个人站</a>
-      </div>
+      <p class="subtitle">面向求职流程的 AI Agent 工作台 PRD：把需求诊断、概念对齐、MVP 范围、AI/Claude 评审、成本 ROI、隐私边界和公开演示链路整理成可评审、可追踪、可迭代的产品文档。</p>
+      <div class="chips"><span class="chip">v0.2</span><span class="chip">状态：待评审</span><span class="chip">更新：2026-07-10</span><span class="chip">虚拟档案演示</span></div>
+      <div class="metrics"><div class="metric"><strong>9</strong><span>核心需求</span></div><div class="metric"><strong>7</strong><span>埋点事件</span></div><div class="metric"><strong>1</strong><span>AI 评审质量门</span></div><div class="metric"><strong>0</strong><span>公开真实隐私</span></div></div>
+      <div class="actions"><a class="btn" href="../projects/job-war-room-demo/index.html">打开求职作战演示</a><a class="btn" href="../">返回个人站</a></div>
     </header>
-
-    <div class="layout">
-      <nav class="toc">
-        <strong>目录</strong>
-        <a href="#doc">0. 文档说明</a>
-        <a href="#goal">1. 背景与目标</a>
-        <a href="#scope">2. 范围定义</a>
-        <a href="#solution">3. 产品方案</a>
-        <a href="#rules">4. 全局规则</a>
-        <a href="#requirements">5. 需求列表</a>
-        <a href="#details">6. 需求详情</a>
-        <a href="#workflow">10. 工作流设计</a>
-        <a href="#risk">11. 风险与待确认</a>
-      </nav>
-
-      <div class="content">
-        <section id="doc">
-          <h2>0. 文档说明</h2>
-          <div class="table-wrap"><table><tbody>
-            <tr><th>文档版本</th><td>v0.1</td><th>创建日期</th><td>2026-07-08</td></tr>
-            <tr><th>作者</th><td>皮玺玉 / Codex PRD Writer Skill</td><th>当前状态</th><td>待评审</td></tr>
-            <tr><th>用途</th><td colspan="3">作为个人站“求职作战中心”项目的面试演示 PRD，说明产品定位、MVP 范围、工作流、验收标准和风险边界。</td></tr>
-          </tbody></table></div>
-          <div class="table-wrap"><table><thead><tr><th>版本</th><th>日期</th><th>修订内容</th><th>原因</th></tr></thead><tbody>
-            <tr><td>v0.1</td><td>2026-07-08</td><td>初版创建，补充 PRD 网页演示入口</td><td>个人站求职作战项目需要可打开 PRD</td></tr>
-          </tbody></table></div>
-        </section>
-
-        <section id="goal">
-          <h2>1. 背景与目标</h2>
-          <p>求职过程不是一次性写简历，而是持续整理信息、判断岗位、定制材料、准备面试、复盘反馈的复杂链路。求职作战中心把这些动作整理成本地优先的 AI Agent 工作台，让求职材料、决策过程和交付产物可追踪、可复用、可演示。</p>
-          <div class="table-wrap"><table><thead><tr><th>用户类型</th><th>核心场景</th><th>主要痛点</th></tr></thead><tbody>
-            <tr><td>转岗/求职中的产品经理</td><td>看 JD、改简历、准备面试</td><td>简历和项目讲法无法稳定匹配岗位</td></tr>
-            <tr><td>AI 工具实践者</td><td>向面试官展示 AI 产品和工程落地</td><td>项目很多但难讲成一条业务链路</td></tr>
-            <tr><td>面试官/HR</td><td>打开 Demo 和 PRD 看项目结构</td><td>不想看零散截图和难复现本地服务</td></tr>
-          </tbody></table></div>
-        </section>
-
-        <section id="scope">
-          <h2>2. 范围定义</h2>
-          <div class="callout">一句话定义：在本地优先和隐私隔离前提下，为求职者提供个人档案、路径推演、JD 决策、简历定制、面试演练、学习作战和作品集展示的 AI Agent 工作台。</div>
-          <div class="table-wrap"><table><thead><tr><th>优先级</th><th>功能</th><th>解决的问题</th><th>说明</th></tr></thead><tbody>
-            <tr><td>Must</td><td>个人档案与素材库</td><td>避免每次重新介绍自己</td><td>保存经历、项目、技能、偏好和约束。</td></tr>
-            <tr><td>Must</td><td>JD 解析与决策建议</td><td>避免盲投和 AI 编造</td><td>解析岗位要求、匹配证据、风险点和行动建议。</td></tr>
-            <tr><td>Must</td><td>简历与面试产物生成</td><td>把判断转成可投递材料</td><td>输出简历建议、面试手册、STAR 讲法。</td></tr>
-            <tr><td>Should</td><td>学习作战与作品集展示</td><td>把缺口转行动，把项目转证据</td><td>输出学习任务和公开讲法。</td></tr>
-          </tbody></table></div>
-          <div class="table-wrap"><table><thead><tr><th>本版不做</th><th>原因</th><th>后续计划</th></tr></thead><tbody>
-            <tr><td>自动投递岗位</td><td>涉及平台账号、反爬、隐私和误投风险</td><td>仅保留人工确认后的外部跳转方向。</td></tr>
-            <tr><td>真实公司信息自动断言</td><td>容易生成过期或错误事实</td><td>需要来源链接和人工确认。</td></tr>
-            <tr><td>多用户 SaaS 权限体系</td><td>MVP 是本地优先个人工作台</td><td>后续评估账号、同步和团队版。</td></tr>
-          </tbody></table></div>
-        </section>
-
-        <section id="solution">
-          <h2>3. 产品方案</h2>
-          <pre>flowchart TD
-  A["个人档案"] --> B["路径推演"]
-  A --> C["JD 解析"]
-  C --> D["决策建议"]
-  D --> E["简历定制"]
-  D --> F["面试手册"]
-  F --> G["面试演练"]
-  D --> H["学习作战"]
-  A --> I["作品集展示"]
-  I --> J["公开 Demo / PRD"]</pre>
-          <div class="table-wrap"><table><thead><tr><th>对象</th><th>核心字段</th><th>用途</th></tr></thead><tbody>
-            <tr><td>Profile</td><td>经历、项目、技能、偏好、限制</td><td>作为所有生成任务的事实来源。</td></tr>
-            <tr><td>JD</td><td>岗位、公司、职责、要求、来源时间</td><td>用于解析和匹配。</td></tr>
-            <tr><td>Decision</td><td>匹配度、证据、风险、行动建议</td><td>帮用户决定是否投入。</td></tr>
-            <tr><td>Interview Pack</td><td>自我介绍、项目讲法、STAR、追问</td><td>形成面试准备包。</td></tr>
-          </tbody></table></div>
-        </section>
-
-        <section id="rules">
-          <h2>4. 全局规则</h2>
-          <ul>
-            <li>真实档案和求职材料优先本地保存，不默认上传公开站点。</li>
-            <li>公开 Demo 必须使用虚拟档案和只读数据。</li>
-            <li>所有岗位和公司事实必须说明来源或标记待确认。</li>
-            <li>简历产物要说明“为什么这样改”，不是只给结果。</li>
-            <li>模型失败时不返回硬编码假结果，必须提示失败或降级。</li>
-          </ul>
-        </section>
-
-        <section id="requirements">
-          <h2>5. 需求列表</h2>
-          <div class="table-wrap"><table><thead><tr><th>编号</th><th>模块</th><th>需求</th><th>优先级</th><th>说明</th></tr></thead><tbody>
-            <tr><td>R1</td><td>个人档案</td><td>建立事实来源和素材库</td><td>P0</td><td>所有 AI 输出都必须引用或基于档案。</td></tr>
-            <tr><td>R2</td><td>JD 解析</td><td>结构化岗位信息和要求</td><td>P0</td><td>支持文本输入，链接解析视环境可用。</td></tr>
-            <tr><td>R3</td><td>决策建议</td><td>输出匹配证据、风险和行动建议</td><td>P0</td><td>不做“必过”预测。</td></tr>
-            <tr><td>R4</td><td>简历定制</td><td>生成面向目标岗位的修改建议</td><td>P0</td><td>保留版本和修改理由。</td></tr>
-            <tr><td>R7</td><td>演示模式</td><td>使用虚拟档案和只读数据公开演示</td><td>P0</td><td>不暴露真实隐私。</td></tr>
-            <tr><td>R8</td><td>作品集展示</td><td>输出公开项目讲法和 Demo 链接</td><td>P1</td><td>连接个人站。</td></tr>
-          </tbody></table></div>
-        </section>
-
-        <section id="details">
-          <h2>6. 需求详情</h2>
-          <h3>R1. 个人档案与素材库</h3>
-          <p>档案字段分为已确认事实、可包装表达和待确认材料。AI 不得把待确认材料直接写入最终简历；演示档案与真实档案必须隔离。</p>
-          <h3>R2. JD 解析与决策建议</h3>
-          <p>JD 输出必须区分原文信息、系统推断和待确认。匹配建议必须引用档案里的项目或经历作为证据，不输出录取概率、薪资预测等无来源结论。</p>
-          <h3>R3. 简历定制与面试演练</h3>
-          <p>简历建议必须包含修改前后方向和修改理由；面试手册覆盖自我介绍、项目 STAR、风险问题和反问建议。</p>
-        </section>
-
-        <section id="workflow">
-          <h2>10. 工作流设计</h2>
-          <div class="table-wrap"><table><thead><tr><th>角色/工具</th><th>主要用途</th><th>输出</th><th>注意事项</th></tr></thead><tbody>
-            <tr><td>Codex</td><td>实现、调试、测试、PRD 页面生成、个人站入口更新</td><td>代码、文档、构建验证、push</td><td>修改中文文件必须避免乱码。</td></tr>
-            <tr><td>Claude</td><td>PRD / 架构 / 复杂逻辑复核</td><td>评审建议</td><td>是否使用待确认。</td></tr>
-            <tr><td>Tuzi API</td><td>产品运行时模型网关</td><td>结构化解析、总结、改写</td><td>模型、价格、tools 支持均待确认。</td></tr>
-            <tr><td>Vercel / GitHub Pages</td><td>公开演示承载</td><td>线上 Demo / PRD</td><td>后端 API 与静态站能力边界需说明。</td></tr>
-          </tbody></table></div>
-          <div class="table-wrap"><table><thead><tr><th>产出类型</th><th>预估产出</th><th>验收标准</th><th>状态</th></tr></thead><tbody>
-            <tr><td>文档</td><td>PRD Markdown + HTML</td><td>可打开、可讲、可维护</td><td>本次已交付</td></tr>
-            <tr><td>功能</td><td>个人站项目入口</td><td>项目弹窗可打开 PRD 和 Demo</td><td>本次已交付</td></tr>
-            <tr><td>演示资产</td><td>GitHub Pages 站内虚拟档案 Demo 链路</td><td>不暴露真实隐私，面试官可直接打开</td><td>已设为主入口</td></tr>
-          </tbody></table></div>
-        </section>
-
-        <section id="risk">
-          <h2>11. 风险与待确认</h2>
-          <div class="table-wrap"><table><thead><tr><th>编号</th><th>风险/问题</th><th>影响</th><th>处理建议</th><th>状态</th></tr></thead><tbody>
-            <tr><td>Q1</td><td>求职材料包含个人隐私</td><td>公开演示泄露真实经历或联系方式</td><td>所有公开 Demo 使用虚拟档案</td><td>已处理</td></tr>
-            <tr><td>Q2</td><td>AI 生成不真实公司事实</td><td>简历或面试话术失真</td><td>公司事实必须有来源或标记待确认</td><td>已处理</td></tr>
-            <tr><td>Q3</td><td>模型能力和价格变化</td><td>成本估算失准，功能不可用</td><td>发布前实时核验</td><td>待确认</td></tr>
-            <tr><td>Q4</td><td>外部 Demo 不稳定或 Vercel 外链被重置</td><td>面试现场打不开</td><td>主入口使用 GitHub Pages 站内演示，Vercel 仅保留为备用外链</td><td>已处理</td></tr>
-          </tbody></table></div>
-        </section>
-      </div>
-    </div>
+    <div class="layout"><nav class="toc"><strong>目录</strong><a href="#sec-29-0-文档说明">0. 文档说明</a>
+<a href="#sec-2504-1-背景与目标">1. 背景与目标</a>
+<a href="#sec-4674-2-范围定义">2. 范围定义</a>
+<a href="#sec-7150-3-产品方案">3. 产品方案</a>
+<a href="#sec-9015-4-全局规则">4. 全局规则</a>
+<a href="#sec-10168-5-需求列表">5. 需求列表</a>
+<a href="#sec-11381-6-需求详情">6. 需求详情</a>
+<a href="#sec-14119-7-非功能需求">7. 非功能需求</a>
+<a href="#sec-14779-8-埋点与数据">8. 埋点与数据</a>
+<a href="#sec-15729-9-项目计划">9. 项目计划</a>
+<a href="#sec-16644-10-工作流设计">10. 工作流设计</a>
+<a href="#sec-22603-11-风险与待确认">11. 风险与待确认</a>
+<a href="#sec-23615-12-附录">12. 附录</a></nav><article class="content"><h2 id="sec-29-0-文档说明">0. 文档说明</h2>
+<div class="table-wrap"><table><thead><tr><th>项目</th><th>内容</th></tr></thead><tbody><tr><td>文档版本</td><td>v0.2</td></tr><tr><td>创建日期</td><td>2026-07-08</td></tr><tr><td>更新日期</td><td>2026-07-10</td></tr><tr><td>作者</td><td>皮玺玉 / Codex PRD Writer Skill</td></tr><tr><td>当前状态</td><td>待评审</td></tr><tr><td>文档用途</td><td>作为个人站“求职作战中心”项目的面试演示 PRD，说明产品定位、需求诊断、概念对齐、MVP 范围、工作流、验收标准、AI 评审和风险边界。</td></tr></tbody></table></div>
+<h3>0.1 修订记录</h3>
+<div class="table-wrap"><table><thead><tr><th>版本</th><th>日期</th><th>修订人</th><th>修订内容</th><th>修订原因</th><th>审核人</th></tr></thead><tbody><tr><td>v0.1</td><td>2026-07-08</td><td>Codex</td><td>初版创建，补充 PRD 网页演示入口</td><td>个人站求职作战项目需要可打开 PRD</td><td>皮玺玉待确认</td></tr><tr><td>v0.2</td><td>2026-07-10</td><td>Codex</td><td>按新版 PRD Writer Skill 补充需求诊断、概念版对齐、AI/Claude 评审、成本 ROI、运行规则和风险边界</td><td>面试演示需要从“功能说明”升级为“可评审、可追踪、可迭代”的产品 PRD</td><td>Claude 待评审</td></tr></tbody></table></div>
+<h3>0.2 名词术语</h3>
+<div class="table-wrap"><table><thead><tr><th>词汇</th><th>别名</th><th>说明</th></tr></thead><tbody><tr><td>求职作战中心</td><td>Studio</td><td>面向个人求职流程的 AI Agent 工作台。</td></tr><tr><td>个人档案</td><td>Profile</td><td>求职者的经历、项目、技能、偏好、约束和素材库。</td></tr><tr><td>JD 决策</td><td>Job Decision</td><td>对目标岗位进行匹配、风险、投入产出和行动建议判断。</td></tr><tr><td>信息分级铁律</td><td>Fact Boundary</td><td>AI 只能基于已确认事实输出，未知数据必须标记待确认，不编公司事实、量化数字和未来预测。</td></tr><tr><td>演示模式</td><td>Demo Profile</td><td>使用虚拟档案和只读数据向面试官展示完整流程，不暴露真实隐私。</td></tr><tr><td>需求诊断</td><td>Requirement Diagnosis</td><td>从用户、业务、技术三个角度判断需求是否合理、缺口在哪里、是否值得进入 PRD。</td></tr><tr><td>概念版</td><td>Concept Version</td><td>在完整 PRD 前先对齐一句话定义、目标用户、核心场景、MVP 三件事、本版不做和成功标志。</td></tr><tr><td>AI/Claude 评审</td><td>AI Review</td><td>使用 Claude 或同等级模型对 PRD 的合理性、漏洞、冲突、风险和追问点进行复核。</td></tr></tbody></table></div>
+<h3>0.3 状态说明与评审门槛</h3>
+<div class="table-wrap"><table><thead><tr><th>状态</th><th>含义</th><th>进入条件</th><th>退出条件</th></tr></thead><tbody><tr><td>需求诊断中</td><td>只确认问题、用户、业务价值和技术约束</td><td>有原始想法或现有页面</td><td>三视角问题已回答，关键缺口已标记</td></tr><tr><td>概念待确认</td><td>先确认产品方向和 MVP 边界</td><td>诊断通过</td><td>用户确认一句话定义、MVP 三件事和本版不做</td></tr><tr><td>PRD 草稿</td><td>可用于开发讨论，但仍有待确认项</td><td>概念确认</td><td>需求、流程、验收、风险、工作流成体系</td></tr><tr><td>待评审</td><td>可提交给用户、Claude 或面试官复核</td><td>PRD 草稿完成</td><td>高风险问题处理或明确进入后续版本</td></tr><tr><td>已确认</td><td>可作为开发和演示基线</td><td>评审通过</td><td>后续变更进入修订记录</td></tr></tbody></table></div>
+<p>当前状态为 <code>待评审</code>。本次 v0.2 的评审门槛是：能解释为什么做、为谁做、MVP 做什么、不做什么、AI 不能编什么、公开演示如何保护隐私、Claude 应该审什么。</p>
+<h2 id="sec-2504-1-背景与目标">1. 背景与目标</h2>
+<h3>1.1 背景</h3>
+<p>求职过程不是一次性写简历，而是持续整理信息、判断岗位、定制材料、准备面试、复盘反馈的复杂链路。用户常见问题是材料散、JD 判断靠感觉、AI 容易编事实、每次投递都从零开始。求职作战中心把这些动作整理成一个本地优先的 AI Agent 工作台，让求职材料、决策过程和交付产物可追踪、可复用、可演示。</p>
+<h3>1.2 需求诊断复核</h3>
+<div class="table-wrap"><table><thead><tr><th>视角</th><th>诊断结论</th><th>当前证据</th><th>缺口/待确认</th></tr></thead><tbody><tr><td>用户视角</td><td>求职者需要把档案、JD 判断、简历改写、面试准备和作品集讲法串起来，不再依赖一次性聊天。</td><td>已有求职作战中心 Demo、PRD、个人站项目入口和虚拟档案演示。</td><td>真实使用频率、不同岗位的优先级和材料复盘周期待统计。</td></tr><tr><td>商业/面试视角</td><td>该项目的主要价值是证明 AI 产品经理能把个人求职场景做成产品闭环，同时降低面试官理解成本。</td><td>个人站可以打开 Demo 和 PRD，适合面试展示。</td><td>是否扩展为付费咨询工具或模板产品待确认。</td></tr><tr><td>技术视角</td><td>MVP 应本地优先，公开站只放虚拟档案；AI 能力用于结构化、改写、追问和评审，不承担事实自动断言。</td><td>站内静态演示、Vercel 备用应用、GitHub Pages 发布链路已存在。</td><td>真实后端、模型网关、账号体系、日志脱敏策略待进一步确认。</td></tr></tbody></table></div>
+<p>诊断结论：需求合理，适合作为面试演示型 AI Agent 项目；但必须坚持信息分级铁律，避免把“求职建议工具”做成会编事实、泄露隐私或承诺录取结果的黑盒工具。</p>
+<h3>1.3 目标用户</h3>
+<div class="table-wrap"><table><thead><tr><th>用户类型</th><th>用户特征</th><th>核心场景</th><th>主要痛点</th></tr></thead><tbody><tr><td>转岗/求职中的产品经理</td><td>有项目经历但表达分散，需要面向岗位包装</td><td>看 JD、改简历、准备面试、输出作品集讲法</td><td>简历和项目讲法无法稳定匹配岗位</td></tr><tr><td>AI 工具实践者</td><td>需要证明自己不是只会 prompt，而能做产品闭环</td><td>向面试官展示 AI 产品思考和工程落地</td><td>项目很多但难讲成一条业务链路</td></tr><tr><td>面试官/HR</td><td>希望快速判断候选人的产品、AI、工程能力</td><td>打开 Demo 和 PRD 看项目结构</td><td>不想看零散截图和难复现本地服务</td></tr></tbody></table></div>
+<h3>1.4 业务目标与成功指标</h3>
+<div class="table-wrap"><table><thead><tr><th>目标</th><th>衡量指标</th><th>当前基线</th><th>目标值</th><th>统计周期</th></tr></thead><tbody><tr><td>让求职流程产品化</td><td>完整链路模块覆盖数</td><td>已覆盖档案、JD、简历、面试、学习、作品集</td><td>MVP 覆盖 6 个核心模块</td><td>面试前</td></tr><tr><td>降低公开演示隐私风险</td><td>演示模式是否只用虚拟档案</td><td>已有 demo profile</td><td>线上 Demo 可直接打开且不暴露真实档案</td><td>每次发布</td></tr><tr><td>提升面试讲解效率</td><td>面试官 3 分钟内能理解项目</td><td>待统计</td><td>通过 PRD + Demo 形成可讲路径</td><td>每次面试</td></tr><tr><td>降低 AI 编造风险</td><td>未确认事实标记率</td><td>待统计</td><td>所有公司事实、数字、预测均标记来源或待确认</td><td>每次输出</td></tr></tbody></table></div>
+<h3>1.5 价值分析</h3>
+<ul><li>用户价值: 把求职材料、判断、改稿和面试准备从“临时聊天”变成可复盘的工作台。</li><li>产品价值: 证明 AI Agent 可以落在真实高频任务上，而不是单次问答。</li><li>面试价值: 面试官能同时看到产品拆解、工程实现、AI 使用边界和公开演示意识。</li></ul>
+<h2 id="sec-4674-2-范围定义">2. 范围定义</h2>
+<h3>2.1 一句话产品定义</h3>
+<p>Studio · 求职作战中心是在本地优先和隐私隔离前提下，为求职者提供个人档案、路径推演、JD 决策、简历定制、面试演练、学习作战和作品集展示的 AI Agent 工作台。</p>
+<h3>2.2 概念版对齐</h3>
+<div class="table-wrap"><table><thead><tr><th>概念项</th><th>当前结论</th><th>状态</th></tr></thead><tbody><tr><td>一句话产品定义</td><td>本地优先的 AI 求职作战工作台，把个人档案、JD 决策、简历面试产物和作品集演示串成闭环。</td><td>已确认</td></tr><tr><td>目标用户</td><td>AI 产品经理、转岗/求职中的产品经理、需要向面试官展示 AI 产品闭环的人。</td><td>已确认</td></tr><tr><td>核心场景</td><td>面试前准备、岗位筛选、简历定制、面试演练、个人站公开展示。</td><td>已确认</td></tr><tr><td>MVP 三件事</td><td>个人档案事实源、JD 决策与材料生成、演示模式与作品集讲法。</td><td>已确认</td></tr><tr><td>平台选择</td><td>本地 Web App + GitHub Pages 静态演示 + Vercel 备用完整应用。</td><td>已确认</td></tr><tr><td>本版不做</td><td>自动投递、真实公司事实自动断言、录取概率预测、多用户 SaaS。</td><td>已确认</td></tr><tr><td>成功标志</td><td>面试官打开个人站后，3 分钟内能理解项目定位、流程、PRD 和隐私边界。</td><td>待统计</td></tr><tr><td>关键风险</td><td>隐私泄露、AI 编造、外链不可用、PRD 与 Demo 不同步。</td><td>已识别</td></tr></tbody></table></div>
+<h3>2.3 MVP 范围</h3>
+<div class="table-wrap"><table><thead><tr><th>优先级</th><th>功能</th><th>解决的问题</th><th>说明</th></tr></thead><tbody><tr><td>Must</td><td>个人档案与素材库</td><td>避免每次重新介绍自己</td><td>保存经历、项目、技能、偏好、约束和可复用素材。</td></tr><tr><td>Must</td><td>JD 解析与决策建议</td><td>避免盲投和 AI 编造</td><td>解析岗位要求、匹配证据、风险点和行动建议。</td></tr><tr><td>Must</td><td>简历与面试产物生成</td><td>把判断转成可投递材料</td><td>输出简历改写建议、面试手册、STAR 讲法和追问准备。</td></tr><tr><td>Should</td><td>路径推演</td><td>帮用户选择求职方向</td><td>按目标岗位、能力缺口和样例公司生成路径建议。</td></tr><tr><td>Should</td><td>学习作战计划</td><td>把能力缺口转成行动</td><td>生成阶段学习任务、产物和复盘标准。</td></tr><tr><td>Should</td><td>作品集展示口径</td><td>方便公开演示</td><td>整理项目背景、功能模块、Demo 链接、讲法和风险边界。</td></tr></tbody></table></div>
+<h3>2.4 本版不做</h3>
+<div class="table-wrap"><table><thead><tr><th>不做项</th><th>原因</th><th>后续计划</th></tr></thead><tbody><tr><td>自动投递岗位</td><td>涉及平台账号、反爬、隐私和误投风险</td><td>仅保留人工确认后的外部跳转方向。</td></tr><tr><td>真实公司信息自动断言</td><td>容易生成过期或错误事实</td><td>需要来源链接和人工确认后再进入材料。</td></tr><tr><td>付费求职服务闭环</td><td>当前以作品集和个人工具验证为主</td><td>有真实咨询需求后单独立项。</td></tr><tr><td>多用户 SaaS 权限体系</td><td>MVP 是本地优先个人工作台</td><td>后续可评估账号、同步和团队版。</td></tr></tbody></table></div>
+<h3>2.5 约束与假设</h3>
+<div class="table-wrap"><table><thead><tr><th>类型</th><th>内容</th><th>状态</th></tr></thead><tbody><tr><td>约束</td><td>真实档案和求职材料优先本地保存，不默认上传公开站点。</td><td>已确认</td></tr><tr><td>约束</td><td>公开 Demo 必须使用虚拟档案和只读数据。</td><td>已确认</td></tr><tr><td>假设</td><td>当前面试演示以 AI 产品经理 / B 端产品方向为主要讲解场景。</td><td>待确认</td></tr><tr><td>假设</td><td>模型供应商、价格和可用能力会变化，PRD 中不写死实时价格。</td><td>已确认</td></tr></tbody></table></div>
+<h2 id="sec-7150-3-产品方案">3. 产品方案</h2>
+<h3>3.1 功能结构</h3>
+<pre><code>flowchart TD
+  A[&quot;个人档案&quot;] --&gt; B[&quot;路径推演&quot;]
+  A --&gt; C[&quot;JD 解析&quot;]
+  C --&gt; D[&quot;决策建议&quot;]
+  D --&gt; E[&quot;简历定制&quot;]
+  D --&gt; F[&quot;面试手册&quot;]
+  F --&gt; G[&quot;面试演练&quot;]
+  D --&gt; H[&quot;学习作战&quot;]
+  A --&gt; I[&quot;作品集展示&quot;]
+  I --&gt; J[&quot;公开 Demo / PRD&quot;]</code></pre>
+<h3>3.2 信息结构</h3>
+<div class="table-wrap"><table><thead><tr><th>对象</th><th>核心字段</th><th>用途</th></tr></thead><tbody><tr><td>Profile</td><td>基本信息、经历、项目、技能、偏好、限制</td><td>作为所有生成任务的事实来源。</td></tr><tr><td>JD</td><td>岗位名称、公司、职责、要求、链接、来源时间</td><td>用于解析和匹配。</td></tr><tr><td>Decision</td><td>匹配度、证据、风险、行动建议、待确认项</td><td>帮用户决定是否投入。</td></tr><tr><td>Resume Draft</td><td>版本、目标岗位、亮点、项目表述、修改原因</td><td>形成可投递材料。</td></tr><tr><td>Interview Pack</td><td>自我介绍、项目讲法、STAR 案例、追问、反问</td><td>形成面试准备包。</td></tr><tr><td>Portfolio Item</td><td>项目背景、模块、Demo、讲法、边界</td><td>用于公开作品集展示。</td></tr></tbody></table></div>
+<h3>3.3 业务流程</h3>
+<ul><li>用户建立或选择个人档案。</li><li>系统根据目标方向做路径推演，给出推荐岗位类型和能力缺口。</li><li>用户输入或粘贴 JD，系统解析职责、要求和风险。</li><li>系统基于个人档案输出匹配证据、缺口、决策建议和待确认项。</li><li>用户确认目标后生成简历改写建议、面试手册和学习计划。</li><li>用户把可公开项目同步到作品集展示口径。</li><li>面试时使用演示档案和 PRD 页面展示完整闭环。</li></ul>
+<h3>3.4 页面流程</h3>
+<div class="table-wrap"><table><thead><tr><th>页面/模块</th><th>进入方式</th><th>主要动作</th><th>退出/跳转</th></tr></thead><tbody><tr><td>档案页</td><td>首页或设置入口</td><td>查看、编辑、锁定档案</td><td>进入路径推演或 JD 解析</td></tr><tr><td>路径推演</td><td>选择目标方向</td><td>生成方向建议和公司样例</td><td>进入学习作战或 JD 决策</td></tr><tr><td>JD 解析</td><td>输入 JD 链接/文本</td><td>结构化岗位要求</td><td>进入决策建议</td></tr><tr><td>简历定制</td><td>决策后触发</td><td>生成改写建议和版本说明</td><td>导出 Markdown / 复制</td></tr><tr><td>面试演练</td><td>面试包入口</td><td>生成追问和回答框架</td><td>复盘或返回面试包</td></tr><tr><td>作品集展示</td><td>项目模块入口</td><td>预览项目讲法和 Demo</td><td>打开线上 Demo / PRD</td></tr></tbody></table></div>
+<h2 id="sec-9015-4-全局规则">4. 全局规则</h2>
+<h3>4.1 权限与角色</h3>
+<div class="table-wrap"><table><thead><tr><th>角色/状态</th><th>可见内容</th><th>可操作内容</th><th>限制</th></tr></thead><tbody><tr><td>本人本地使用</td><td>真实档案、真实 JD、真实简历版本</td><td>编辑、生成、导出、复盘</td><td>不默认公开。</td></tr><tr><td>面试官演示</td><td>虚拟档案、演示数据、公开 Demo、PRD</td><td>只读浏览</td><td>不能进入真实档案。</td></tr><tr><td>开发/维护者</td><td>配置、日志、模型路由、演示数据</td><td>调试、发布、更新文档</td><td>不能把密钥和真实隐私提交到仓库。</td></tr></tbody></table></div>
+<h3>4.2 全局状态</h3>
+<div class="table-wrap"><table><thead><tr><th>状态</th><th>展示规则</th><th>用户操作</th><th>系统处理</th></tr></thead><tbody><tr><td>空状态</td><td>给出示例档案/JD 模板</td><td>新建或导入</td><td>不自动生成空内容。</td></tr><tr><td>加载中</td><td>显示当前任务名称和阶段</td><td>等待或取消</td><td>保留已有结果。</td></tr><tr><td>模型失败</td><td>显示失败原因和兜底说明</td><td>重试或改用本地摘要</td><td>不返回硬编码假结果。</td></tr><tr><td>事实不确定</td><td>标记“待确认”</td><td>用户补充来源</td><td>未确认前不进入最终简历。</td></tr><tr><td>演示模式</td><td>明确显示演示档案</td><td>只读预览</td><td>禁止保存到真实档案。</td></tr></tbody></table></div>
+<h3>4.3 文案与交互规范</h3>
+<ul><li>所有岗位和公司事实必须说明来源或标记待确认。</li><li>简历产物要说明“为什么这样改”，不是只给结果。</li><li>面试包要优先输出可讲案例、追问准备和风险兜底。</li><li>公开演示页避免出现“给面试官看”这类不必要前台字眼，但 PRD 可说明演示用途。</li></ul>
+<h2 id="sec-10168-5-需求列表">5. 需求列表</h2>
+<div class="table-wrap"><table><thead><tr><th>编号</th><th>模块</th><th>需求</th><th>类型</th><th>优先级</th><th>迭代</th><th>说明</th></tr></thead><tbody><tr><td>R1</td><td>个人档案</td><td>建立事实来源和素材库</td><td>功能</td><td>P0</td><td>MVP</td><td>所有 AI 输出都必须引用或基于档案。</td></tr><tr><td>R2</td><td>JD 解析</td><td>结构化岗位信息和要求</td><td>功能</td><td>P0</td><td>MVP</td><td>支持文本输入，链接解析能力视环境可用。</td></tr><tr><td>R3</td><td>决策建议</td><td>输出匹配证据、风险和行动建议</td><td>功能</td><td>P0</td><td>MVP</td><td>不做“必过”预测。</td></tr><tr><td>R4</td><td>简历定制</td><td>生成面向目标岗位的修改建议</td><td>功能</td><td>P0</td><td>MVP</td><td>保留版本和修改理由。</td></tr><tr><td>R5</td><td>面试演练</td><td>生成项目讲法、追问和回答框架</td><td>功能</td><td>P1</td><td>MVP</td><td>重点服务面试准备。</td></tr><tr><td>R6</td><td>学习作战</td><td>把能力缺口拆成行动计划</td><td>功能</td><td>P1</td><td>MVP</td><td>输出任务、产物和验收。</td></tr><tr><td>R7</td><td>演示模式</td><td>使用虚拟档案和只读数据公开演示</td><td>安全</td><td>P0</td><td>MVP</td><td>不暴露真实隐私。</td></tr><tr><td>R8</td><td>作品集展示</td><td>输出可公开项目讲法和 Demo 链接</td><td>运营</td><td>P1</td><td>MVP</td><td>连接个人站。</td></tr><tr><td>R9</td><td>AI/Claude 评审</td><td>审核需求合理性、逻辑冲突、风险和待追问项</td><td>质量</td><td>P0</td><td>MVP</td><td>作为 PRD 进入开发或面试前的质量门。</td></tr></tbody></table></div>
+<h2 id="sec-11381-6-需求详情">6. 需求详情</h2>
+<h3>R1. 个人档案与素材库</h3>
+<p>#### 6.1 用户故事</p>
+<p>作为求职者，我希望把个人经历、项目、技能和偏好整理成一个可复用档案，以便每次 JD 解析和简历定制都有稳定事实来源。</p>
+<p>#### 6.2 业务规则</p>
+<ul><li>档案字段分为已确认事实、可包装表达和待确认材料。</li><li>AI 不得把待确认材料直接写入最终简历。</li><li>演示档案与真实档案必须隔离。</li></ul>
+<p>#### 6.3 字段与数据</p>
+<div class="table-wrap"><table><thead><tr><th>字段</th><th>类型</th><th>是否必填</th><th>默认值</th><th>校验规则</th><th>说明</th></tr></thead><tbody><tr><td>profileId</td><td>string</td><td>是</td><td>自动生成</td><td>唯一</td><td>档案标识。</td></tr><tr><td>projects</td><td>array</td><td>是</td><td>[]</td><td>每项需有项目名和角色</td><td>用于项目讲法。</td></tr><tr><td>skills</td><td>array</td><td>否</td><td>[]</td><td>文本长度限制</td><td>技能标签。</td></tr><tr><td>constraints</td><td>array</td><td>否</td><td>[]</td><td>可为空</td><td>地点、行业、岗位、隐私限制。</td></tr></tbody></table></div>
+<p>#### 6.4 验收标准</p>
+<ul><li>Given 用户打开演示档案, When 查看内容, Then 只能看到虚拟资料。</li><li>Given 用户生成简历建议, When 档案缺少证据, Then 系统必须提示待补充而不是编造。</li></ul>
+<h3>R2. JD 解析与决策建议</h3>
+<p>#### 6.1 用户故事</p>
+<p>作为求职者，我希望系统能把 JD 拆成职责、要求、风险和匹配证据，以便判断是否值得投入。</p>
+<p>#### 6.2 业务规则</p>
+<ul><li>JD 输出必须区分原文信息、系统推断和待确认。</li><li>匹配建议必须引用档案里的项目或经历作为证据。</li><li>不输出“录取概率”“薪资预测”等无来源结论。</li></ul>
+<p>#### 6.3 验收标准</p>
+<ul><li>Given 用户输入 JD 文本, When 点击解析, Then 系统输出职责、硬性要求、软性要求、风险点和待确认项。</li><li>Given JD 中出现公司信息, When 无可靠来源, Then 标记为待确认。</li></ul>
+<h3>R3. 简历定制与面试演练</h3>
+<p>#### 6.1 用户故事</p>
+<p>作为求职者，我希望系统把 JD 决策结果转成简历改写建议和面试讲法，以便形成可投递、可演练的材料。</p>
+<p>#### 6.2 业务规则</p>
+<ul><li>简历建议必须包含修改前后方向和修改理由。</li><li>面试手册应覆盖自我介绍、项目 STAR、风险问题、反问建议。</li><li>所有材料支持复制或导出 Markdown。</li></ul>
+<p>#### 6.3 验收标准</p>
+<ul><li>Given 用户已有 JD 决策, When 生成面试包, Then 输出自我介绍、项目讲法、追问准备和反问建议。</li><li>Given 用户切换岗位, When 重新生成, Then 保留版本，不覆盖旧产物。</li></ul>
+<h3>R9. AI/Claude 需求评审</h3>
+<p>#### 6.1 用户故事</p>
+<p>作为产品负责人，我希望在 PRD 进入开发或公开演示前，让 Claude 或同等级模型审核需求的合理性、矛盾、缺口和风险，以便提前发现“看起来完整但实际不能落地”的问题。</p>
+<p>#### 6.2 业务规则</p>
+<ul><li>AI 评审只能基于当前 PRD、Demo 描述、已确认事实和明确假设，不得补写未经确认的业务事实。</li><li>评审输出必须分为：合理性结论、主要疑问、风险等级、建议修改、需要用户确认的问题。</li><li>高风险问题必须回写到 <code>风险与待确认</code>，范围变化必须回写到修订记录。</li><li>Claude 评审是质量门，不替代用户最终确认。</li></ul>
+<p>#### 6.3 页面与交互</p>
+<div class="table-wrap"><table><thead><tr><th>场景</th><th>页面/控件</th><th>规则</th><th>异常处理</th></tr></thead><tbody><tr><td>发起 PRD 评审</td><td>PRD 预览 / 评审按钮</td><td>传入当前 PRD 摘要、核心需求、风险表和待确认项</td><td>模型不可用时提示手工评审清单</td></tr><tr><td>查看评审结果</td><td>评审面板</td><td>按严重程度展示问题，不直接覆盖 PRD</td><td>用户选择采纳后再写入 PRD</td></tr><tr><td>回写问题</td><td>风险表 / 修订记录</td><td>高风险项必须保留来源和处理建议</td><td>无法判断时标记待确认</td></tr></tbody></table></div>
+<p>#### 6.4 验收标准</p>
+<ul><li>Given PRD 进入待评审状态, When 发起 Claude 评审, Then 系统输出合理性、疑问、风险、建议和待确认问题。</li><li>Given Claude 提出高风险问题, When 用户采纳, Then PRD 的风险表和修订记录同步更新。</li><li>Given 输入包含真实隐私或密钥, When 发起评审, Then 系统必须提示脱敏风险，不默认上传。</li></ul>
+<h2 id="sec-14119-7-非功能需求">7. 非功能需求</h2>
+<div class="table-wrap"><table><thead><tr><th>类型</th><th>要求</th><th>指标/标准</th><th>说明</th></tr></thead><tbody><tr><td>隐私</td><td>真实档案本地优先保存</td><td>公开 Demo 不含真实隐私</td><td>求职材料敏感度高。</td></tr><tr><td>稳定性</td><td>模型失败可重试或降级</td><td>不返回假数据</td><td>避免演示现场误导。</td></tr><tr><td>可维护性</td><td>内容和项目入口结构化</td><td>新项目不大改组件</td><td>与个人站 content JSON 模式一致。</td></tr><tr><td>兼容性</td><td>Demo 可线上打开</td><td>桌面浏览器优先</td><td>面试官不需要本地环境。</td></tr><tr><td>可解释性</td><td>AI 输出说明依据</td><td>关键建议有证据或待确认</td><td>防止黑盒建议。</td></tr><tr><td>评审性</td><td>PRD 和核心产物可被 AI/人工复核</td><td>评审结论可追溯到具体章节</td><td>便于面试或开发前发现问题。</td></tr></tbody></table></div>
+<h2 id="sec-14779-8-埋点与数据">8. 埋点与数据</h2>
+<div class="table-wrap"><table><thead><tr><th>事件名</th><th>触发时机</th><th>参数</th><th>参数说明</th><th>用途</th></tr></thead><tbody><tr><td>profile_open</td><td>打开档案</td><td>profileType</td><td>demo / real</td><td>判断演示和真实使用分布。</td></tr><tr><td>jd_parse</td><td>解析 JD</td><td>sourceType</td><td>text / url / file</td><td>分析 JD 输入方式。</td></tr><tr><td>decision_generate</td><td>生成决策建议</td><td>jobRole, riskCount</td><td>岗位和风险数</td><td>判断决策模块使用情况。</td></tr><tr><td>resume_export</td><td>导出简历建议</td><td>format</td><td>md / copy</td><td>追踪产物交付。</td></tr><tr><td>interview_pack_open</td><td>打开面试包</td><td>jobId</td><td>目标岗位</td><td>判断面试准备使用率。</td></tr><tr><td>portfolio_demo_click</td><td>打开作品集 Demo</td><td>projectId</td><td>项目标识</td><td>支撑个人站复盘。</td></tr><tr><td>ai_review_run</td><td>发起 AI/Claude 评审</td><td>targetType, issueCount, highRiskCount</td><td>评审对象和问题数量</td><td>追踪 PRD/需求质量门是否被使用。</td></tr></tbody></table></div>
+<h2 id="sec-15729-9-项目计划">9. 项目计划</h2>
+<div class="table-wrap"><table><thead><tr><th>阶段</th><th>开始时间</th><th>结束时间</th><th>交付物</th><th>负责人</th><th>状态</th><th>风险</th></tr></thead><tbody><tr><td>D0 事实盘点</td><td>已完成</td><td>已完成</td><td>项目定位、模块、演示入口</td><td>皮玺玉 / Codex</td><td>已完成</td><td>真实隐私需隔离。</td></tr><tr><td>D1 PRD 演示页</td><td>2026-07-08</td><td>2026-07-08</td><td>PRD Markdown + HTML</td><td>Codex</td><td>已完成</td><td>需持续同步个人站入口。</td></tr><tr><td>D2 演示链路复核</td><td>2026-07-08</td><td>2026-07-08</td><td>首页项目卡片、Demo、PRD 可打开</td><td>皮玺玉 / Codex</td><td>已完成</td><td>Vercel 外链受网络影响，主入口改为 GitHub Pages 站内演示。</td></tr><tr><td>D3 PRD v0.2 优化</td><td>2026-07-10</td><td>2026-07-10</td><td>需求诊断、概念对齐、AI 评审、成本 ROI、风险表</td><td>Codex</td><td>已完成</td><td>需线上验证 GitHub Pages 更新。</td></tr><tr><td>D4 求职材料迭代</td><td>待确认</td><td>待确认</td><td>最新作品集讲法、简历材料</td><td>皮玺玉</td><td>待开始</td><td>不同岗位口径差异。</td></tr></tbody></table></div>
+<h2 id="sec-16644-10-工作流设计">10. 工作流设计</h2>
+<h3>10.1 开发工作流</h3>
+<div class="table-wrap"><table><thead><tr><th>角色/工具</th><th>主要用途</th><th>输入</th><th>输出</th><th>注意事项</th></tr></thead><tbody><tr><td>Codex</td><td>实现、调试、测试、PRD 页面生成、个人站入口更新</td><td>需求、项目文件、现有 Demo</td><td>代码、文档、构建验证、push</td><td>修改中文文件必须避免乱码。</td></tr><tr><td>Claude</td><td>PRD / 架构 / 复杂逻辑复核</td><td>PRD、代码、提示词</td><td>评审建议</td><td>是否使用待确认。</td></tr><tr><td>Tuzi API</td><td>产品运行时模型网关</td><td>JD、档案、生成任务</td><td>结构化解析、总结、改写</td><td>模型、价格、tools 支持均待确认。</td></tr><tr><td>Vercel / GitHub Pages</td><td>公开演示承载</td><td>前端构建包</td><td>线上 Demo / PRD</td><td>后端 API 与静态站能力边界需说明。</td></tr></tbody></table></div>
+<h3>10.2 AI 开发成本、产出预估与 ROI</h3>
+<div class="table-wrap"><table><thead><tr><th>统计项</th><th>口径</th><th>状态</th></tr></thead><tbody><tr><td>统计范围</td><td>需求、PRD、前端、后端、演示、测试、上线准备</td><td>待确认</td></tr><tr><td>平台范围</td><td>Codex、Claude、Tuzi API、Vercel、GitHub Pages</td><td>待确认</td></tr><tr><td>Token 指标</td><td>输入、输出、缓存/思考、总 tokens</td><td>待统计</td></tr><tr><td>金额指标</td><td>单平台金额、总金额、币种、是否含订阅费</td><td>待统计</td></tr><tr><td>收益口径</td><td>节省求职材料准备时间、减少返工、提升面试表达质量</td><td>待确认</td></tr><tr><td>评审口径</td><td>Claude 评审发现的问题数量、严重程度、采纳率和回写章节</td><td>待统计</td></tr></tbody></table></div>
+<p>预估成本表：</p>
+<div class="table-wrap"><table><thead><tr><th>阶段</th><th>平台/工具</th><th>任务</th><th>预计轮次/调用量</th><th>预计输入 tokens</th><th>预计输出 tokens</th><th>单价/计费口径</th><th>预估金额</th><th>币种</th><th>估算依据</th><th>置信度</th></tr></thead><tbody><tr><td>PRD 与页面</td><td>Codex</td><td>生成 PRD、HTML、入口更新</td><td>待统计</td><td>待统计</td><td>待统计</td><td>订阅/平台口径待确认</td><td>待统计</td><td>待确认</td><td>本次任务记录</td><td>中</td></tr><tr><td>评审</td><td>Claude</td><td>PRD 或代码复核</td><td>待确认</td><td>待确认</td><td>待确认</td><td>待确认</td><td>待确认</td><td>待确认</td><td>是否使用待确认</td><td>低</td></tr><tr><td>运行时</td><td>Tuzi API</td><td>JD 解析、总结、改写</td><td>待估算</td><td>待估算</td><td>待估算</td><td>价格需实时核验</td><td>待估算</td><td>待确认</td><td>Tuzi pricing 待确认</td><td>低</td></tr></tbody></table></div>
+<p>预估产出表：</p>
+<div class="table-wrap"><table><thead><tr><th>产出类型</th><th>预估产出</th><th>数量/范围</th><th>验收标准</th><th>价值口径</th><th>预估价值</th><th>状态</th></tr></thead><tbody><tr><td>文档</td><td>PRD Markdown + HTML</td><td>2 个文件</td><td>可打开、可讲、可维护</td><td>减少讲解准备时间</td><td>待估算</td><td>本次已交付</td></tr><tr><td>功能</td><td>个人站项目入口</td><td>1 个 action</td><td>项目弹窗可打开 PRD</td><td>提升面试演示完整度</td><td>待估算</td><td>本次已交付</td></tr><tr><td>演示资产</td><td>GitHub Pages 站内虚拟档案 Demo 链路</td><td>1 条链路</td><td>不暴露真实隐私，面试官可直接打开</td><td>降低公开演示风险</td><td>待估算</td><td>已设为主入口</td></tr><tr><td>质量门</td><td>Claude/AI 评审清单和回写规则</td><td>1 套</td><td>能指出合理性、疑问、风险、修改建议</td><td>减少需求返工</td><td>待估算</td><td>v0.2 补充</td></tr></tbody></table></div>
+<p>实际成本记录表：</p>
+<div class="table-wrap"><table><thead><tr><th>日期/阶段</th><th>平台</th><th>工具/模型</th><th>输入 tokens</th><th>输出 tokens</th><th>总 tokens</th><th>金额</th><th>币种</th><th>数据来源</th><th>实际/估算</th><th>备注</th></tr></thead><tbody><tr><td>2026-07-10 PRD v0.2</td><td>Codex</td><td>Codex Desktop</td><td>待统计</td><td>待统计</td><td>待统计</td><td>待统计</td><td>待确认</td><td>本地任务记录</td><td>待回填</td><td>本次优化 PRD 与 HTML。</td></tr><tr><td>待评审</td><td>Claude</td><td>待确认</td><td>待统计</td><td>待统计</td><td>待统计</td><td>待统计</td><td>待确认</td><td>Claude 会话或导出</td><td>待确认</td><td>仅在用户确认上传脱敏 PRD 后执行。</td></tr></tbody></table></div>
+<p>ROI 汇总：</p>
+<div class="table-wrap"><table><thead><tr><th>指标</th><th>公式/口径</th><th>数值</th><th>状态</th></tr></thead><tbody><tr><td>AI 开发总成本</td><td>Codex、Claude、Tuzi API 等开发阶段成本求和</td><td>待统计</td><td>待确认</td></tr><tr><td>AI 产生总收益</td><td>节省人时、减少返工、提前完成面试材料、提升讲解效率等收益求和</td><td>待统计</td><td>待确认</td></tr><tr><td>AI 开发 ROI</td><td>(AI 产生收益 - AI 开发成本) / AI 开发成本 * 100%</td><td>待统计</td><td>待确认</td></tr><tr><td>投入回收期</td><td>AI 开发总成本 / 周期平均收益</td><td>待统计</td><td>待确认</td></tr></tbody></table></div>
+<h3>10.3 产品运行工作流</h3>
+<pre><code>flowchart TD
+  A[&quot;选择档案&quot;] --&gt; B[&quot;路径推演 / JD 输入&quot;]
+  B --&gt; C[&quot;结构化解析&quot;]
+  C --&gt; D[&quot;匹配证据与风险&quot;]
+  D --&gt; E[&quot;决策建议&quot;]
+  E --&gt; F[&quot;简历定制&quot;]
+  E --&gt; G[&quot;面试手册&quot;]
+  E --&gt; H[&quot;学习计划&quot;]
+  F --&gt; I[&quot;版本留痕&quot;]
+  G --&gt; I
+  H --&gt; I
+  I --&gt; J[&quot;作品集展示 / PRD 演示&quot;]</code></pre>
+<h3>10.4 模型与工具路由</h3>
+<div class="table-wrap"><table><thead><tr><th>任务</th><th>默认工具/模型</th><th>兜底方案</th><th>选择理由</th><th>风险/待确认</th></tr></thead><tbody><tr><td>JD 结构化</td><td>Tuzi API 可用模型</td><td>本地规则解析 + 人工补充</td><td>需要稳定 JSON 结构</td><td>模型和价格待确认</td></tr><tr><td>简历改写</td><td>Claude / GPT / DeepSeek</td><td>模板化建议</td><td>需要表达质量和事实边界</td><td>不可编造经历</td></tr><tr><td>公司信息</td><td>Web Search / 用户提供来源</td><td>标记待确认</td><td>公司事实容易过期</td><td>需要实时来源</td></tr><tr><td>面试追问</td><td>Claude / GPT</td><td>固定追问题库</td><td>长文本推理和表达更重要</td><td>需要控制输出长度</td></tr></tbody></table></div>
+<h3>10.5 配置与安全</h3>
+<div class="table-wrap"><table><thead><tr><th>项目</th><th>建议</th><th>状态</th></tr></thead><tbody><tr><td>API Key</td><td>只放后端环境变量，不写入前端和 Git</td><td>已确认</td></tr><tr><td>Demo Profile</td><td>使用虚拟档案和只读参数</td><td>已确认</td></tr><tr><td>真实档案</td><td>本地优先，不进入 GitHub Pages</td><td>已确认</td></tr><tr><td>日志</td><td>不提交 <code>data/*.jsonl</code> 本地行为日志</td><td>已确认</td></tr><tr><td>线上后端</td><td>Vercel serverless 与 GitHub Pages 静态站能力分开说明</td><td>待确认</td></tr></tbody></table></div>
+<h3>10.6 Claude 评审提示词口径</h3>
+<p>将 PRD 提交给 Claude 或同等级模型评审前，需要先脱敏，并明确评审边界：</p>
+<pre><code>你是产品需求评审人。请基于以下 PRD 内容进行审核，不要编造未提供的公司事实、用户数据、价格或效果。
+请输出：
+1. 需求是否合理，为什么；
+2. MVP 范围是否过大或过小；
+3. 用户价值、面试价值、技术可行性是否一致；
+4. 有哪些逻辑矛盾、缺失字段、异常流程和验收漏洞；
+5. 哪些地方有隐私、安全、合规或 AI 编造风险；
+6. 需要我补充确认的问题；
+7. 建议优先修改的 5 个点。
+请按高/中/低风险排序，并引用 PRD 章节。</code></pre>
+<p>评审结果处理规则：</p>
+<div class="table-wrap"><table><thead><tr><th>结果类型</th><th>处理方式</th><th>是否回写 PRD</th></tr></thead><tbody><tr><td>高风险漏洞</td><td>进入风险表，必要时暂停开发或演示</td><td>是</td></tr><tr><td>范围冲突</td><td>回到概念版对齐，重新确认 MVP</td><td>是</td></tr><tr><td>表述优化</td><td>进入下一版修订或直接修改文案</td><td>视情况</td></tr><tr><td>未确认事实</td><td>标记待确认，不能进入最终简历或演示结论</td><td>是</td></tr></tbody></table></div>
+<h2 id="sec-22603-11-风险与待确认">11. 风险与待确认</h2>
+<div class="table-wrap"><table><thead><tr><th>编号</th><th>风险/问题</th><th>影响</th><th>处理建议</th><th>状态</th></tr></thead><tbody><tr><td>Q1</td><td>求职材料包含个人隐私</td><td>公开演示泄露真实经历、联系方式或求职方向</td><td>所有公开 Demo 使用虚拟档案</td><td>已处理</td></tr><tr><td>Q2</td><td>AI 生成不真实公司事实</td><td>简历或面试话术失真</td><td>公司事实必须有来源或标记待确认</td><td>已处理</td></tr><tr><td>Q3</td><td>模型能力和价格变化</td><td>成本估算失准，功能不可用</td><td>模型、价格和 tools 支持按发布前实时核验</td><td>待确认</td></tr><tr><td>Q4</td><td>面试现场网络不稳定或 Vercel 外链被重置</td><td>Demo 打不开影响展示</td><td>主入口使用 GitHub Pages 站内演示，Vercel 仅保留为备用外链</td><td>已处理</td></tr><tr><td>Q5</td><td>入口过多导致讲解分散</td><td>面试时间被稀释</td><td>主讲求职作战 + 采购看板，其他项目作为补充</td><td>待确认</td></tr><tr><td>Q6</td><td>直接把真实简历/JD 上传给 Claude 或第三方模型</td><td>可能泄露个人隐私、求职方向或公司信息</td><td>上传前脱敏；敏感内容只做本地处理或人工摘要</td><td>待确认</td></tr><tr><td>Q7</td><td>本地日志、真实档案或密钥误提交到公开仓库</td><td>GitHub 源码可见，可能造成隐私和账号风险</td><td>提交前扫描 staged diff；<code>data/*.jsonl</code>、密钥、真实联系方式不进入本次提交</td><td>已处理</td></tr></tbody></table></div>
+<h2 id="sec-23615-12-附录">12. 附录</h2>
+<ul><li>站内 Demo: <code>/projects/job-war-room-demo/index.html</code></li><li>Vercel 备用完整应用: <code>https://ai-job-war-room-studio.vercel.app/?profile=demo&amp;profile_lock=demo</code></li><li>个人站项目入口: <code>content/projects.json</code> 中 <code>job-war-room</code></li><li>本 PRD 网页: <code>/docs/job-war-room-prd.html</code></li><li>本 PRD Markdown: <code>/docs/job-war-room-prd.md</code></li><li>v0.2 评审重点: 需求诊断、概念对齐、AI/Claude 评审、成本 ROI、隐私与公开演示边界</li></ul>
+</article></div>
   </main>
 </body>
 </html>
