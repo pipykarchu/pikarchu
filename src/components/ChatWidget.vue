@@ -1,6 +1,9 @@
 <script setup>
 import { nextTick, ref } from 'vue'
 import { useTracker } from '../composables/useTracker'
+import profile from '../../content/profile.json'
+import projects from '../../content/projects.json'
+import services from '../../content/services.json'
 
 defineEmits(['open-contact'])
 
@@ -14,7 +17,7 @@ const t = {
   send: '\u53d1\u9001',
   sending: '\u601d\u8003\u4e2d...',
   intro: '\u4f60\u597d\uff0c\u6211\u53ef\u4ee5\u5e2e\u4f60\u4e86\u89e3\u8fd9\u4e2a\u4eba\u7ad9\u7684\u4e3b\u4eba\u3001\u4f5c\u54c1\u548c\u8054\u7cfb\u65b9\u5f0f\u3002',
-  error: '\u6682\u65f6\u6ca1\u6709\u8fde\u4e0a\u667a\u80fd\u5ba2\u670d\uff0c\u53ef\u4ee5\u5148\u70b9\u51fb\u7559\u8a00\u5165\u53e3\u8054\u7cfb\u3002',
+  error: '\u6682\u65f6\u6ca1\u6709\u8fde\u4e0a\u5728\u7ebf AI\uff0c\u6211\u5148\u7528\u7ad9\u70b9\u8d44\u6599\u56de\u7b54\u57fa\u7840\u95ee\u9898\u3002',
   empty: '\u8bf7\u5148\u8f93\u5165\u4e00\u4e2a\u95ee\u9898\u3002',
   configTip: '\u672a\u914d\u7f6e API Key \u65f6\u4f1a\u4f7f\u7528\u672c\u5730\u57fa\u7840\u56de\u590d\u3002'
 }
@@ -33,6 +36,75 @@ const messages = ref([
 ])
 const chatBody = ref(null)
 const { track } = useTracker()
+const visibleProjects = [...projects]
+  .filter(project => !project.hidden)
+  .sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))
+
+const includesAny = (text, keywords) => keywords.some(keyword => text.includes(keyword))
+
+const formatProjectList = (items = visibleProjects.slice(0, 6)) => {
+  return items
+    .map((project, index) => `${index + 1}. ${project.title}：${project.shortDesc}`)
+    .join('\n')
+}
+
+const getLocalReply = (question) => {
+  const text = String(question || '').toLowerCase()
+
+  if (includesAny(text, ['联系', '微信', '邮箱', '小红书', 'contact', '合作'])) {
+    return [
+      `可以通过页面里的“留言 / 联系”入口联系${profile.name}。`,
+      profile.contact?.email ? `邮箱：${profile.contact.email}` : '',
+      '也可以在联系弹窗里查看微信和小红书二维码。'
+    ].filter(Boolean).join('\n')
+  }
+
+  if (includesAny(text, ['作品', '项目', '案例', 'demo', '做过', '有哪些'])) {
+    return [
+      `${profile.name}目前展示的重点作品有：`,
+      formatProjectList(),
+      '你可以点击作品卡片查看详情、PRD 或演示页面。'
+    ].join('\n')
+  }
+
+  if (includesAny(text, ['服务', '定制', '咨询', '培训', '报价', '价格', '付费'])) {
+    return [
+      '目前站点里有两类服务入口：',
+      ...services.map(item => `- ${item.title}：${item.desc}`),
+      '具体报价和合作范围需要结合需求确认，建议点击“留言 / 联系”说明你的场景。'
+    ].join('\n')
+  }
+
+  if (includesAny(text, ['skill', 'prd', '工作流', 'prompt', '提示词'])) {
+    const skillProjects = visibleProjects.filter(project =>
+      /skill|prd|工作流|漫剧|分镜|定妆/i.test(`${project.title} ${project.tags?.join(' ') || ''}`)
+    ).slice(0, 5)
+
+    return [
+      `${profile.name}把 AI 能力沉淀成可复用工作流，不只是一次性 Prompt。`,
+      formatProjectList(skillProjects),
+      '这些 Skill 主要覆盖 PRD、剧本、分镜、定妆造和漫剧生产。'
+    ].join('\n')
+  }
+
+  if (includesAny(text, ['你是谁', '做什么', '介绍', '主人', '个人', '定位', 'who'])) {
+    return [
+      `${profile.greeting}。`,
+      `${profile.intro}`,
+      `这个站点主要展示 AI 产品实践、工作流工具、内容生产项目和个人服务入口。`,
+      `一句话定位：${profile.slogan}。`
+    ].join('\n')
+  }
+
+  return [
+    t.error,
+    '你可以问我：',
+    '1. 你是做什么的？',
+    '2. 有哪些作品？',
+    '3. 怎么联系你？',
+    '4. 有哪些 Skill 或工作流？'
+  ].join('\n')
+}
 
 const scrollToBottom = async () => {
   await nextTick()
@@ -73,7 +145,7 @@ const ask = async (preset = '') => {
 
     messages.value.push({ role: 'assistant', content: data.reply })
   } catch {
-    messages.value.push({ role: 'assistant', content: t.error })
+    messages.value.push({ role: 'assistant', content: getLocalReply(content) })
   } finally {
     loading.value = false
     await scrollToBottom()
