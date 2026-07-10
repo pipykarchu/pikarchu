@@ -154,7 +154,7 @@
       "环境变量",
       "接口限流"
     ],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-01.png",
     "links": {
       "demo": "/docs/personal-site-ai-chat-prd.html",
       "demoNote": "打开个人站智能客服 PRD，说明 MVP 范围、数据来源、兜底策略和验收标准。"
@@ -198,7 +198,7 @@
       "AI 生图提示词",
       "B站发布复盘"
     ],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-02.png",
     "links": {
       "demo": "/docs/ciwaxian-prd.html",
       "demoNote": "打开《娃娃仙》项目 PRD；B 站成片入口在详情按钮中保留。"
@@ -246,7 +246,7 @@
       "localStorage",
       "工作流模板"
     ],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-03.png",
     "links": {
       "demo": "/projects/prd-workbench-demo/index.html",
       "demoNote": "打开交互式 PRD 工作台演示页；页面为静态单文件，不联网、不调用 API，草稿只保存在当前浏览器 localStorage。"
@@ -301,7 +301,7 @@
       "Mermaid",
       "HTML 导出"
     ],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-04.png",
     "links": {
       "demo": "/projects/bilibili-ai-learning-assistant/demo/index.html",
       "demoNote": "打开从 D:/AI/AI训练演示/视频学习/B站视频AI学习助手 最新构建产物复制来的前端演示页；静态站可看界面和本地历史，真实转写、网页视频解析、ASR 和 LLM 整理需要启动原项目后端 npm run dev:all。"
@@ -349,7 +349,7 @@
       "AI 生图提示词",
       "B站发布复盘"
     ],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-05.png",
     "links": {
       "demo": "/projects/manju-production-workflow-demo/index.html",
       "demoNote": "打开《娃娃仙》项目当时使用的统一漫剧生产工作流看板，展示 PRD、分镜、静帧、视频平台、剪辑合成和发布复盘链路。"
@@ -400,7 +400,7 @@
       "角色三视图",
       "selection-state"
     ],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-01.png",
     "links": {
       "demo": "/projects/wawaxian-visual-review-demo/index.html",
       "demoNote": "打开个人站内置的《娃娃仙》视觉定版评审静态演示；可说明定妆造 Skill 如何做候选对比、锁定项和下一轮调整。"
@@ -445,7 +445,7 @@
       "角色一致性",
       "剧本结构"
     ],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-02.png",
     "links": {},
     "actions": [
       {
@@ -484,7 +484,7 @@
       "Tuzi API",
       "DeepSeek / Claude 流程"
     ],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-03.png",
     "links": {},
     "actions": [
       {
@@ -523,7 +523,7 @@
       "MJ / 豆包",
       "小红书 / 闲鱼 / B站"
     ],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-04.png",
     "links": {
       "demo": "/docs/furry-design-commerce-prd.html",
       "demoNote": "打开 AI 辅助福瑞设计商业 PRD，说明服务包装、套餐、授权边界和验证计划。"
@@ -563,7 +563,7 @@
       "Python 工具",
       "GitHub"
     ],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-05.png",
     "links": {},
     "actions": [
       {
@@ -593,7 +593,7 @@
       "Prompt"
     ],
     "tech": [],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-01.png",
     "links": {},
     "highlights": [
       "面试讲法：作为内容生产管线的后续扩展方向，不作为当前主讲项目。",
@@ -623,7 +623,7 @@
       "JSON 导入导出",
       "周期状态建议"
     ],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-02.png",
     "links": {
       "demo": "/projects/weight-loss-tracker/index.html",
       "demoNote": "打开从 D:/AI/AI训练演示/减肥/减肥记录仪.html 复制来的真实工具演示；数据保存在浏览器 localStorage。"
@@ -660,7 +660,7 @@
       "周期管理"
     ],
     "tech": [],
-    "cover": "",
+    "cover": "/mascot/pixiu-card-03.png",
     "links": {},
     "highlights": [
       "面试讲法：非当前主讲项目，只作为未来方向储备。",
