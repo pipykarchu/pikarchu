@@ -25,7 +25,8 @@ defineEmits(['open-contact', 'set-mode'])
         </span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-6 text-sm" :style="{ color: 'var(--color-linear-text-secondary)' }">
+      <nav class="hidden md:flex items-center gap-5 text-sm whitespace-nowrap" :style="{ color: 'var(--color-linear-text-secondary)' }">
+        <a href="#work-portfolio" class="hover:opacity-100 opacity-70 transition-opacity">工作档案</a>
         <a href="#projects" class="hover:opacity-100 opacity-70 transition-opacity">作品</a>
         <a href="#services" class="hover:opacity-100 opacity-70 transition-opacity">合作</a>
         <a href="#about" class="hover:opacity-100 opacity-70 transition-opacity">关于</a>

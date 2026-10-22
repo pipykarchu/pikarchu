@@ -5,6 +5,7 @@ import HeroSection from './components/HeroSection.vue'
 import CategorySection from './components/CategorySection.vue'
 import ServicesSection from './components/ServicesSection.vue'
 import OperationDemoSection from './components/OperationDemoSection.vue'
+import WorkPortfolioSection from './components/WorkPortfolioSection.vue'
 import AppFooter from './components/AppFooter.vue'
 import ContactModal from './components/ContactModal.vue'
 import AdminDashboard from './components/AdminDashboard.vue'
@@ -78,6 +79,7 @@ onMounted(() => {
         @scroll-to-projects="handleScrollToProjects"
         @scroll-to-services="handleScrollToServices"
       />
+      <WorkPortfolioSection />
       <template v-if="siteMode === 'business'">
         <ServicesSection
           :mode="siteMode"
