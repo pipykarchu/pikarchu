@@ -48,6 +48,12 @@ html.theme-preload *::after {
 
 #app { min-height: 100vh; }
 
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .float-anim, .animate-pulse { animation: none !important; }
+}
+
 button, a, input, textarea {
   -webkit-tap-highlight-color: transparent;
 }

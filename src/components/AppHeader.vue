@@ -26,7 +26,6 @@ defineEmits(['open-contact', 'set-mode'])
       </a>
 
       <nav class="hidden md:flex items-center gap-5 text-sm whitespace-nowrap" :style="{ color: 'var(--color-linear-text-secondary)' }">
-        <a href="#work-portfolio" class="hover:opacity-100 opacity-70 transition-opacity">工作档案</a>
         <a href="#projects" class="hover:opacity-100 opacity-70 transition-opacity">作品</a>
         <a href="#services" class="hover:opacity-100 opacity-70 transition-opacity">合作</a>
         <a href="#about" class="hover:opacity-100 opacity-70 transition-opacity">关于</a>
@@ -44,29 +43,29 @@ defineEmits(['open-contact', 'set-mode'])
             class="px-3 py-1.5 rounded-md text-xs font-medium transition-all whitespace-nowrap"
             :class="mode === 'business' ? 'text-white' : ''"
             :style="mode === 'business'
-              ? { background: 'linear-gradient(135deg, #14B8A6 0%, #60A5FA 100%)' }
+              ? { background: 'var(--color-linear-text)', color: 'var(--color-linear-bg)' }
               : { color: 'var(--color-linear-text-secondary)' }"
             @click="$emit('set-mode', 'business')"
           >
-            商业版
+            合作服务
           </button>
           <button
             type="button"
             class="px-3 py-1.5 rounded-md text-xs font-medium transition-all whitespace-nowrap"
             :class="mode === 'demo' ? 'text-white' : ''"
             :style="mode === 'demo'
-              ? { background: 'linear-gradient(135deg, #A78BFA 0%, #F472B6 100%)' }
+              ? { background: 'var(--color-linear-text)', color: 'var(--color-linear-bg)' }
               : { color: 'var(--color-linear-text-secondary)' }"
             @click="$emit('set-mode', 'demo')"
           >
-            演示版
+            作品集
           </button>
         </div>
         <ThemeToggle />
         <button
           @click="$emit('open-contact')"
           class="px-3 py-2 md:py-1.5 rounded-lg text-xs font-medium transition-all duration-300 hover:-translate-y-0.5 text-white whitespace-nowrap"
-          style="background: linear-gradient(135deg, #A78BFA 0%, #F472B6 100%);"
+          style="background: var(--color-linear-text); color: var(--color-linear-bg);"
         >
           + 加我
         </button>

@@ -1,5 +1,176 @@
 [
   {
+    "id": "mozin-app",
+    "category": "work",
+    "workType": "project",
+    "sourceLabel": "工作项目",
+    "title": "Mozin 智能穿戴耳机 APP",
+    "status": "case",
+    "priority": 500,
+    "role": "产品设计与交付协同",
+    "period": "2026.07 入职以来",
+    "shortDesc": "围绕耳机的实际使用，把设备采集、素材上传和 AI 处理串成连贯的产品流程。",
+    "longDesc": "耳机、APP、云素材和 AI 任务各有状态，需要明确每一步做什么、谁来处理，以及失败后怎样继续。",
+    "scope": "展示本人参与的产品设计与交付工作；具体功能上线及业务效果以实际验证为准。",
+    "takeaway": "先把状态与边界讲清楚，再用原型和规格对齐交付。",
+    "tags": [
+      "需求与交互原型",
+      "AI 场景与开发规格",
+      "验收、手册与发布材料"
+    ],
+    "tech": [
+      "需求分析",
+      "交互原型",
+      "AI 场景",
+      "验收交付"
+    ],
+    "highlights": [
+      "参与需求与原型设计，梳理页面入口、状态、异常路径及研发交付要求。",
+      "整理实时翻译、录音总结等 AI 场景，明确触发条件、依赖与优先级。",
+      "区分设备原件、云副本和手机缓存，设计上传、取消、重试及删除恢复规则。",
+      "协同验收、用户手册和版本发布材料，将 APP 1.5 与 2.0 作为同一项目的阶段经历。"
+    ],
+    "archive": "/archives/work/mozin-app.md",
+    "actions": [
+      {
+        "label": "下载项目摘要",
+        "href": "/archives/work/mozin-app.md",
+        "download": true
+      }
+    ]
+  },
+  {
+    "id": "yunlingxi-planning",
+    "category": "work",
+    "workType": "project",
+    "sourceLabel": "工作项目",
+    "title": "云灵汐 · 产品规划与业务设计",
+    "status": "case",
+    "priority": 499,
+    "role": "参与部分规划与设计",
+    "period": "2026.10 阶段工作",
+    "shortDesc": "参与组织权限、定制出行等专题，把角色、业务流程和输入输出整理成可讨论、可继续推进的方案。",
+    "longDesc": "不同业务身份、组织关系和用户场景交织，需要先收敛范围，再明确共用流程与局部差异。",
+    "scope": "本人参与部分规划与设计，未独立负责全平台；当前方案和原型不代表正式系统上线。",
+    "takeaway": "用一条共用主线承载流程，把差异留在资料、条件与权限里。",
+    "tags": [
+      "业务流程与输入输出清单",
+      "组织权限阶段原型",
+      "规划画板与评审材料"
+    ],
+    "tech": [
+      "业务规划",
+      "角色权限",
+      "输入输出",
+      "范围收敛"
+    ],
+    "highlights": [
+      "参与规划讨论，细化本人涉及模块的业务说明、原型及评审材料。",
+      "梳理权限申请、确认、执行与异常恢复，区分组织业务范围和业务内部权限。",
+      "参与将定制出行收敛为路线规划，用一条六阶段主线承载三类场景。",
+      "明确资料输入输出、角色差异与外部交易边界，同步正文和画板并保留变更依据。"
+    ],
+    "archive": "/archives/work/yunlingxi-planning.md",
+    "actions": [
+      {
+        "label": "下载项目摘要",
+        "href": "/archives/work/yunlingxi-planning.md",
+        "download": true
+      }
+    ]
+  },
+  {
+    "id": "work-feishu-reporting",
+    "category": "work",
+    "workType": "method",
+    "sourceLabel": "工作沉淀",
+    "title": "飞书联动与汇报模板",
+    "status": "documented",
+    "priority": 300,
+    "shortDesc": "结合飞书与 AI 工具，把工作记录整理成日报、周报和月报需要的结构，保留来源与人工核对。",
+    "longDesc": "结合飞书与 AI 工具，把工作记录整理成日报、周报和月报需要的结构，保留来源与人工核对。",
+    "role": "在实际项目中整理与定制",
+    "tags": [
+      "汇报模板",
+      "真实工作样例",
+      "核对规则"
+    ],
+    "highlights": [
+      "汇报模板、真实工作样例、核对规则",
+      "结合真实工作材料使用，保留来源、版本和人工核对"
+    ],
+    "scope": "工作方法与工具沉淀，用于支撑业务项目。",
+    "archive": "/archives/work/feishu-reporting.md",
+    "actions": [
+      {
+        "label": "下载方法说明",
+        "href": "/archives/work/feishu-reporting.md",
+        "download": true
+      }
+    ]
+  },
+  {
+    "id": "work-delivery-sop",
+    "category": "work",
+    "workType": "method",
+    "sourceLabel": "工作沉淀",
+    "title": "SOP 与工作流定制",
+    "status": "documented",
+    "priority": 299,
+    "shortDesc": "按实际任务定制步骤，明确每一环需要什么输入、交付什么结果，以及哪里需要检查和确认。",
+    "longDesc": "按实际任务定制步骤，明确每一环需要什么输入、交付什么结果，以及哪里需要检查和确认。",
+    "role": "在实际项目中整理与定制",
+    "tags": [
+      "阶段步骤",
+      "输入输出",
+      "检查点"
+    ],
+    "highlights": [
+      "阶段步骤、输入输出、检查点",
+      "需求 → 分析 → 原型 → 评审 → 交付 → 归档",
+      "逐环节明确输入、输出、检查点与人工确认"
+    ],
+    "scope": "工作方法与工具沉淀，用于支撑业务项目。",
+    "archive": "/archives/work/delivery-sop.md",
+    "actions": [
+      {
+        "label": "下载方法说明",
+        "href": "/archives/work/delivery-sop.md",
+        "download": true
+      }
+    ]
+  },
+  {
+    "id": "work-template-skills",
+    "category": "work",
+    "workType": "method",
+    "sourceLabel": "工作沉淀",
+    "title": "模板与技能复用",
+    "status": "documented",
+    "priority": 298,
+    "shortDesc": "把反复使用的做法沉淀成模板和技能，配合项目保留版本和修改依据，方便继续使用和修订。",
+    "longDesc": "把反复使用的做法沉淀成模板和技能，配合项目保留版本和修改依据，方便继续使用和修订。",
+    "role": "在实际项目中整理与定制",
+    "tags": [
+      "可复用模板",
+      "技能说明",
+      "版本记录"
+    ],
+    "highlights": [
+      "可复用模板、技能说明、版本记录",
+      "结合真实工作材料使用，保留来源、版本和人工核对"
+    ],
+    "scope": "工作方法与工具沉淀，用于支撑业务项目。",
+    "archive": "/archives/work/template-skills.md",
+    "actions": [
+      {
+        "label": "下载方法说明",
+        "href": "/archives/work/template-skills.md",
+        "download": true
+      }
+    ]
+  },
+  {
     "id": "job-war-room",
     "title": "Studio · 求职作战中心",
     "category": "work",
@@ -52,7 +223,9 @@
         "href": "docs/job-war-room-prd.html"
       }
     ],
-    "priority": 100
+    "priority": 100,
+    "workType": "tool",
+    "sourceLabel": "个人作品"
   },
   {
     "id": "procurement-dashboard",
@@ -87,7 +260,9 @@
       "数据质量校验：自动发现订单号和金额对应多个时间的异常。",
       "零部署：单文件 HTML，浏览器本地处理，不上传后端。"
     ],
-    "priority": 95
+    "priority": 95,
+    "workType": "tool",
+    "sourceLabel": "个人作品"
   },
   {
     "id": "personal-ip-site",
@@ -131,7 +306,9 @@
       "后台指标：已补功能模块点击使用率、会话留存率和近 7 日回访口径。",
       "配套文档：工作流、SOP、进度看板统一呈现在个人站 PRD 里，不再拆成多个外跳入口。"
     ],
-    "priority": 90
+    "priority": 90,
+    "workType": "project",
+    "sourceLabel": "个人作品"
   },
   {
     "id": "personal-site-ai-chat",
@@ -172,7 +349,9 @@
         "label": "查看智能客服 PRD",
         "href": "/docs/personal-site-ai-chat-prd.html"
       }
-    ]
+    ],
+    "workType": "tool",
+    "sourceLabel": "个人作品"
   },
   {
     "id": "ciwaxian-manju",
@@ -273,7 +452,9 @@
       "输出闭环：同一页面可导出 Markdown、JSON 和 standalone HTML，方便后续交给 Codex 继续迭代。",
       "工作流意识：默认带入 Codex + Claude + Tuzi API 的协作分工，同时把价格、模型能力和 ROI 标为待确认。"
     ],
-    "priority": 92
+    "priority": 92,
+    "workType": "method",
+    "sourceLabel": "个人沉淀"
   },
   {
     "id": "bilibili-ai-learning-assistant",
@@ -541,7 +722,9 @@
         "label": "查看商业 PRD",
         "href": "/docs/furry-design-commerce-prd.html"
       }
-    ]
+    ],
+    "workType": "project",
+    "sourceLabel": "个人作品"
   },
   {
     "id": "skill-library",
@@ -579,7 +762,9 @@
       "后续可继续扩展成个人工作流市场。"
     ],
     "priority": 72,
-    "hidden": true
+    "hidden": true,
+    "workType": "method",
+    "sourceLabel": "个人沉淀"
   },
   {
     "id": "video-fx",

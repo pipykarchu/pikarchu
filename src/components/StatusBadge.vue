@@ -7,7 +7,9 @@ const config = {
   live: { label: 'Live', dotClass: 'bg-emerald-400', textClass: 'text-emerald-500', borderClass: 'border-emerald-400/30 bg-emerald-400/10' },
   wip: { label: 'WIP', dotClass: 'bg-purple-400', textClass: 'text-purple-500', borderClass: 'border-purple-400/30 bg-purple-400/10' },
   idea: { label: 'Idea', dotClass: 'bg-zinc-400', textClass: 'text-zinc-500', borderClass: 'border-zinc-400/30 bg-zinc-400/10' },
-  paid: { label: 'Paid', dotClass: 'bg-pink-400', textClass: 'text-pink-500', borderClass: 'border-pink-400/30 bg-pink-400/10' }
+  paid: { label: 'Paid', dotClass: 'bg-pink-400', textClass: 'text-pink-500', borderClass: 'border-pink-400/30 bg-pink-400/10' },
+  case: { label: '阶段成果', dotClass: 'bg-sky-400', textClass: 'text-sky-500', borderClass: 'border-sky-400/30 bg-sky-400/10' },
+  documented: { label: '已沉淀', dotClass: 'bg-amber-400', textClass: 'text-amber-500', borderClass: 'border-amber-400/30 bg-amber-400/10' }
 }
 </script>
 

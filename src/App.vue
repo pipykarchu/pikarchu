@@ -5,7 +5,6 @@ import HeroSection from './components/HeroSection.vue'
 import CategorySection from './components/CategorySection.vue'
 import ServicesSection from './components/ServicesSection.vue'
 import OperationDemoSection from './components/OperationDemoSection.vue'
-import WorkPortfolioSection from './components/WorkPortfolioSection.vue'
 import AppFooter from './components/AppFooter.vue'
 import ContactModal from './components/ContactModal.vue'
 import AdminDashboard from './components/AdminDashboard.vue'
@@ -29,7 +28,7 @@ const { track } = useTracker()
 const allowedModes = new Set(['business', 'demo'])
 const initialMode = new URLSearchParams(window.location.search).get('mode')
 const siteMode = ref(allowedModes.has(initialMode) ? initialMode : 'demo')
-const modeLabel = computed(() => siteMode.value === 'demo' ? '演示版' : '商业版')
+const modeLabel = computed(() => siteMode.value === 'demo' ? '作品集' : '合作服务')
 
 const setSiteMode = (mode) => {
   if (!allowedModes.has(mode) || siteMode.value === mode) return
@@ -49,12 +48,19 @@ const handleOpenContact = () => {
 
 const handleScrollToProjects = () => {
   track('button_click', 'scroll_to_projects')
-  document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  scrollToSection('projects')
 }
 
 const handleScrollToServices = () => {
   track('button_click', 'scroll_to_services')
-  document.getElementById('services')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  scrollToSection('services')
+}
+
+const scrollToSection = (id) => {
+  const target = document.getElementById(id)
+  if (!target) return
+  const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 85, behavior: reduced ? 'auto' : 'smooth' })
 }
 
 onMounted(() => {
@@ -79,7 +85,6 @@ onMounted(() => {
         @scroll-to-projects="handleScrollToProjects"
         @scroll-to-services="handleScrollToServices"
       />
-      <WorkPortfolioSection />
       <template v-if="siteMode === 'business'">
         <ServicesSection
           :mode="siteMode"

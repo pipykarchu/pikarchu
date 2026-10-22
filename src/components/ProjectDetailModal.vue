@@ -1,13 +1,46 @@
 <script setup>
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import StatusBadge from './StatusBadge.vue'
 import { useTracker } from '../composables/useTracker'
 import { withBase, withVersion } from '../composables/useAssetPath'
 
-defineProps({
+const props = defineProps({
   project: { type: Object, default: null },
   accent: { type: String, default: '#A78BFA' }
 })
-defineEmits(['close'])
+const emit = defineEmits(['close'])
+const dialogElement = ref(null)
+let lastFocus = null
+let previousOverflow = null
+const restorePage = () => {
+  if (previousOverflow !== null) document.body.style.overflow = previousOverflow
+  previousOverflow = null
+  if (lastFocus?.isConnected) lastFocus.focus()
+  lastFocus = null
+}
+const handleKeydown = (event) => {
+  if (!props.project) return
+  if (event.key === 'Escape') { event.preventDefault(); emit('close'); return }
+  if (event.key !== 'Tab') return
+  const controls = [...(dialogElement.value?.querySelectorAll('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])') || [])]
+  const first = controls[0]
+  const last = controls[controls.length - 1]
+  if (!first) { event.preventDefault(); dialogElement.value?.focus(); return }
+  if (event.shiftKey && (document.activeElement === first || !dialogElement.value.contains(document.activeElement))) { event.preventDefault(); last.focus() }
+  else if (!event.shiftKey && (document.activeElement === last || !dialogElement.value.contains(document.activeElement))) { event.preventDefault(); first.focus() }
+}
+watch(() => props.project, async (project, previous) => {
+  if (!project) { restorePage(); return }
+  if (!previous) {
+    lastFocus = document.activeElement
+    previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+  }
+  await nextTick()
+  if (props.project?.id === project.id) dialogElement.value?.querySelector('button')?.focus()
+})
+onMounted(() => window.addEventListener('keydown', handleKeydown))
+onBeforeUnmount(() => { window.removeEventListener('keydown', handleKeydown); restorePage() })
 
 const { track } = useTracker()
 
@@ -26,6 +59,11 @@ const handleActionClick = (project, action) => {
         @click.self="$emit('close')"
       >
         <article
+          ref="dialogElement"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="project-detail-title"
+          tabindex="-1"
           class="w-full max-w-3xl max-h-[92vh] sm:max-h-[88vh] overflow-y-auto rounded-2xl sm:rounded-3xl shadow-2xl"
           :style="{ background: 'var(--color-linear-bg-secondary)', border: '1px solid var(--color-linear-border)' }"
         >
@@ -34,7 +72,7 @@ const handleActionClick = (project, action) => {
               <div class="mb-2">
                 <StatusBadge :status="project.status" />
               </div>
-              <h3 class="text-lg md:text-2xl font-semibold leading-tight line-clamp-2 sm:truncate" :style="{ color: 'var(--color-linear-text)' }">
+              <h3 id="project-detail-title" class="text-lg md:text-2xl font-semibold leading-tight line-clamp-2 sm:truncate" :style="{ color: 'var(--color-linear-text)' }">
                 {{ project.title }}
               </h3>
             </div>
@@ -61,6 +99,11 @@ const handleActionClick = (project, action) => {
             <p class="text-base leading-relaxed mb-5" :style="{ color: 'var(--color-linear-text-secondary)' }">
               {{ project.longDesc || project.shortDesc }}
             </p>
+
+            <dl v-if="project.role || project.period" class="detail-context">
+              <div v-if="project.role"><dt>我的参与</dt><dd>{{ project.role }}</dd></div>
+              <div v-if="project.period"><dt>阶段</dt><dd>{{ project.period }}</dd></div>
+            </dl>
 
             <div v-if="project.tech?.length" class="mb-6">
               <h4 class="text-sm font-semibold mb-3" :style="{ color: 'var(--color-linear-text)' }">技术与能力栈</h4>
@@ -97,10 +140,11 @@ const handleActionClick = (project, action) => {
                   v-for="action in project.actions.filter(item => item.href && !item.disabled)"
                   :key="action.label"
                   :href="withBase(action.href)"
-                  target="_blank"
+                  :target="action.download ? undefined : '_blank'"
+                  :download="action.download ? '' : undefined"
                   rel="noreferrer"
                   class="px-5 py-3 sm:py-2.5 rounded-lg text-sm font-medium text-white text-center transition-transform hover:-translate-y-0.5"
-                  :style="{ background: `linear-gradient(135deg, ${accent} 0%, #F472B6 100%)` }"
+                  :style="{ background: 'var(--color-linear-text)', color: 'var(--color-linear-bg)' }"
                   @click="handleActionClick(project, action)"
                 >
                   {{ action.label }}
@@ -122,7 +166,7 @@ const handleActionClick = (project, action) => {
                 target="_blank"
                 rel="noreferrer"
                 class="px-5 py-3 sm:py-2.5 rounded-lg text-sm font-medium text-white text-center transition-transform hover:-translate-y-0.5"
-                :style="{ background: `linear-gradient(135deg, ${accent} 0%, #F472B6 100%)` }"
+                :style="{ background: 'var(--color-linear-text)', color: 'var(--color-linear-bg)' }"
                 @click="handleActionClick(project, { label: 'Demo' })"
               >
                 Demo
@@ -132,6 +176,7 @@ const handleActionClick = (project, action) => {
             <p v-if="project.links?.demoNote" class="mt-3 text-xs" :style="{ color: 'var(--color-linear-text-tertiary)' }">
               {{ project.links.demoNote }}
             </p>
+            <p v-if="project.scope" class="detail-scope">{{ project.scope }}</p>
           </div>
         </article>
       </div>
@@ -140,10 +185,15 @@ const handleActionClick = (project, action) => {
 </template>
 
 <style scoped>
+.detail-context { display: flex; flex-wrap: wrap; gap: 14px 28px; padding: 16px 0; margin: 0 0 22px; border-top: 1px solid var(--color-linear-border); border-bottom: 1px solid var(--color-linear-border); }
+.detail-context dt { font-size: 11px; color: var(--color-linear-text-tertiary); margin-bottom: 5px; }
+.detail-context dd { margin: 0; font-size: 13px; color: var(--color-linear-text-secondary); }
+.detail-scope { margin-top: 20px; font-size: 12px; line-height: 1.9; color: var(--color-linear-text-tertiary); }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.25s ease;
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
+@media (prefers-reduced-motion: reduce) { .fade-enter-active, .fade-leave-active { transition: none; } }
 </style>
