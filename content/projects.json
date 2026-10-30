@@ -33,6 +33,10 @@
     "archive": "/archives/work/mozin-app.md",
     "actions": [
       {
+        "label": "荣耀应用市场下载 APP",
+        "href": "https://appmarket-h5.cloud.honor.com/h5/share/latest/index.html?shareId=2116220485641052160&shareTo=copyLink"
+      },
+      {
         "label": "下载项目摘要",
         "href": "/archives/work/mozin-app.md",
         "download": true
