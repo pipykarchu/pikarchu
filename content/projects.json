@@ -860,12 +860,12 @@
     "title": "貅知识 · 个人学习花园",
     "category": "work",
     "priority": 486,
-    "shortDesc": "围绕学习目标整理知识框架，把学习路径拆成可以动手完成的小作品。",
+    "shortDesc": "学习花园的独立样品：编辑目标、浏览六个知识节点、记笔记，完成参考测验。",
     "highlights": [
-      "演示内容：整理知识框架、规划学习路径，把目标拆成可验证的小作品。",
-      "按学习目标组织知识框架与学习路径。",
-      "明确学习范围，把目标拆解为可验证的小作品。",
-      "当前仅本人可见，需本人登录后演示；访客试用待开放。"
+      "保存试用目标，在六节点示例框架中查看任务并记录笔记。",
+      "参考题支持作答、解析和重试；学习回答来自预设内容。",
+      "问答使用标明的预设模拟回答，未收录的问题会明确提示，不调用真实模型。",
+      "支持重置当前样品，仅清除本样品的试用记录，不影响其他样品或正式数据。"
     ],
     "tags": [
       "学习规划",
@@ -874,19 +874,19 @@
     ],
     "cover": "/mascot/pixiu-card-04.png",
     "workType": "project",
-    "sourceLabel": "Codex 站点",
-    "status": "case",
+    "sourceLabel": "个人作品 · 独立样品",
+    "status": "live",
     "role": "个人产品设计，借助 AI 协作完成实现、发布与迭代",
-    "longDesc": "围绕学习目标整理知识框架，把学习路径拆成可以动手完成的小作品。 当前仅本人可见，需本人登录后演示；访客试用待开放。",
-    "scope": "当前仅本人可见，需本人登录后演示；访客试用待开放。",
+    "longDesc": "学习花园的独立样品：编辑目标、浏览六个知识节点、记笔记，完成参考测验。 这是核心流程的简化样品，使用虚拟数据和明确标注的预设回答。无需登录，不连接正式后台、Codex、ima 或模型接口，不消耗作者的模型额度。",
+    "scope": "样品数据仅保存在当前浏览器，五个应用各自隔离，可单独重置；正式应用和数据保持私有。",
     "links": {
-      "demo": "https://study-bloom.yellow-spool-5033.chatgpt.site",
-      "demoNote": "当前仅本人可见，需本人登录后演示；访客试用待开放。"
+      "demo": "/projects/codex-samples/study-bloom/index.html",
+      "demoNote": "独立样品：虚拟数据、预设回答，不调用模型；操作仅保存到访客自己的浏览器。"
     },
     "actions": [
       {
-        "label": "打开站点（需本人登录）",
-        "href": "https://study-bloom.yellow-spool-5033.chatgpt.site"
+        "label": "打开独立样品",
+        "href": "/projects/codex-samples/study-bloom/index.html"
       }
     ]
   },
@@ -895,12 +895,12 @@
     "title": "藏宝库 · 知识管理工作台",
     "category": "work",
     "priority": 488,
-    "shortDesc": "集中查看知识库概况、资料整理流程和行动清单，让收集的资料接着用起来。",
+    "shortDesc": "知识管理的独立样品：搜索虚拟资料、阅读行动建议，添加自己的试用笔记。",
     "highlights": [
-      "演示内容：知识库概况、资料整理流程和行动清单。",
-      "在工作台里查看知识库概况。",
-      "把资料整理与行动清单放在一起，衔接后续任务。",
-      "当前仅本人可见，需本人登录后演示；访客试用待开放。"
+      "搜索 RAG、需求等预置资料，打开阅读内容和下一步行动。",
+      "保存试用笔记、重新搜索和查看；不读取你的正式知识库。",
+      "问答使用标明的预设模拟回答，未收录的问题会明确提示，不调用真实模型。",
+      "支持重置当前样品，仅清除本样品的试用记录，不影响其他样品或正式数据。"
     ],
     "tags": [
       "知识管理",
@@ -909,19 +909,19 @@
     ],
     "cover": "/mascot/pixiu-card-05.png",
     "workType": "project",
-    "sourceLabel": "Codex 站点",
-    "status": "case",
+    "sourceLabel": "个人作品 · 独立样品",
+    "status": "live",
     "role": "个人产品设计，借助 AI 协作完成实现、发布与迭代",
-    "longDesc": "集中查看知识库概况、资料整理流程和行动清单，让收集的资料接着用起来。 当前仅本人可见，需本人登录后演示；访客试用待开放。",
-    "scope": "当前仅本人可见，需本人登录后演示；访客试用待开放。",
+    "longDesc": "知识管理的独立样品：搜索虚拟资料、阅读行动建议，添加自己的试用笔记。 这是核心流程的简化样品，使用虚拟数据和明确标注的预设回答。无需登录，不连接正式后台、Codex、ima 或模型接口，不消耗作者的模型额度。",
+    "scope": "样品数据仅保存在当前浏览器，五个应用各自隔离，可单独重置；正式应用和数据保持私有。",
     "links": {
-      "demo": "https://knowledge-desk-20261023.yellow-spool-5033.chatgpt.site",
-      "demoNote": "当前仅本人可见，需本人登录后演示；访客试用待开放。"
+      "demo": "/projects/codex-samples/knowledge-desk/index.html",
+      "demoNote": "独立样品：虚拟数据、预设回答，不调用模型；操作仅保存到访客自己的浏览器。"
     },
     "actions": [
       {
-        "label": "打开站点（需本人登录）",
-        "href": "https://knowledge-desk-20261023.yellow-spool-5033.chatgpt.site"
+        "label": "打开独立样品",
+        "href": "/projects/codex-samples/knowledge-desk/index.html"
       }
     ]
   },
@@ -930,12 +930,12 @@
     "title": "自有引力 · 副业规划工作台",
     "category": "work",
     "priority": 487,
-    "shortDesc": "把副业机会、服务报价、知识产品、行动进度和利润试算放在一个工作台里。",
+    "shortDesc": "副业工作台的独立样品：收藏虚拟机会、修改报价试算，生成试单并记录进度。",
     "highlights": [
-      "演示内容：机会筛选、服务报价、行动进度和利润试算。",
-      "比较副业方向，整理服务报价与知识产品。",
-      "结合利润试算评估投入，跟踪后续行动进度。",
-      "当前仅本人可见，需本人登录后演示；访客试用待开放。"
+      "收藏虚拟机会，修改报价、成本、费率和工时，计算预计净额。",
+      "生成虚拟试单、标记交付、勾选起步行动，不联系真实客户。",
+      "问答使用标明的预设模拟回答，未收录的问题会明确提示，不调用真实模型。",
+      "支持重置当前样品，仅清除本样品的试用记录，不影响其他样品或正式数据。"
     ],
     "tags": [
       "副业规划",
@@ -944,19 +944,19 @@
     ],
     "cover": "/mascot/pixiu-card-03.png",
     "workType": "project",
-    "sourceLabel": "Codex 站点",
-    "status": "case",
+    "sourceLabel": "个人作品 · 独立样品",
+    "status": "live",
     "role": "个人产品设计，借助 AI 协作完成实现、发布与迭代",
-    "longDesc": "把副业机会、服务报价、知识产品、行动进度和利润试算放在一个工作台里。 当前仅本人可见，需本人登录后演示；访客试用待开放。",
-    "scope": "当前仅本人可见，需本人登录后演示；访客试用待开放。",
+    "longDesc": "副业工作台的独立样品：收藏虚拟机会、修改报价试算，生成试单并记录进度。 这是核心流程的简化样品，使用虚拟数据和明确标注的预设回答。无需登录，不连接正式后台、Codex、ima 或模型接口，不消耗作者的模型额度。",
+    "scope": "样品数据仅保存在当前浏览器，五个应用各自隔离，可单独重置；正式应用和数据保持私有。",
     "links": {
-      "demo": "https://side-income-studio.yellow-spool-5033.chatgpt.site",
-      "demoNote": "当前仅本人可见，需本人登录后演示；访客试用待开放。"
+      "demo": "/projects/codex-samples/side-income-studio/index.html",
+      "demoNote": "独立样品：虚拟数据、预设回答，不调用模型；操作仅保存到访客自己的浏览器。"
     },
     "actions": [
       {
-        "label": "打开站点（需本人登录）",
-        "href": "https://side-income-studio.yellow-spool-5033.chatgpt.site"
+        "label": "打开独立样品",
+        "href": "/projects/codex-samples/side-income-studio/index.html"
       }
     ]
   },
@@ -965,12 +965,12 @@
     "title": "小红果 · 双人同步观影",
     "category": "work",
     "priority": 490,
-    "shortDesc": "为两个人一起看视频设计房间、分享加入和播放进度同步流程。",
+    "shortDesc": "双人同步观影的独立样品：创建演示房间、控制播放与进度，查看本地模拟跟随端。",
     "highlights": [
-      "演示流程：创建房间 → 分享加入 → 同步播放、暂停和进度。",
-      "通过创建房间、分享入口邀请另一人加入。",
-      "区分房主与跟随者，组织播放、暂停和进度同步流程。",
-      "当前仅本人可见，需本人登录后演示；访客试用待开放。"
+      "创建演示房间，体验播放、暂停、拖动进度与切换场景。",
+      "右侧跟随端在本页模拟，没有真实连线，也不会发送邀请。",
+      "问答使用标明的预设模拟回答，未收录的问题会明确提示，不调用真实模型。",
+      "支持重置当前样品，仅清除本样品的试用记录，不影响其他样品或正式数据。"
     ],
     "tags": [
       "双人观影",
@@ -979,19 +979,19 @@
     ],
     "cover": "/mascot/pixiu-card-01.png",
     "workType": "project",
-    "sourceLabel": "Codex 站点",
-    "status": "case",
+    "sourceLabel": "个人作品 · 独立样品",
+    "status": "live",
     "role": "个人产品设计，借助 AI 协作完成实现、发布与迭代",
-    "longDesc": "为两个人一起看视频设计房间、分享加入和播放进度同步流程。 当前仅本人可见，需本人登录后演示；访客试用待开放。",
-    "scope": "当前仅本人可见，需本人登录后演示；访客试用待开放。",
+    "longDesc": "双人同步观影的独立样品：创建演示房间、控制播放与进度，查看本地模拟跟随端。 这是核心流程的简化样品，使用虚拟数据和明确标注的预设回答。无需登录，不连接正式后台、Codex、ima 或模型接口，不消耗作者的模型额度。",
+    "scope": "样品数据仅保存在当前浏览器，五个应用各自隔离，可单独重置；正式应用和数据保持私有。",
     "links": {
-      "demo": "https://xiaohongguo.yellow-spool-5033.chatgpt.site",
-      "demoNote": "当前仅本人可见，需本人登录后演示；访客试用待开放。"
+      "demo": "/projects/codex-samples/xiaohongguo/index.html",
+      "demoNote": "独立样品：虚拟数据、预设回答，不调用模型；操作仅保存到访客自己的浏览器。"
     },
     "actions": [
       {
-        "label": "打开站点（需本人登录）",
-        "href": "https://xiaohongguo.yellow-spool-5033.chatgpt.site"
+        "label": "打开独立样品",
+        "href": "/projects/codex-samples/xiaohongguo/index.html"
       }
     ]
   },
@@ -1000,12 +1000,12 @@
     "title": "地底余烬 · 探索挖矿",
     "category": "work",
     "priority": 489,
-    "shortDesc": "可以在浏览器里试玩的挖矿游戏原型，串起移动、挖掘、矿石拾取和背包查看。",
+    "shortDesc": "探索挖矿的独立样品：方向键、WASD 或相邻格点击挖矿，体验拾取与背包。",
     "highlights": [
-      "试玩内容：移动 → 挖开岩壁 → 拾取矿石 → 查看背包。",
-      "从移动、挖掘到矿石拾取，形成连续的探索流程。",
-      "在背包里查看收集结果，验证基础游戏交互。",
-      "已公开，可直接打开浏览器试玩。"
+      "探索独立 7 × 7 小地图，采集石块、铜矿和晶石。",
+      "地图进度只存于访客浏览器，不读取或修改正式游戏存档。",
+      "问答使用标明的预设模拟回答，未收录的问题会明确提示，不调用真实模型。",
+      "支持重置当前样品，仅清除本样品的试用记录，不影响其他样品或正式数据。"
     ],
     "tags": [
       "浏览器游戏",
@@ -1014,19 +1014,19 @@
     ],
     "cover": "/mascot/pixiu-card-02.png",
     "workType": "project",
-    "sourceLabel": "Codex 站点",
+    "sourceLabel": "个人作品 · 独立样品",
     "status": "live",
     "role": "个人产品设计，借助 AI 协作完成实现、发布与迭代",
-    "longDesc": "可以在浏览器里试玩的挖矿游戏原型，串起移动、挖掘、矿石拾取和背包查看。 已公开，可直接打开浏览器试玩。",
-    "scope": "已公开，可直接打开浏览器试玩。",
+    "longDesc": "探索挖矿的独立样品：方向键、WASD 或相邻格点击挖矿，体验拾取与背包。 这是核心流程的简化样品，使用虚拟数据和明确标注的预设回答。无需登录，不连接正式后台、Codex、ima 或模型接口，不消耗作者的模型额度。",
+    "scope": "样品数据仅保存在当前浏览器，五个应用各自隔离，可单独重置；正式应用和数据保持私有。",
     "links": {
-      "demo": "https://emberburrow.yellow-spool-5033.chatgpt.site",
-      "demoNote": "已公开，可直接打开浏览器试玩。"
+      "demo": "/projects/codex-samples/emberburrow/index.html",
+      "demoNote": "独立样品：虚拟数据、预设回答，不调用模型；操作仅保存到访客自己的浏览器。"
     },
     "actions": [
       {
-        "label": "立即试玩",
-        "href": "https://emberburrow.yellow-spool-5033.chatgpt.site"
+        "label": "试玩独立样品",
+        "href": "/projects/codex-samples/emberburrow/index.html"
       }
     ]
   }
