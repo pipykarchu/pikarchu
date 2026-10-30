@@ -858,13 +858,14 @@
   {
     "id": "study-bloom",
     "title": "貅知识 · 个人学习花园",
-    "category": "learning",
-    "priority": 98,
+    "category": "work",
+    "priority": 486,
     "shortDesc": "围绕学习目标整理知识框架，把学习路径拆成可以动手完成的小作品。",
     "highlights": [
+      "演示内容：整理知识框架、规划学习路径，把目标拆成可验证的小作品。",
       "按学习目标组织知识框架与学习路径。",
       "明确学习范围，把目标拆解为可验证的小作品。",
-      "站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。"
+      "当前仅本人可见，需本人登录后演示；访客试用待开放。"
     ],
     "tags": [
       "学习规划",
@@ -873,18 +874,18 @@
     ],
     "cover": "/mascot/pixiu-card-04.png",
     "workType": "project",
-    "sourceLabel": "个人作品",
-    "status": "live",
+    "sourceLabel": "Codex 站点",
+    "status": "case",
     "role": "个人产品设计，借助 AI 协作完成实现、发布与迭代",
-    "longDesc": "围绕学习目标整理知识框架，把学习路径拆成可以动手完成的小作品。 站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。",
-    "scope": "站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。",
+    "longDesc": "围绕学习目标整理知识框架，把学习路径拆成可以动手完成的小作品。 当前仅本人可见，需本人登录后演示；访客试用待开放。",
+    "scope": "当前仅本人可见，需本人登录后演示；访客试用待开放。",
     "links": {
       "demo": "https://study-bloom.yellow-spool-5033.chatgpt.site",
-      "demoNote": "站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。"
+      "demoNote": "当前仅本人可见，需本人登录后演示；访客试用待开放。"
     },
     "actions": [
       {
-        "label": "打开站点（需授权）",
+        "label": "打开站点（需本人登录）",
         "href": "https://study-bloom.yellow-spool-5033.chatgpt.site"
       }
     ]
@@ -892,13 +893,14 @@
   {
     "id": "knowledge-desk",
     "title": "藏宝库 · 知识管理工作台",
-    "category": "learning",
-    "priority": 97,
+    "category": "work",
+    "priority": 488,
     "shortDesc": "集中查看知识库概况、资料整理流程和行动清单，让收集的资料接着用起来。",
     "highlights": [
+      "演示内容：知识库概况、资料整理流程和行动清单。",
       "在工作台里查看知识库概况。",
       "把资料整理与行动清单放在一起，衔接后续任务。",
-      "站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。"
+      "当前仅本人可见，需本人登录后演示；访客试用待开放。"
     ],
     "tags": [
       "知识管理",
@@ -907,18 +909,18 @@
     ],
     "cover": "/mascot/pixiu-card-05.png",
     "workType": "project",
-    "sourceLabel": "个人作品",
-    "status": "live",
+    "sourceLabel": "Codex 站点",
+    "status": "case",
     "role": "个人产品设计，借助 AI 协作完成实现、发布与迭代",
-    "longDesc": "集中查看知识库概况、资料整理流程和行动清单，让收集的资料接着用起来。 站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。",
-    "scope": "站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。",
+    "longDesc": "集中查看知识库概况、资料整理流程和行动清单，让收集的资料接着用起来。 当前仅本人可见，需本人登录后演示；访客试用待开放。",
+    "scope": "当前仅本人可见，需本人登录后演示；访客试用待开放。",
     "links": {
       "demo": "https://knowledge-desk-20261023.yellow-spool-5033.chatgpt.site",
-      "demoNote": "站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。"
+      "demoNote": "当前仅本人可见，需本人登录后演示；访客试用待开放。"
     },
     "actions": [
       {
-        "label": "打开站点（需授权）",
+        "label": "打开站点（需本人登录）",
         "href": "https://knowledge-desk-20261023.yellow-spool-5033.chatgpt.site"
       }
     ]
@@ -927,12 +929,13 @@
     "id": "side-income-studio",
     "title": "自有引力 · 副业规划工作台",
     "category": "work",
-    "priority": 99,
+    "priority": 487,
     "shortDesc": "把副业机会、服务报价、知识产品、行动进度和利润试算放在一个工作台里。",
     "highlights": [
+      "演示内容：机会筛选、服务报价、行动进度和利润试算。",
       "比较副业方向，整理服务报价与知识产品。",
       "结合利润试算评估投入，跟踪后续行动进度。",
-      "站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。"
+      "当前仅本人可见，需本人登录后演示；访客试用待开放。"
     ],
     "tags": [
       "副业规划",
@@ -941,18 +944,18 @@
     ],
     "cover": "/mascot/pixiu-card-03.png",
     "workType": "project",
-    "sourceLabel": "个人作品",
-    "status": "live",
+    "sourceLabel": "Codex 站点",
+    "status": "case",
     "role": "个人产品设计，借助 AI 协作完成实现、发布与迭代",
-    "longDesc": "把副业机会、服务报价、知识产品、行动进度和利润试算放在一个工作台里。 站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。",
-    "scope": "站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。",
+    "longDesc": "把副业机会、服务报价、知识产品、行动进度和利润试算放在一个工作台里。 当前仅本人可见，需本人登录后演示；访客试用待开放。",
+    "scope": "当前仅本人可见，需本人登录后演示；访客试用待开放。",
     "links": {
       "demo": "https://side-income-studio.yellow-spool-5033.chatgpt.site",
-      "demoNote": "站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。"
+      "demoNote": "当前仅本人可见，需本人登录后演示；访客试用待开放。"
     },
     "actions": [
       {
-        "label": "打开站点（需授权）",
+        "label": "打开站点（需本人登录）",
         "href": "https://side-income-studio.yellow-spool-5033.chatgpt.site"
       }
     ]
@@ -960,13 +963,14 @@
   {
     "id": "xiaohongguo",
     "title": "小红果 · 双人同步观影",
-    "category": "life",
-    "priority": 96,
+    "category": "work",
+    "priority": 490,
     "shortDesc": "为两个人一起看视频设计房间、分享加入和播放进度同步流程。",
     "highlights": [
+      "演示流程：创建房间 → 分享加入 → 同步播放、暂停和进度。",
       "通过创建房间、分享入口邀请另一人加入。",
       "区分房主与跟随者，组织播放、暂停和进度同步流程。",
-      "站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。"
+      "当前仅本人可见，需本人登录后演示；访客试用待开放。"
     ],
     "tags": [
       "双人观影",
@@ -975,18 +979,18 @@
     ],
     "cover": "/mascot/pixiu-card-01.png",
     "workType": "project",
-    "sourceLabel": "个人作品",
-    "status": "live",
+    "sourceLabel": "Codex 站点",
+    "status": "case",
     "role": "个人产品设计，借助 AI 协作完成实现、发布与迭代",
-    "longDesc": "为两个人一起看视频设计房间、分享加入和播放进度同步流程。 站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。",
-    "scope": "站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。",
+    "longDesc": "为两个人一起看视频设计房间、分享加入和播放进度同步流程。 当前仅本人可见，需本人登录后演示；访客试用待开放。",
+    "scope": "当前仅本人可见，需本人登录后演示；访客试用待开放。",
     "links": {
       "demo": "https://xiaohongguo.yellow-spool-5033.chatgpt.site",
-      "demoNote": "站点已发布，访问需要站点授权；作品集入口不改变原有访问权限。"
+      "demoNote": "当前仅本人可见，需本人登录后演示；访客试用待开放。"
     },
     "actions": [
       {
-        "label": "打开站点（需授权）",
+        "label": "打开站点（需本人登录）",
         "href": "https://xiaohongguo.yellow-spool-5033.chatgpt.site"
       }
     ]
@@ -994,13 +998,14 @@
   {
     "id": "emberburrow",
     "title": "地底余烬 · 探索挖矿",
-    "category": "life",
-    "priority": 95,
+    "category": "work",
+    "priority": 489,
     "shortDesc": "可以在浏览器里试玩的挖矿游戏原型，串起移动、挖掘、矿石拾取和背包查看。",
     "highlights": [
+      "试玩内容：移动 → 挖开岩壁 → 拾取矿石 → 查看背包。",
       "从移动、挖掘到矿石拾取，形成连续的探索流程。",
       "在背包里查看收集结果，验证基础游戏交互。",
-      "站点已公开，可直接打开试玩。"
+      "已公开，可直接打开浏览器试玩。"
     ],
     "tags": [
       "浏览器游戏",
@@ -1009,18 +1014,18 @@
     ],
     "cover": "/mascot/pixiu-card-02.png",
     "workType": "project",
-    "sourceLabel": "个人作品",
+    "sourceLabel": "Codex 站点",
     "status": "live",
     "role": "个人产品设计，借助 AI 协作完成实现、发布与迭代",
-    "longDesc": "可以在浏览器里试玩的挖矿游戏原型，串起移动、挖掘、矿石拾取和背包查看。 站点已公开，可直接打开试玩。",
-    "scope": "站点已公开，可直接打开试玩。",
+    "longDesc": "可以在浏览器里试玩的挖矿游戏原型，串起移动、挖掘、矿石拾取和背包查看。 已公开，可直接打开浏览器试玩。",
+    "scope": "已公开，可直接打开浏览器试玩。",
     "links": {
       "demo": "https://emberburrow.yellow-spool-5033.chatgpt.site",
-      "demoNote": "站点已公开，可直接打开试玩。"
+      "demoNote": "已公开，可直接打开浏览器试玩。"
     },
     "actions": [
       {
-        "label": "打开游戏试玩",
+        "label": "立即试玩",
         "href": "https://emberburrow.yellow-spool-5033.chatgpt.site"
       }
     ]
