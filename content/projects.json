@@ -862,7 +862,7 @@
   {
     "id": "study-bloom",
     "title": "貅知识 · 个人学习花园",
-    "category": "work",
+    "category": "learning",
     "priority": 486,
     "shortDesc": "学习花园的独立样品：编辑目标、浏览六个知识节点、记笔记，完成参考测验。",
     "highlights": [
@@ -897,7 +897,7 @@
   {
     "id": "knowledge-desk",
     "title": "藏宝库 · 知识管理工作台",
-    "category": "work",
+    "category": "learning",
     "priority": 488,
     "shortDesc": "知识管理的独立样品：搜索虚拟资料、阅读行动建议，添加自己的试用笔记。",
     "highlights": [
