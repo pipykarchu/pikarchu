@@ -77,14 +77,18 @@ npm run preview # 预览构建产物
 
 ### 加一个新项目
 
-直接编辑 `content/projects.json` 加一条：
+所有作品统一维护在 `content/projects.json`。在数组中新增一条，`id` 保持唯一，`category` 使用 `content/categories.json` 中已有的领域 ID（`work` / `learning` / `content` / `life`）。以下是工作项目阶段成果的填写模板；标题、职责、范围等占位文案须按实际情况替换后再发布：
 
 ```json
 {
   "id": "my-new-project",
   "title": "新项目名",
-  "category": "general",
-  "status": "wip",
+  "category": "work",
+  "workType": "project",
+  "sourceLabel": "工作项目",
+  "status": "case",
+  "role": "填写本人实际参与的部分",
+  "scope": "填写可展示范围、当前阶段及尚未验证的上线或效果边界",
   "shortDesc": "一句话说明",
   "tags": ["标签1", "标签2"],
   "links": {},
@@ -92,7 +96,30 @@ npm run preview # 预览构建产物
 }
 ```
 
-`status` 取值：`live` / `wip` / `idea` / `paid`，分别显示绿/紫/灰/粉徽章。
+`status` 与 `src/components/StatusBadge.vue` 的六种取值保持一致：
+
+| 取值 | 徽章文案 / 颜色 | 使用含义 |
+| --- | --- | --- |
+| `live` | Live / 绿 | 可体验的作品；静态演示可体验不代表完整应用或后端已生产上线，需说明演示边界。 |
+| `wip` | WIP / 紫 | 进行中，尚在开发或验证。 |
+| `idea` | Idea / 灰 | 构思或方向储备。 |
+| `paid` | Paid / 粉 | 目录中显示“可合作”，不能仅凭该状态声称已有付费客户或收入。 |
+| `case` | 阶段成果 / 天蓝 | 可展示的阶段工作、方案或原型，不作为生产上线证明。 |
+| `documented` | 已沉淀 / 琥珀 | 已整理的方法、SOP 或模板，不作为生产上线证明。 |
+
+目录预览对前四种状态分别显示“可体验 / 进行中 / 构思中 / 可合作”；详情徽章使用上表文案。状态描述成熟度或展示方式，来源与本人贡献需通过以下字段单独说明：
+
+| 字段 | 用途与填写规则 |
+| --- | --- |
+| `workType` | 工作领域（`category: "work"`）的筛选类型：`project`（项目）、`tool`（工具）、`method`（技能与模板）。代码在缺省时按 `project` 筛选；新增工作条目建议显式填写，其他领域无需为工作筛选补此字段。 |
+| `sourceLabel` | 目录中的来源文案，现有值包括“工作项目”“工作沉淀”“个人作品”“个人沉淀”。它是展示文本，不是代码限定枚举；不能用 `category: "work"` 或 `workType` 推断作品属于任职工作。缺省时目录会回退到类型或状态文案。 |
+| `role` | 可选，详情页“我的参与”；仅填写本人实际参与的职责，不把协作描述成独立负责。 |
+| `period` | 可选，详情页“阶段”；填写真实的参与时间或阶段。 |
+| `scope` | 可选，详情页的展示范围与验证边界说明；工作项目及易被误解为完整上线的演示建议填写。 |
+
+有可体验入口时再填写 `links.demo`，用 `links.demoNote` 说明静态演示、只读数据或后端依赖等限制。`actions` 可提供多个入口，`archive` 可提供公开摘要或方法说明；目录预览优先使用 `archive`，否则取首个有效 `actions`，最后回退到 `links.demo`。归档通过条目入口访问，无需另建首页分区。`hidden: true` 的条目不显示在目录中。
+
+新增条目前核对来源、职责、阶段和可访问材料，不因有演示或归档就将 `case` / `documented` 改为生产上线叙述。目录归属和展示交互详见 [作品目录说明](docs/portfolio-catalog-20261022.md)。
 
 ### 改 slogan / 联系方式
 
